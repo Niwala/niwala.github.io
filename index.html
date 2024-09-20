@@ -5,6 +5,7 @@
     <title>WebGL</title>
     <link rel="stylesheet" href="./webgl.css" type="text/css">
 	<link rel="stylesheet" href="./styles.css" type="text/css">
+	<link href="themes/prism.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
       integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
       crossorigin="anonymous" defer>
@@ -14,12 +15,47 @@
 
   <body>
   
+	<script src="prism.js"></script>
+  
 	<div class="banner">
+	<div class="centred">
 	
-	
+	<h1>Shader functions</h1>
 	
 	</div>
+	</div>
+	
+	<article>
+		<div class="centred">
+			<div class="vertical">
+			
+				<p>Ce site a pour objectif de référencer des fonctions basiques utilisable dans les shaders.</p>
+		
+				<div class="function-box">
+		
+				<div class="vertical">
+				<h3>Sinus</h3>
+				<p>Le sinus est très pratique pour créer une oscillation douce.</p>
+				
+				<div class="slider-container">
+					<p>Frequency</p>
+					<input type="range" min="0" max="20" value="3.1415" step="0.01" class="slider" id="slider-frequency">
+					<p class="slider-value"><span id="slider-frequency-value">50</span></p>
+				</div>
+				
+				<pre><code class="language-hlsl">float result = step(sin(uv.x * frequency + time), uv.y)</code></pre>
+				
+				</div>
+				
+				<canvas id="glcanvas" width="200px" height="200px"></canvas>
+		
+				</div>
+			</div>
+		</div>
+	</article>
+	
+	
   
-    <canvas id="glcanvas" width="500px" height="500px"></canvas>
+
   </body>
 </html>
