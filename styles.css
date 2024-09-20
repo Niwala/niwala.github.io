@@ -51,6 +51,8 @@ article
 	flex-direction: row;
 	padding: 10px;
 	padding-left: 15px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	flex-grow: 0;
 
 	border-color: #3d444d;
