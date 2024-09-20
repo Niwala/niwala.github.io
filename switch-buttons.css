@@ -1,0 +1,58 @@
+.switch-field 
+{
+	display: flex;
+	margin-bottom: 36px;
+	overflow: hidden;
+	
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.switch-field input 
+{
+	position: absolute !important;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	width: 1px;
+	border: 0;
+	overflow: hidden;
+}
+
+.switch-field label 
+{
+	background-color: #36445c;
+	color: rgba(255, 255, 255, 1.0);
+	font-size: 14px;
+	line-height: 1;
+	text-align: center;
+	padding: 8px 16px;
+	margin-right: -1px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	transition: all 0.1s ease-in-out;
+}
+
+.switch-field label:hover 
+{
+	cursor: pointer;
+}
+
+.switch-field input:checked + label 
+{
+	background-color: #111721;
+	color: rgba(255, 255, 255, 1.0);
+	box-shadow: none;
+}
+
+.switch-field label:first-of-type 
+{
+	border-radius: 4px 0 0 4px;
+}
+
+.switch-field label:last-of-type 
+{
+	border-radius: 0 4px 4px 0;
+}

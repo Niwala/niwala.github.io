@@ -2,10 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>WebGL</title>
-    <link rel="stylesheet" href="./webgl.css" type="text/css">
-	<link rel="stylesheet" href="./styles.css" type="text/css">
-	<link href="themes/prism.css" rel="stylesheet" />
+    <title>Shader Functions</title>
+	
+    <link rel="stylesheet" href="./webgl.css" type="text/css"/>
+	<link rel="stylesheet" href="./styles.css" type="text/css"/>
+	<link rel="stylesheet" href="./prism.css" type="text/css"/>
+	<link rel="stylesheet" href="./switch-buttons.css" type="text/css"/>
+	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
       integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
       crossorigin="anonymous" defer>
@@ -29,26 +32,39 @@
 		<div class="centred">
 			<div class="vertical">
 			
-				<p>Ce site a pour objectif de référencer des fonctions basiques utilisable dans les shaders.</p>
+				<p>Ce site a pour objectif de référencer des fonctions basiques utilisables dans les shaders.</p>
 		
 				<div class="function-box">
 		
-				<div class="vertical">
-				<h3>Sinus</h3>
-				<p>Le sinus est très pratique pour créer une oscillation douce.</p>
-				
-				<div class="slider-container">
-					<p>Frequency</p>
-					<input type="range" min="0" max="20" value="3.1415" step="0.01" class="slider" id="slider-frequency">
-					<p class="slider-value"><span id="slider-frequency-value">50</span></p>
-				</div>
-				
-				<pre><code class="language-hlsl">float result = step(sin(uv.x * frequency + time), uv.y)</code></pre>
-				
-				</div>
-				
-				<canvas id="glcanvas" width="200px" height="200px"></canvas>
-		
+					<div class="vertical">
+						<h3>Sinus</h3>
+						<p>Le sinus est très pratique pour créer une oscillation douce.</p>
+						
+						<div class="switch-field">
+							<input type="radio" id="radio-0" name="switch-one" value="yes" checked/>
+							<label for="radio-0">Frequency</label>
+							<input type="radio" id="radio-1" name="switch-one" value="no" />
+							<label for="radio-1">Amplitude</label>
+							<input type="radio" id="radio-2" name="switch-one" value="no" />
+							<label for="radio-2">Speed</label>
+						</div>
+					
+						<div class="horizontal">
+							<div class="vertical">
+					
+								<div class="slider-container">
+									<p>Frequency</p>
+									<input type="range" min="0" max="20" value="3.1415" step="0.01" class="slider" id="slider-frequency">
+									<p class="slider-value"><span id="slider-frequency-value">50</span></p>
+								</div>
+								
+								<pre class="line-numbers"><code class="language-hlsl">float result = step(sin(uv.x * frequency + time), uv.y)</code></pre>
+								
+								
+							</div>
+							<canvas id="glcanvas" width="200px" height="200px" class="shader-preview"></canvas>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

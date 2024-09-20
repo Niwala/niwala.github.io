@@ -20,7 +20,6 @@ article
 	flex-direction: row;
 }
 
-
 .banner
 {
 	padding: 8px;
@@ -50,7 +49,8 @@ article
 {
 	display: flex;
 	flex-direction: row;
-	padding: 8px;
+	padding: 10px;
+	padding-left: 15px;
 	flex-grow: 0;
 
 	border-color: #3d444d;
@@ -59,6 +59,13 @@ article
 	border-radius: 8px;
 	
 	background-color: #1b2330;
+}
+
+.shader-preview
+{
+	width: 200px;
+	height: 200px;
+	border-radius: 5px;
 }
 
 .vertical
@@ -129,7 +136,7 @@ article
 	width: 25px;
 	height: 25px;
 	border-radius: 50%; 
-	background: #6180ae;
+	background: #475a7b;
 	cursor: pointer;
 }
 
@@ -138,6 +145,6 @@ article
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
-	background: #6180ae;
+	background: #475a7b;
 	cursor: pointer;
 }
