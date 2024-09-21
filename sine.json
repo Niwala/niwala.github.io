@@ -13,7 +13,7 @@
 				{
 					"name": "Frequency",
 					"id": "frequency",
-					"type": "float",
+					"type": "range",
 					"value": 3.1415,
 					"min": 0.0,
 					"max": 20.0
@@ -22,7 +22,7 @@
 				{
 					"name": "Offset",
 					"id": "offset",
-					"type": "float",
+					"type": "range",
 					"value": 0,
 					"min": 0.0,
 					"max": 10.0
@@ -41,7 +41,7 @@
 				{
 					"name": "Amplitude",
 					"id": "amplitude",
-					"type": "float",
+					"type": "range",
 					"value": 0.5,
 					"min": 0.0,
 					"max": 2.0
@@ -60,7 +60,7 @@
 				{
 					"name": "Speed",
 					"id": "speed",
-					"type": "float",
+					"type": "range",
 					"value": 3.1415,
 					"min": 0.0,
 					"max": 20.0
@@ -74,20 +74,28 @@
 		{
 			"name": "Blink",
 			"description": "Dans cet exemple, le sinus est entièrement basé sur le temps plutôt que l'axe X.",
+			
 			"properties":
 			[
 				{
+					"name": "Compare to Y Axis",
+					"id": "compareY",
+					"type": "toggle",
+					"value": "false"
+				},
+			
+				{
 					"name": "Speed",
 					"id": "speed",
-					"type": "float",
+					"type": "range",
 					"value": 3.1415,
 					"min": 0.0,
 					"max": 20.0
 				}
 			],
 			
-			"shader": "color = vec3(sin(time * speed) * 0.5 + 0.5);",
-			"code": "float result = sin(time * speed) * 0.5 + 0.5;"
+			"shader": "highp float a = sin(time * speed) * 0.5 + 0.5; color = vec3(compareY > 0.5 ? step(uv.y, a) : a);",
+			"code": "//Sans comparaison à l'axe Y\nfloat result = sin(time * speed) * 0.5 + 0.5;\n\n//Avec comparaison à l'axe y\nfloat result = step(uv.y, sin(time * speed) * 0.5 + 0.5);"
 		}
 	]
 }

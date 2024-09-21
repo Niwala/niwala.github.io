@@ -7,6 +7,7 @@ var templateExample;
 
 var exampleList;
 var sliderList;
+var toggleList;
 var colorFieldList;
 
 function Parse()
@@ -38,6 +39,7 @@ function ReadJson(data)
 {
 	exampleList = new Array();
 	sliderList = new Array();
+	toggleList =  new Array();
 	colorFieldList = new Array();
 	
 	let content = templateContainer;
@@ -79,9 +81,14 @@ function ReadJson(data)
 			
 			switch (property.type)
 			{
-				case "float":
+				case "range":
 					sliderList.push(propertyHtmlID);
 					properties += BuildSlider(propertyHtmlID, data.name + "-" + example.name, property);
+				break;
+				
+				case "toggle":
+					toggleList.push(propertyHtmlID);
+					properties += BuildToggle(propertyHtmlID, data.name + "-" + example.name, property);
 				break;
 				
 				case "color":
@@ -129,7 +136,7 @@ function ReadJson(data)
 		renderers.set(data.name + "-" + data.examples[i].name, shaderRenderer);
 	}
 	
-	//Bind properties
+	//Bind properties > Sliders
 	for (let i = 0; i < sliderList.length; i++)
 	{
 		let slider = document.getElementById(sliderList[i]);
@@ -148,6 +155,24 @@ function ReadJson(data)
 			
 			r.SetFloatValue(this.id, this.value);
 			field.innerText = this.value;
+		};
+	}
+	
+	//Bind properties > Toggles
+	for (let i = 0; i < toggleList.length; i++)
+	{
+		let toggle = document.getElementById(toggleList[i]);
+		let exampleName = toggle.getAttribute("data-example-name");
+		let renderer = renderers.get(exampleName);
+
+        renderer.SetFloatValue(toggle.id, toggle.value ? 1.0 : 0.0);
+		
+		toggle.oninput = function() 
+		{
+			let dn = this.getAttribute("data-example-name");
+			let r = renderers.get(dn);
+			
+			r.SetFloatValue(this.id, toggle.checked ? 1.0 : 0.0);
 		};
 	}
 }
@@ -176,6 +201,16 @@ function BuildSlider(htmlID, dataExampleName, property)
 	"<p>" + property.name + "</p>" + 
 	"<input type=\"range\" data-example-name=\"" + dataExampleName + "\" min=\"" + property.min + "\" max=\"" + property.max + "\" value=\"" + property.value + "\" step=\"" + 0.01 + "\" class=\"slider\"/ id=\"" + htmlID +"\">" +
 	"<p class=\"slider-value\"><span id=\"field-" + htmlID + "\">50</span></p></div>";
+}
+
+function BuildToggle(htmlID, dataExampleName, property)
+{
+	return "<div class=\"slider-container\">" + 
+	"<p>" + property.name + "</p>" + 
+	"<label class=\"toggle-container\">" +
+	"<input type=\"checkbox\" data-example-name=\"" + dataExampleName + "\"" + (property.value ? "checked" : "") + " id=\"" + htmlID +"\">" +
+	"<span class=\"checkmark\"></span>" +
+	"</label></div>";
 }
 
 function BuildColorPicker(htmlID, dataExampleName, property)

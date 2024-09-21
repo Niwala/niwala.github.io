@@ -30,6 +30,8 @@ class ShaderRenderer
 			switch (property.type)
 			{
 				case "float":
+				case "range":
+				case "toggle":
 				uniforms += "\nuniform highp float " + property.id + ";";
 				break;
 				
@@ -102,6 +104,8 @@ void main(void)
 			switch(property.type)
 			{
 				case "float":
+				case "range":
+				case "toggle":
 				this.floatValues.set(propHtmlName, 0.0);
 				break;
 				
