@@ -20,6 +20,30 @@ article
 	flex-direction: row;
 }
 
+h2
+{
+	margin-bottom: 0px;
+}
+
+h3
+{
+	margin-bottom: 0px;
+}
+
+h4
+{
+	margin-bottom: 0px;
+}
+
+pre
+{
+	background: #111721;
+	margin-right: 10px;
+	border-radius: 5px;
+	padding: 8px;
+	margin-bottom: 0 !important;
+}
+
 .banner
 {
 	padding: 8px;
@@ -68,6 +92,7 @@ article
 	width: 200px;
 	height: 200px;
 	border-radius: 5px;
+	align-self: end;
 }
 
 .vertical

@@ -29,8 +29,8 @@
 				}
 			],
 			
-			"shader": "float result = step(sin(uv.x * frequency + offset), uv.y)",
-			"code": "float result = step(sin(uv.x * frequency + offset), uv.y)"
+			"shader": "color = vec3(step(sin(uv.x * frequency + offset), uv.y));",
+			"code": "float result = step(sin(uv.x * frequency + offset), uv.y);"
 		},
 		
 		{
@@ -40,7 +40,7 @@
 			[
 				{
 					"name": "Amplitude",
-					"id": "frequency",
+					"id": "amplitude",
 					"type": "float",
 					"value": 3.1415,
 					"min": 0.0,
@@ -48,8 +48,8 @@
 				}
 			],
 			
-			"shader": "float result = step(sin(uv.x * 6.2831) * amplitude, uv.y)",
-			"code": "float result = step(sin(uv.x * 6.2831) * amplitude, uv.y)"
+			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time) * amplitude, uv.y));",
+			"code": "float result = step(sin(uv.x * 3.1415) * amplitude, uv.y);"
 		},
 		
 		{
@@ -59,7 +59,7 @@
 			[
 				{
 					"name": "Speed",
-					"id": "frequency",
+					"id": "speed",
 					"type": "float",
 					"value": 3.1415,
 					"min": 0.0,
@@ -67,8 +67,8 @@
 				}
 			],
 			
-			"shader": "float result = step(sin(uv.x * frequency + time), uv.y)",
-			"code": "float result = step(sin(uv.x * 6.2831) * amplitude, uv.y)"
+			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time * speed), uv.y));",
+			"code": "float result = step(sin(uv.x * 3.1415) * amplitude, uv.y);"
 		}
 	]
 }

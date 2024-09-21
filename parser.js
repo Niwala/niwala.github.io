@@ -2,10 +2,12 @@ Parse();
 
 //Templates
 var templateContainer;
-var templatePropertySlider;
-var templatePropertyColor;
-var templatePropertyCode;
-var templateSwitchButton;
+var templateExample;
+
+
+var exampleList;
+var sliderList;
+var colorFieldList;
 
 function Parse()
 {
@@ -23,73 +25,151 @@ function LoadTemplates()
 	//Template container
 	container = document.getElementById("template")
 	templateContainer = container.innerHTML;
-	// container.style.display = 'none';
 	
-	//Property Slider
-	var propertySlider = document.getElementById("template-property-slider");
-	templatePropertySlider = propertySlider.innerHTML;
-	//propertySlider.style.display = 'none';
+	//Template example
+	let example = document.getElementById("template-example")
+	templateExample = example.innerHTML;
 	
-	//Property color
-	var propertyColor = document.getElementById("template-property-color");
-	templatePropertyColor = propertyColor.innerHTML;
-	//propertyColor.style.display = 'none';
-
-	//Code
-	var propertyCode = document.getElementById("template-code");
-	templatePropertyCode = propertyCode.innerHTML;
-	//propertyCode.style.display = 'none';
-
-	//Switch buttons
-	var switchField = document.getElementById("template-switch");
-	templateSwitchButton = switchField.innerHTML;
-	//switchField.style.display = 'none';
+	//Hide template
+	container.style.display = 'none';
 }
 
 function ReadJson(data)
 {
-	//Variants
-	// var allSwitchButtons = "";
+	exampleList = new Array();
+	sliderList = new Array();
+	colorFieldList = new Array();
 	
-	// for	(let i = 0; i < data.examples.length; i++)
-	// {
-		// var s = templateSwitchButton.replace(/button-id/g, "button" + i);
-		// s = s.replace(/button-group/g, "group-0");
-		// s = s.replace(/button-value/g, i == 0 ? "true" : "false");
-		// s = s.replace(/template-button/g, data.examples[i].name);
-		// allSwitchButtons += s;
-	// }
-	
-	
-	// switchField.innerHTML = allSwitchButtons;
-	
-	// //Build container
-	// var container = templateContainer;
-	// container = container.replace(/template-title/g, data.name);
-	// container = container.replace(/template-description/g, data.description);
-	
-	var content = templateContainer;
+	let content = templateContainer;
 	content = content.replace(/template-title/g, data.name);
 	content = content.replace(/template-description/g, data.description);
 	
 	
-	//Example
-	var exampleID = 0;
-	var example = data.examples[exampleID];
+	//Example buttons
+	let exampleButtons = "";
+	for	(let i = 0; i < data.examples.length; i++)
+	{
+		exampleButtons += BuildExampleButton(data.examples[i], data.name, i);
+	}
+	content = content.replace(/template-buttons/g, exampleButtons);
 	
-	content = content.replace(/example-name/g, example.name);
-	content = content.replace(/example-description/g, example.description);
 	
-	content = content.replace(/example-properties/g, BuildSlider("TestSlider", 2, 0, 5, 0.01, "TestSliderID"));
+	//Add all examples
+	let examples = "";
+	for	(let i = 0; i < data.examples.length; i++)
+	{
+		//Start example
+		let exampleContent = templateExample;
+		let example = data.examples[i];
+		let exampleHtmlID = data.name + "-" + example.name;
+		examples += "<div id=\"" + exampleHtmlID + "\">";
+		exampleList.push(exampleHtmlID);
+		
+		//Example > content
+		exampleContent = exampleContent.replace(/example-name/g, example.name);
+		exampleContent = exampleContent.replace(/example-description/g, example.description);
+		
+		
+		//Example > Properties
+		let properties = "";
+		for	(let i = 0; i < example.properties.length; i++)
+		{
+			let property = example.properties[i];
+			let propertyHtmlID = sliderHtmlID = data.name + "-" + example.name + "-" + property.name;
+			
+			switch (property.type)
+			{
+				case "float":
+					sliderList.push(propertyHtmlID);
+					properties += BuildSlider(propertyHtmlID, property);
+				break;
+				
+				case "color":
+					colorFieldList.push(propertyHtmlID);
+					properties += BuildColorPicker(propertyHtmlID, property);
+				break;
+			}
+		}
+		exampleContent = exampleContent.replace(/example-properties/g, properties);
 
-	var contentContainer = document.getElementById("content-container");
+
+		//Example > Code
+		exampleContent = exampleContent.replace(/example-code/g, example.code);
+		
+		//Example > Canvas
+		exampleContent = exampleContent.replace(/example-canvas-id/g, data.name + "-" + example.name + "-canvas");
+		
+		//Close example
+		examples += exampleContent + "</div>";
+	}
+	content = content.replace(/template-examples/g, examples);
+	
+	
+	//Apply new html
+	let contentContainer = document.getElementById("content-container");
 	contentContainer.innerHTML = content;
 	
+	//Update Prism
+	Prism.highlightAll();
+	
+	
+	//Open first example
+	OpenExample(0);
+	
+	
+	//Bind properties
+	for (let i = 0; i < sliderList.length; i++)
+	{
+		let slider = document.getElementById("slider-" + sliderList[i]);
+		let field = document.getElementById("slider-field-" + sliderList[i]);
+		field.innerText = slider.value;
+
+		slider.oninput = function() 
+		{
+		  field.innerText = this.value;
+		}
+	}
+	
+	//Bind canvas
+	for (let i = 0; i < data.examples.length; i++)
+	{
+		let canvasID = data.name + "-" + data.examples[i].name + "-canvas"
+		let canvas = document.getElementById(canvasID);
+		ApplyShader(canvas, data.examples[i].shader);
+	}
 }
 
-function BuildSlider(name, value, minValue, maxValue, step, shaderID)
+function OpenExample(id)
 {
-	return "<div class=\"slider-container\"><p>" + name + "</p>" + 
-	"<input type=\"range\" min=\"" + minValue + "\" max=\"" + maxValue + "\" value=\"" + value + "\" step=\"" + step + "\" class=\"slider\"/ id=\"slider-" + name +"\"></div>" +
-	"<p class=\"slider-value\"><span id=\"slider-field-" + name + "\">50</span></p>";
+	for	(let i = 0; i < exampleList.length; i++)
+	{
+		let example = document.getElementById(exampleList[i]);
+		
+		if (i == id)
+			example.style.display = 'flex';
+		else
+			example.style.display = 'none';
+	}
 }
+
+function BuildExampleButton(example, group, id)
+{
+	return "<input type=\"radio\" id=\"button-" + id + "\" name=\"button-" + group + "\" value=\"" + (id == 0 ? "true" : "false") + "\" onclick=\"OpenExample(" + id + ")\"><label for=\"button-" + id + "\">" + example.name + "</label></input>";
+}
+
+function BuildSlider(htmlID, property)
+{
+	return "<div class=\"slider-container\">" + 
+	"<p>" + property.name + "</p>" + 
+	"<input type=\"range\" min=\"" + property.min + "\" max=\"" + property.max + "\" value=\"" + property.value + "\" step=\"" + 0.01 + "\" class=\"slider\"/ id=\"slider-" + htmlID +"\">" +
+	"<p class=\"slider-value\"><span id=\"slider-field-" + htmlID + "\">50</span></p></div>";
+}
+
+function BuildColorPicker(htmlID, property)
+{
+	return "<div class=\"slider-container\">" + 
+	"<p>" + property.name + "</p>" +
+	"<input type=\"color\" value=\"" + property.value + "\" class=\"color-picker\" id=\"color-" + htmlID + "\"/>" +
+	"</div>";
+}
+

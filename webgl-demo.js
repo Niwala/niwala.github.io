@@ -5,7 +5,114 @@ var frequencyLocation;
 
 var frequencyValue;
 
-main();
+
+function ApplyShader(canvas, include)
+{
+	// var frequencySlider = document.getElementById("slider-frequency");
+	// var frequencyLabel = document.getElementById("slider-frequency-value");
+	
+	// frequencyLabel.innerHTML = frequencySlider.value;
+	// frequencyValue = frequencySlider.value;
+	// frequencySlider.oninput = function() 
+	// {
+	  // frequencyLabel.innerHTML = this.value;
+	  // frequencyValue = this.value;
+	// }
+	
+
+  const gl = canvas.getContext('webgl');
+
+  // If we don't have a GL context, give up now
+
+  if (!gl) {
+    alert('Unable to initialize WebGL. Your browser or machine may not support it.');
+    return;
+  }
+
+  // Vertex shader program
+
+  const vsSource = `
+    attribute vec4 aVertexPosition;
+    attribute vec2 aTextureCoord;
+
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
+
+    varying highp vec2 vTextureCoord;
+
+    void main(void) {
+      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+      vTextureCoord = aTextureCoord;
+    }
+  `;
+
+  // Fragment shader program
+
+  let fsSource = `
+    varying highp vec2 vTextureCoord;
+
+    uniform sampler2D uSampler;
+	uniform highp vec4 testColor;
+	uniform highp float time;
+	uniform highp float frequency;
+
+    void main(void) 
+	{
+		highp vec2 uv = gl_FragCoord.xy / 200.0;
+		highp vec3 color = vec3(0.0);
+		` + include + `
+		gl_FragColor = vec4(color, 1.0);
+    }
+  `;
+
+  // Initialize a shader program; this is where all the lighting
+  // for the vertices and so forth is established.
+  const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+  
+  timeLocation = gl.getUniformLocation(shaderProgram, "time");
+  frequencyLocation = gl.getUniformLocation(shaderProgram, "frequency");
+
+  // Collect all the info needed to use the shader program.
+  // Look up which attributes our shader program is using
+  // for aVertexPosition, aTextureCoord and also
+  // look up uniform locations.
+  const programInfo = {
+    program: shaderProgram,
+    attribLocations: {
+      vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+      textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord'),
+    },
+    uniformLocations: {
+      projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+      modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+      uSampler: gl.getUniformLocation(shaderProgram, 'uSampler'),
+    }
+  };
+
+  // Here's where we call the routine that builds all the
+  // objects we'll be drawing.
+  const buffers = initBuffers(gl);
+
+  const texture = loadTexture(gl, 'cubetexture.jpg');
+  
+  //Vars
+  //testColorID = gl.getUniformLocation(shaderProgram, "testColor");
+
+  var then = 0;
+
+  // Draw the scene repeatedly
+  function render(now) {
+    now *= 0.001;  // convert to seconds
+    const deltaTime = now - then;
+    then = now;
+
+    drawScene(gl, programInfo, buffers, texture, now, deltaTime);
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+}
+
 
 //
 // Start here
