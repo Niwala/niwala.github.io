@@ -169,7 +169,7 @@ function OpenExample(id)
 
 function BuildExampleButton(example, group, id)
 {
-	return "<input type=\"radio\" id=\"button-" + id + "\" name=\"button-" + group + "\" value=\"" + (id == 0 ? "true" : "false") + "\" onclick=\"OpenExample(" + id + ")\"><label for=\"button-" + id + "\">" + example.name + "</label></input>";
+	return "<input type=\"radio\" id=\"button-" + id + "\" name=\"button-" + group + "\" " + (id == 0 ? "checked" : "") + " onclick=\"OpenExample(" + id + ")\"><label for=\"button-" + id + "\">" + example.name + "</label></input>";
 }
 
 function BuildSlider(htmlID, data, property)
