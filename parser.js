@@ -81,12 +81,12 @@ function ReadJson(data)
 			{
 				case "float":
 					sliderList.push(propertyHtmlID);
-					properties += BuildSlider(propertyHtmlID, data, property);
+					properties += BuildSlider(propertyHtmlID, data.name + "-" + example.name, property);
 				break;
 				
 				case "color":
 					colorFieldList.push(propertyHtmlID);
-					properties += BuildColorPicker(propertyHtmlID, data, property);
+					properties += BuildColorPicker(propertyHtmlID, data.name + "-" + example.name, property);
 				break;
 			}
 		}
@@ -126,7 +126,7 @@ function ReadJson(data)
 		let canvas = document.getElementById(canvasID);
 		
 		var shaderRenderer = new ShaderRenderer(canvas, data, data.examples[i]);
-		renderers.set(data.name, shaderRenderer);
+		renderers.set(data.name + "-" + data.examples[i].name, shaderRenderer);
 	}
 	
 	//Bind properties
@@ -135,23 +135,21 @@ function ReadJson(data)
 		let slider = document.getElementById(sliderList[i]);
 		let field = document.getElementById("field-" + sliderList[i]);
 
-		let dataName = slider.getAttribute("data-name");
-		let renderer = renderers.get(dataName);
+		let exampleName = slider.getAttribute("data-example-name");
+		let renderer = renderers.get(exampleName);
 
-		OnChangeSlider(slider, field, renderer);
+        renderer.SetFloatValue(slider.id, slider.value);
+        field.innerText = slider.value;
 		
-		renderer.SetFloatValue(slider.id, slider.value);
-		field.innerText = slider.value;
+		slider.oninput = function() 
+		{
+			let dn = this.getAttribute("data-example-name");
+			let r = renderers.get(dn);
+			
+			r.SetFloatValue(this.id, this.value);
+			field.innerText = this.value;
+		};
 	}
-}
-
-function OnChangeSlider(slider, field, renderer) 
-{
-    slider.oninput = function() 
-	{
-        renderer.SetFloatValue(this.id, this.value);
-        field.innerText = this.value;
-    };
 }
 
 function OpenExample(id)
@@ -172,19 +170,19 @@ function BuildExampleButton(example, group, id)
 	return "<input type=\"radio\" id=\"button-" + id + "\" name=\"button-" + group + "\" " + (id == 0 ? "checked" : "") + " onclick=\"OpenExample(" + id + ")\"><label for=\"button-" + id + "\">" + example.name + "</label></input>";
 }
 
-function BuildSlider(htmlID, data, property)
+function BuildSlider(htmlID, dataExampleName, property)
 {
 	return "<div class=\"slider-container\">" + 
 	"<p>" + property.name + "</p>" + 
-	"<input type=\"range\" data-name=\"" + data.name + "\" min=\"" + property.min + "\" max=\"" + property.max + "\" value=\"" + property.value + "\" step=\"" + 0.01 + "\" class=\"slider\"/ id=\"" + htmlID +"\">" +
+	"<input type=\"range\" data-example-name=\"" + dataExampleName + "\" min=\"" + property.min + "\" max=\"" + property.max + "\" value=\"" + property.value + "\" step=\"" + 0.01 + "\" class=\"slider\"/ id=\"" + htmlID +"\">" +
 	"<p class=\"slider-value\"><span id=\"field-" + htmlID + "\">50</span></p></div>";
 }
 
-function BuildColorPicker(htmlID, data, property)
+function BuildColorPicker(htmlID, dataExampleName, property)
 {
 	return "<div class=\"slider-container\">" + 
 	"<p>" + property.name + "</p>" +
-	"<input type=\"color\" data-name=\"" + data.name + "\" value=\"" + property.value + "\" class=\"color-picker\" id=\"" + htmlID + "\"/>" +
+	"<input type=\"color\" data-example-name=\"" + dataExampleName + "\" value=\"" + property.value + "\" class=\"color-picker\" id=\"" + htmlID + "\"/>" +
 	"</div>";
 }
 

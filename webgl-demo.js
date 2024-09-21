@@ -171,7 +171,6 @@ void main(void)
 		{
 			let loc = this.locations.get(key);
 			this.gl.uniform1f(loc, value);
-			 // console.log(key + "  " + loc + "  " + value);
 		});
 		
 		this.colorValues.forEach((value, key) => 

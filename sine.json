@@ -25,11 +25,11 @@
 					"type": "float",
 					"value": 0,
 					"min": 0.0,
-					"max": 100.0
+					"max": 10.0
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * frequency + offset) * 0.5 + 0.5, uv.y));color.x += 0.1;",
+			"shader": "color = vec3(step(sin(uv.x * frequency + offset) * 0.5 + 0.5, uv.y));",
 			"code": "float result = step(sin(uv.x * frequency + offset), uv.y);"
 		},
 		
@@ -42,13 +42,13 @@
 					"name": "Amplitude",
 					"id": "amplitude",
 					"type": "float",
-					"value": 3.1415,
+					"value": 0.5,
 					"min": 0.0,
-					"max": 20.0
+					"max": 2.0
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time) * amplitude * 0.5 + 0.5, uv.y));color.y += 0.1;",
+			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time) * amplitude * 0.5 + 0.5, uv.y));",
 			"code": "float result = step(sin(uv.x * 3.1415 + time) * amplitude, uv.y);"
 		},
 		
