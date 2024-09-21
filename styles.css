@@ -94,6 +94,15 @@ article
 {
 	width: 170px;
 	margin: 0;
+	margin-bottom: 6px;
+}
+
+.color-picker
+{
+	border-radius: 5px;
+	background-color: #0d1117;
+	border-width: 0px;
+	padding:3px;
 }
 
 .slider-value

@@ -7,7 +7,7 @@
 	[
 		{
 			"name": "Frequency",
-			"description": "",
+			"description": "Dans cet exemple, nous pouvons faire varier la fréquence de notre sinus.",
 			"properties":
 			[
 				{
@@ -17,15 +17,25 @@
 					"value": 3.1415,
 					"min": 0.0,
 					"max": 20.0
+				},
+				
+				{
+					"name": "Offset",
+					"id": "offset",
+					"type": "float",
+					"value": 0,
+					"min": 0.0,
+					"max": 100.0
 				}
 			],
 			
-			"shader": "float result = step(sin(uv.x * frequency + time), uv.y)"
+			"shader": "float result = step(sin(uv.x * frequency + offset), uv.y)",
+			"code": "float result = step(sin(uv.x * frequency + offset), uv.y)"
 		},
 		
 		{
 			"name": "Amplitude",
-			"description": "",
+			"description": "Dans cet exemple, nous pouvons faire varier l'amplitude de notre sinus.",
 			"properties":
 			[
 				{
@@ -38,12 +48,13 @@
 				}
 			],
 			
-			"shader": "float result = step(sin(uv.x * frequency + time), uv.y)"
+			"shader": "float result = step(sin(uv.x * 6.2831) * amplitude, uv.y)",
+			"code": "float result = step(sin(uv.x * 6.2831) * amplitude, uv.y)"
 		},
 		
 		{
 			"name": "Speed",
-			"description": "",
+			"description": "Dans cet exemple, nous pouvons faire varier la vitesse de notre sinus.",
 			"properties":
 			[
 				{
@@ -56,7 +67,8 @@
 				}
 			],
 			
-			"shader": "float result = step(sin(uv.x * frequency + time), uv.y)"
+			"shader": "float result = step(sin(uv.x * frequency + time), uv.y)",
+			"code": "float result = step(sin(uv.x * 6.2831) * amplitude, uv.y)"
 		}
 	]
 }
