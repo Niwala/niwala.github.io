@@ -86,17 +86,17 @@ void main(void)
 
 		// Initialize a shader program; this is where all the lighting
 		// for the vertices and so forth is established.
-		const shaderProgram = this.initShaderProgram(this.gl, vertexShader, fragmentShader);
+		this.shaderProgram = this.initShaderProgram(this.gl, vertexShader, fragmentShader);
 		  
 		//Get properties locations > Built-in properties
-		this.timeLocation = this.gl.getUniformLocation(shaderProgram, "time");
+		this.timeLocation = this.gl.getUniformLocation(this.shaderProgram, "time");
 		
 		//Get properties locations > Example properties
 		for	(let i = 0; i < this.example.properties.length; i++)
 		{
 			let property = this.example.properties[i];
 			let propHtmlName = this.data.name + "-" + this.example.name + "-" + property.name
-			let loc = this.gl.getUniformLocation(shaderProgram, property.id);
+			let loc = this.gl.getUniformLocation(this.shaderProgram, property.id);
 			this.locations.set(propHtmlName, loc);
 			
 			switch(property.type)
@@ -115,42 +115,40 @@ void main(void)
 		// Look up which attributes our shader program is using
 		// for aVertexPosition, aTextureCoord and also
 		// look up uniform locations.
-		const programInfo = {
-			program: shaderProgram,
+		this.programInfo = {
+			program: this.shaderProgram,
 			attribLocations: {
-			  vertexPosition: this.gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-			  textureCoord: this.gl.getAttribLocation(shaderProgram, 'aTextureCoord'),
+			  vertexPosition: this.gl.getAttribLocation(this.shaderProgram, 'aVertexPosition'),
+			  textureCoord: this.gl.getAttribLocation(this.shaderProgram, 'aTextureCoord'),
 			},
 			uniformLocations: {
-			  projectionMatrix: this.gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-			  modelViewMatrix: this.gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-			  uSampler: this.gl.getUniformLocation(shaderProgram, 'uSampler'),
+			  projectionMatrix: this.gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix'),
+			  modelViewMatrix: this.gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix'),
+			  uSampler: this.gl.getUniformLocation(this.shaderProgram, 'uSampler'),
 			}
 		  };
 
 		// Here's where we call the routine that builds all the
 		// objects we'll be drawing.
-		const buffers = this.initBuffers(this.gl);
+		this.buffers = this.initBuffers(this.gl);
 
 
 		var then = 0;
 
 		// Draw the scene repeatedly
-		const render = (now) =>  
+		this.render = (now) =>  
 		{
 			now *= 0.001;  // convert to seconds
-			const deltaTime = now - then;
+			this.deltaTime = now - then;
 			then = now;
 			
 			this.time = now;
-			
-			const texture = null;
-			
-			this.drawScene(this.gl, programInfo, buffers, texture, now, deltaTime);
+						
+			this.drawScene(this.gl, this.programInfo, this.buffers, null, now, this.deltaTime);
 
-			requestAnimationFrame(render);
+			requestAnimationFrame(this.render);
 		}
-		requestAnimationFrame(render);
+		requestAnimationFrame(this.render);
 	}
 	
 	SetFloatValue(name, value)
@@ -193,17 +191,16 @@ void main(void)
 	{
 
 	  // Create a buffer for the cube's vertex positions.
-
-	  const positionBuffer = gl.createBuffer();
+	  this.positionBuffer = gl.createBuffer();
 
 	  // Select the positionBuffer as the one to apply buffer
 	  // operations to from here out.
 
-	  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+	  gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
 	  // Now create an array of positions for the cube.
 
-	  const positions = [
+	  this.positions = [
 		// Front face
 		-1.0, -1.0,  1.0,
 		 1.0, -1.0,  1.0,
@@ -215,14 +212,14 @@ void main(void)
 	  // shape. We do this by creating a Float32Array from the
 	  // JavaScript array, then use it to fill the current buffer.
 
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.positions), gl.STATIC_DRAW);
 
 	  // Now set up the texture coordinates for the faces.
 
-	  const textureCoordBuffer = gl.createBuffer();
-	  gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+	  this.textureCoordBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
 
-	  const textureCoordinates = [
+	  this.textureCoordinates = [
 		// Front
 		0.0,  0.0,
 		1.0,  0.0,
@@ -230,32 +227,32 @@ void main(void)
 		0.0,  1.0,
 	  ];
 
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoordinates),
 					gl.STATIC_DRAW);
 
 	  // Build the element array buffer; this specifies the indices
 	  // into the vertex arrays for each face's vertices.
 
-	  const indexBuffer = gl.createBuffer();
-	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+	  this.indexBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
 
 	  // This array defines each face as two triangles, using the
 	  // indices into the vertex array to specify each triangle's
 	  // position.
 
-	  const indices = [
+	  this.indices = [
 		0,  1,  2,      0,  2,  3,    // front
 	  ];
 
 	  // Now send the element array to GL
 
 	  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-		  new Uint16Array(indices), gl.STATIC_DRAW);
+		  new Uint16Array(this.indices), gl.STATIC_DRAW);
 
 	  return {
-		position: positionBuffer,
-		textureCoord: textureCoordBuffer,
-		indices: indexBuffer,
+		position: this.positionBuffer,
+		textureCoord: this.textureCoordBuffer,
+		indices: this.indexBuffer,
 	  };
 	}
 
@@ -335,11 +332,11 @@ void main(void)
 	  // and we only want to see objects between 0.1 units
 	  // and 100 units away from the camera.
 
-	  const fieldOfView = 45 * Math.PI / 180;   // in radians
-	  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-	  const zNear = 0.1;
-	  const zFar = 100.0;
-	  const projectionMatrix = mat4.create();
+	  let fieldOfView = 45 * Math.PI / 180;   // in radians
+	  let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+	  let zNear = 0.1;
+	  let zFar = 100.0;
+	  let projectionMatrix = mat4.create();
 
 	  // note: glmatrix.js always has the first argument
 	  // as the destination to receive the result.
@@ -351,7 +348,7 @@ void main(void)
 
 	  // Set the drawing position to the "identity" point, which is
 	  // the center of the scene.
-	  const modelViewMatrix = mat4.create();
+	  let modelViewMatrix = mat4.create();
 
 	  // Now move the drawing position a bit to where we want to
 	  // start drawing the square.
@@ -371,11 +368,11 @@ void main(void)
 	  // Tell WebGL how to pull out the positions from the position
 	  // buffer into the vertexPosition attribute
 	  {
-		const numComponents = 3;
-		const type = gl.FLOAT;
-		const normalize = false;
-		const stride = 0;
-		const offset = 0;
+		let numComponents = 3;
+		let type = gl.FLOAT;
+		let normalize = false;
+		let stride = 0;
+		let offset = 0;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
 		gl.vertexAttribPointer(
 			programInfo.attribLocations.vertexPosition,
@@ -438,9 +435,9 @@ void main(void)
 	  // gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
 	  {
-		const vertexCount = 6;
-		const type = gl.UNSIGNED_SHORT;
-		const offset = 0;
+		let vertexCount = 6;
+		let type = gl.UNSIGNED_SHORT;
+		let offset = 0;
 		gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
 	  }
 
@@ -456,22 +453,22 @@ void main(void)
 	//
 	initShaderProgram(gl, vsSource, fsSource) 
 	{
-	  const vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
-	  const fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+	  this.vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
+	  this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
 	  // Create the shader program
-	  const shaderProgram = gl.createProgram();
-	  gl.attachShader(shaderProgram, vertexShader);
-	  gl.attachShader(shaderProgram, fragmentShader);
-	  gl.linkProgram(shaderProgram);
+	  this.shaderProgram = gl.createProgram();
+	  gl.attachShader(this.shaderProgram, this.vertexShader);
+	  gl.attachShader(this.shaderProgram, this.fragmentShader);
+	  gl.linkProgram(this.shaderProgram);
 
 	  // If creating the shader program failed, alert
-	  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-		alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+	  if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
+		alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(this.shaderProgram));
 		return null;
 	  }
 
-	  return shaderProgram;
+	  return this.shaderProgram;
 	}
 
 	//
@@ -480,7 +477,7 @@ void main(void)
 	//
 	loadShader(gl, type, source) 
 	{
-	  const shader = gl.createShader(type);
+	  let shader = gl.createShader(type);
 
 	  // Send the source to the shader object
 	  gl.shaderSource(shader, source);
