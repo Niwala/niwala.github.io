@@ -29,7 +29,7 @@
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * frequency + offset), uv.y));",
+			"shader": "color = vec3(step(sin(uv.x * frequency + offset) * 0.5 + 0.5, uv.y));",
 			"code": "float result = step(sin(uv.x * frequency + offset), uv.y);"
 		},
 		
@@ -48,8 +48,8 @@
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time) * amplitude, uv.y));",
-			"code": "float result = step(sin(uv.x * 3.1415) * amplitude, uv.y);"
+			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time) * amplitude * 0.5 + 0.5, uv.y));",
+			"code": "float result = step(sin(uv.x * 3.1415 + time) * amplitude, uv.y);"
 		},
 		
 		{
@@ -67,8 +67,8 @@
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time * speed), uv.y));",
-			"code": "float result = step(sin(uv.x * 3.1415) * amplitude, uv.y);"
+			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time * speed) * 0.5 + 0.5, uv.y));",
+			"code": "float result = step(sin(uv.x * 3.1415 + time * speed), uv.y);"
 		}
 	]
 }
