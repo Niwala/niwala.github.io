@@ -29,8 +29,8 @@
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * frequency + offset) * 0.5 + 0.5, uv.y));",
-			"code": "float result = step(sin(uv.x * frequency + offset), uv.y);"
+			"shader": "color = vec3(step(uv.y, sin(uv.x * frequency + offset) * 0.5 + 0.5));",
+			"code": "float result = step(uv.y, sin(uv.x * frequency + offset));"
 		},
 		
 		{
@@ -48,8 +48,8 @@
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time) * amplitude * 0.5 + 0.5, uv.y));",
-			"code": "float result = step(sin(uv.x * 3.1415 + time) * amplitude, uv.y);"
+			"shader": "color = vec3(step(uv.y, sin(uv.x * 3.1415 + time) * amplitude * 0.5 + 0.5));",
+			"code": "float result = step(uv.y, sin(uv.x * 3.1415 + time) * amplitude);"
 		},
 		
 		{
@@ -67,8 +67,27 @@
 				}
 			],
 			
-			"shader": "color = vec3(step(sin(uv.x * 3.1415 + time * speed) * 0.5 + 0.5, uv.y));",
-			"code": "float result = step(sin(uv.x * 3.1415 + time * speed), uv.y);"
+			"shader": "color = vec3(step(uv.y, sin(uv.x * 3.1415 + time * speed) * 0.5 + 0.5));",
+			"code": "float result = step(uv.y, sin(uv.x * 3.1415 + time * speed));"
+		},
+		
+		{
+			"name": "Blink",
+			"description": "Dans cet exemple, le sinus est entièrement basé sur le temps plutôt que l'axe X.",
+			"properties":
+			[
+				{
+					"name": "Speed",
+					"id": "speed",
+					"type": "float",
+					"value": 3.1415,
+					"min": 0.0,
+					"max": 20.0
+				}
+			],
+			
+			"shader": "color = vec3(sin(time * speed) * 0.5 + 0.5);",
+			"code": "float result = sin(time * speed) * 0.5 + 0.5;"
 		}
 	]
 }
