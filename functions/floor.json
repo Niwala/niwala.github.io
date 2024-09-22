@@ -1,0 +1,23 @@
+{
+  "name": "Floor",
+  "tags": "",
+  "description": "Floor va retourner la valeur du plus proche nombre entier égal ou inférieur à x.\r\n",
+  "examples": [
+    {
+      "name": "Scaling",
+      "description": "Le floor est un bon example pour démontrer ce principe qui consite à déformer l'espace de travail pour modifier la manière dont s'applique notre opération.\r\n\r\nDans notre cas, un floor par défaut travail avec des nombres entiers, dans notre espace UV qui va de 0 à 1, cela ne nous donne pas grand chose à voir.\r\n\r\nMalheureusement, le floor ne prend pas de second argument, il \"fait des marches\" d'une taille de 1 uniquement, on ne peut pas lui dire d'en faire de plus petite.\r\n\r\nPar contre, nous pouvons changer nos UVs; si on multiple nos Uvs par 5, par exemple, on se retrouve alors avec des valeurs qui vont de 0 à 5 et le floor fera donc plus d'étapes par dessus,",
+      "shader": "color = vec3(step(uv.y * scale + time,  floor(uv.x * scale + time)));",
+      "code": "float result = step(uv.y * scale + time,  floor(uv.x * scale + time));",
+      "properties": [
+        {
+          "name": "Scale",
+          "id": "scale",
+          "type": "range",
+          "value": "1",
+          "min": "0",
+          "max": "10"
+        }
+      ]
+    }
+  ]
+}

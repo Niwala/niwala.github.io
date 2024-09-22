@@ -42,11 +42,13 @@ function ReadAllFunctions()
 function ReadFunctions(functions)
 {
 	//Add buttons for functions
-	let btnContainer = document.getElementById("function-list");
+	let list = "";
 	for (var i = 0; i < functions.length; i++) 
 	{
-		btnContainer.innerHTML += " " + functions[i] + " ";
+		list += " <button type=\"button\" onclick=\"ReadFunction('" + functions[i] + "')\">" + functions[i] + "</button>";
 	}
+	let btnContainer = document.getElementById("function-list");
+	btnContainer.innerHTML = list;
 	
 	//
 	for (var i = 0; i < functions.length; i++) 
@@ -58,6 +60,16 @@ function ReadFunctions(functions)
 		.then(jsonResponse => ReadJson(jsonResponse)) 
 	  	.catch((e) => console.error(e));
 	}
+}
+
+function ReadFunction(functionName)
+{
+	let filename = "https://niwala.github.io/functions/" + functionName;
+
+	fetch(filename)
+	.then(response => response.json())
+	.then(jsonResponse => ReadJson(jsonResponse)) 
+	.catch((e) => console.error(e));
 }
 
 function ReadJson(data)
