@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ShaderFunctionBuilder
 {
     [Serializable]
     public struct ShaderFunction
     {
-        public string name;
-        public string tags;
-        public string description;
+        [JsonConverter(typeof(EmptyStringConverter))] public string name;
+        [JsonConverter(typeof(EmptyStringConverter))] public string tags;
+        [JsonConverter(typeof(EmptyStringConverter))] public string description;
 
         public ShaderExample[] examples;
     }
@@ -19,10 +21,10 @@ namespace ShaderFunctionBuilder
     [Serializable]
     public struct ShaderExample
     {
-        public string name;
-        public string description;
-        public string shader;
-        public string code;
+        [JsonConverter(typeof(EmptyStringConverter))] public string name;
+        [JsonConverter(typeof(EmptyStringConverter))] public string description;
+        [JsonConverter(typeof(EmptyStringConverter))] public string shader;
+        [JsonConverter(typeof(EmptyStringConverter))] public string code;
 
         public ShaderProperty[] properties;
     }
@@ -30,17 +32,42 @@ namespace ShaderFunctionBuilder
     [Serializable]
     public struct ShaderProperty
     {
-        public string name;
-        public string id;
-        public string type;
-        public string value;
-        public string min;
-        public string max;
+        [JsonConverter(typeof(EmptyStringConverter))] public string name;
+        [JsonConverter(typeof(EmptyStringConverter))] public string id;
+        [JsonConverter(typeof(EmptyStringConverter))] public string type;
+        [JsonConverter(typeof(EmptyStringConverter))] public string value;
+        [JsonConverter(typeof(EmptyStringConverter))] public string min;
+        [JsonConverter(typeof(EmptyStringConverter))] public string max;
     }
 
     [Serializable]
     public struct FunctionCollection
     {
         public string[] functions;
+    }
+
+    public class EmptyStringConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteValue("");
+            }
+            else
+            {
+                writer.WriteValue(value);
+            }
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return reader.Value?.ToString() ?? "";
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(string);
+        }
     }
 }

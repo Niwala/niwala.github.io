@@ -54,6 +54,7 @@ function ReadFunctions(functions)
 
 function ReadJson(data)
 {
+	console.log(data);
 	exampleList = new Array();
 	sliderList = new Array();
 	toggleList =  new Array();
@@ -66,7 +67,8 @@ function ReadJson(data)
 	
 	//Example buttons
 	let exampleButtons = "";
-	for	(let i = 0; i < data.examples.length; i++)
+	let exampleCount = data.examples == null ? 0 : data.examples.length;
+	for	(let i = 0; i < exampleCount; i++)
 	{
 		exampleButtons += BuildExampleButton(data.examples[i], data.name, i);
 	}
@@ -75,7 +77,7 @@ function ReadJson(data)
 	
 	//Add all examples
 	let examples = "";
-	for	(let i = 0; i < data.examples.length; i++)
+	for	(let i = 0; i < exampleCount; i++)
 	{
 		//Start example
 		let exampleContent = templateExample;
@@ -91,7 +93,7 @@ function ReadJson(data)
 		
 		//Example > Properties
 		let properties = "";
-		for	(let i = 0; i < example.properties.length; i++)
+		for	(let i = 0; i < exampleCount; i++)
 		{
 			let property = example.properties[i];
 			let propertyHtmlID = sliderHtmlID = data.name + "-" + example.name + "-" + property.name;
@@ -144,7 +146,7 @@ function ReadJson(data)
 
 	//Bind canvas
 	const renderers = new Map();
-	for (let i = 0; i < data.examples.length; i++)
+	for (let i = 0; i < exampleCount; i++)
 	{
 		let canvasID = data.name + "-" + data.examples[i].name + "-canvas"
 		let canvas = document.getElementById(canvasID);

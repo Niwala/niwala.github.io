@@ -221,6 +221,7 @@ namespace ShaderFunctionBuilder
             collection.functions = files.ToList().Select(x => x.Name).ToArray();
 
             string filepath = workspace.Parent.FullName + "\\functions.json";
+            JsonSerializerSettings settings = new JsonSerializerSettings();
             string jsonFile = JsonConvert.SerializeObject(collection, Formatting.Indented);
             File.WriteAllText(filepath, jsonFile);
         }
