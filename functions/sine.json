@@ -1,5 +1,5 @@
 {
-  "name": "Sinus (sin)",
+  "name": "Sin",
   "tags": "trigonometry circle wave",
   "description": "Le sinus est très pratique pour créer une oscillation douce.",
   "examples": [
@@ -70,8 +70,8 @@
           "id": "compareY",
           "type": "toggle",
           "value": "False",
-          "min": null,
-          "max": null
+          "min": "",
+          "max": ""
         },
         {
           "name": "Speed",
