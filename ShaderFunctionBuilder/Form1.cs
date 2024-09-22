@@ -72,6 +72,17 @@ namespace ShaderFunctionBuilder
             return example.properties[index];
         }
 
+        private void SetCurrentProperty(ShaderProperty property)
+        {
+            int index = propertyList.SelectedIndex;
+            ShaderExample example = GetCurrentExample();
+            if (index < 0 || index >= example.properties.Length)
+                return;
+
+            example.properties[index] = property;
+            SetCurrentExample(example);
+        }
+
         private void OnSelectFile(object sender, EventArgs e)
         {
             OpenFile(files[fileList.SelectedIndex]);
@@ -204,6 +215,16 @@ namespace ShaderFunctionBuilder
         
         }
 
+        private void SaveIndex()
+        {
+            FunctionCollection collection = new FunctionCollection();
+            collection.functions = files.ToList().Select(x => x.Name).ToArray();
+
+            string filepath = workspace.Parent.FullName + "\\functions.json";
+            string jsonFile = JsonConvert.SerializeObject(collection, Formatting.Indented);
+            File.WriteAllText(filepath, jsonFile);
+        }
+
 
         #region Field changes
         private void OnChangeFunctionName(object sender, EventArgs e)
@@ -273,6 +294,7 @@ namespace ShaderFunctionBuilder
             string filepath = files[fileList.SelectedIndex].FullName;
             string jsonFile = JsonConvert.SerializeObject(function, Formatting.Indented);
             File.WriteAllText(filepath, jsonFile);
+            SaveIndex();
         }
 
         private void Revert(object sender, EventArgs e)
@@ -418,7 +440,26 @@ namespace ShaderFunctionBuilder
 
         private void RemoveProperty(object sender, EventArgs e)
         {
+            ShaderExample example = GetCurrentExample();
+            if (example.properties == null)
+                example.properties = new ShaderProperty[0];
 
+            int index = propertyList.SelectedIndex;
+            if (index < 0 || index >= example.properties.Length)
+                return;
+
+            List<ShaderProperty> properties = example.properties.ToList();
+            properties.RemoveAt(index);
+            example.properties = properties.ToArray();
+            propertyList.Items.RemoveAt(index);
+
+            SetCurrentExample(example);
+            if (properties.Count > 0)
+            {
+                propertyList.SelectedIndex = Math.Max(index - 1, 0);
+                SelectProperty(null, null);
+            }
+            SetDirty();
         }
 
         private void CreateProperty(object sender, EventArgs e)
@@ -450,6 +491,13 @@ namespace ShaderFunctionBuilder
 
         private void OnPropertyChanged(object sender, EventArgs e)
         {
+            ShaderProperty property = GetCurrentProperty();
+            property.name = propertyNameField.Text;
+            property.id = propertyShaderNameField.Text;
+            property.value = propertyValueField.Text;
+            property.min = propertyMinField.Text;
+            property.max = propertyMaxField.Text;
+            SetCurrentProperty(property);
             SetDirty();
         }
 

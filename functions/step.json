@@ -1,6 +1,14 @@
 {
   "name": "Step",
   "tags": null,
-  "description": null,
-  "examples": null
+  "description": "",
+  "examples": [
+    {
+      "name": "Example",
+      "description": "Empty example",
+      "shader": "//",
+      "code": "//",
+      "properties": null
+    }
+  ]
 }

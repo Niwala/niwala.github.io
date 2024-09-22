@@ -13,12 +13,7 @@ var colorFieldList;
 function Parse()
 {
 	LoadTemplates();
-	
-	fetch("https://niwala.github.io/sine.json")
-		.then(response => response.json())
-		.then(jsonResponse => ReadJson(jsonResponse))     
-	  .catch((e) => console.error(e));
-	
+	ReadAllFunctions();
 }
 
 function LoadTemplates()
@@ -33,6 +28,28 @@ function LoadTemplates()
 	
 	//Hide template
 	container.style.display = 'none';
+}
+
+function ReadAllFunctions()
+{
+	let index;
+		fetch("https://niwala.github.io/functions.json")
+		.then(response => response.json())
+		.then(jsonResponse => ReadFunctions(jsonResponse.functions))     
+	  	.catch((e) => console.error(e));
+}
+
+function ReadFunctions(functions)
+{
+	for (var i = 0; i < functions.length; i++) 
+	{
+		let filename = "https://niwala.github.io/functions/" + functions[i];
+
+	  	fetch(filename)
+		.then(response => response.json())
+		.then(jsonResponse => ReadJson(jsonResponse)) 
+	  	.catch((e) => console.error(e));
+	}
 }
 
 function ReadJson(data)

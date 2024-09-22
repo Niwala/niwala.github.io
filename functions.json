@@ -1,0 +1,7 @@
+{
+  "functions": [
+    "cosine.json",
+    "sine.json",
+    "step.json"
+  ]
+}

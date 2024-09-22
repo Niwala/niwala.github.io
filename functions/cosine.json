@@ -6,80 +6,16 @@
     {
       "name": "Blink",
       "description": "Dans cet exempvdsces",
-      "shader": "",
-      "code": "//Sans comparaison à l'axe Y\r\n\nfloat result = sin(time * speed) * 0.5 + 0.5;\r\n\r\n\n\n//Avec comparaison à l'axe y\r\n\nfloat result = step(uv.y, sin(time * speed) * 0.5 + 0.5);",
+      "shader": "//",
+      "code": "//Sans comparaison à l'axe Y\r\nfloat result = sin(time * speed) * 0.5 + 0.5;\r\n\r\n//Avec comparaison à l'axe y\r\nfloat result = step(uv.y, sin(time * speed) * 0.5 + 0.5);",
       "properties": [
         {
-          "name": null,
-          "id": null,
-          "type": "toggle",
-          "value": "false",
-          "min": null,
-          "max": null
-        },
-        {
-          "name": null,
-          "id": null,
+          "name": "Frequency",
+          "id": "frequency",
           "type": "range",
-          "value": "3.1415",
-          "min": "0.0",
-          "max": "20.0"
-        }
-      ]
-    },
-    {
-      "name": "Frequency",
-      "description": "Dans cet exemple, nous pouvons faire varier la fréquence de notre sinus.",
-      "shader": null,
-      "code": null,
-      "properties": [
-        {
-          "name": null,
-          "id": null,
-          "type": "range",
-          "value": "3.1415",
-          "min": "0.0",
-          "max": "20.0"
-        },
-        {
-          "name": null,
-          "id": null,
-          "type": "range",
-          "value": "0",
-          "min": "0.0",
-          "max": "10.0"
-        }
-      ]
-    },
-    {
-      "name": "Amplitude",
-      "description": "Dans cet exemple, nous pouvons faire varier l'amplitude de notre sinus.",
-      "shader": null,
-      "code": null,
-      "properties": [
-        {
-          "name": null,
-          "id": null,
-          "type": "range",
-          "value": "0.5",
-          "min": "0.0",
-          "max": "2.0"
-        }
-      ]
-    },
-    {
-      "name": "Speed",
-      "description": "Dans cet exemple, nous pouvons faire varier la vitesse de notre sinus.",
-      "shader": null,
-      "code": null,
-      "properties": [
-        {
-          "name": null,
-          "id": null,
-          "type": "range",
-          "value": "3.1415",
-          "min": "0.0",
-          "max": "20.0"
+          "value": "2",
+          "min": "0",
+          "max": "5"
         }
       ]
     }

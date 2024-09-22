@@ -37,4 +37,10 @@ namespace ShaderFunctionBuilder
         public string min;
         public string max;
     }
+
+    [Serializable]
+    public struct FunctionCollection
+    {
+        public string[] functions;
+    }
 }
