@@ -23,7 +23,8 @@ class ShaderRenderer
 		
 		//Build uniforms
 		let uniforms = "";
-		for (let j = 0; j < this.example.properties.length; j++)
+		let propertyCount = this.example.properties == null ? 0 : this.example.properties.length;
+		for (let j = 0; j < propertyCount; j++)
 		{
 			let property = this.example.properties[j];
 			
@@ -94,7 +95,7 @@ void main(void)
 		this.timeLocation = this.gl.getUniformLocation(this.shaderProgram, "time");
 		
 		//Get properties locations > Example properties
-		for	(let i = 0; i < this.example.properties.length; i++)
+		for	(let i = 0; i < propertyCount; i++)
 		{
 			let property = this.example.properties[i];
 			let propHtmlName = this.data.name + "-" + this.example.name + "-" + property.name

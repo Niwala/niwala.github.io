@@ -41,6 +41,14 @@ function ReadAllFunctions()
 
 function ReadFunctions(functions)
 {
+	//Add buttons for functions
+	let btnContainer = document.getElementById("function-list");
+	for (var i = 0; i < functions.length; i++) 
+	{
+		btnContainer.innerHTML += " " + functions[i] + " ";
+	}
+	
+	//
 	for (var i = 0; i < functions.length; i++) 
 	{
 		let filename = "https://niwala.github.io/functions/" + functions[i];
@@ -92,10 +100,11 @@ function ReadJson(data)
 		
 		
 		//Example > Properties
+		let propertyCount = example.properties == null ? 0 : example.properties.length;
 		let properties = "";
-		for	(let i = 0; i < exampleCount; i++)
+		for	(let j = 0; j < propertyCount; j++)
 		{
-			let property = example.properties[i];
+			let property = example.properties[j];
 			let propertyHtmlID = sliderHtmlID = data.name + "-" + example.name + "-" + property.name;
 			
 			switch (property.type)

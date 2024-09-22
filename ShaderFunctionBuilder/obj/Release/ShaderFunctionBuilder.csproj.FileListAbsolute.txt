@@ -1,0 +1,13 @@
+H:\Website\Website\ShaderFunctionBuilder\bin\Release\ShaderFunctionBuilder.exe.config
+H:\Website\Website\ShaderFunctionBuilder\bin\Release\ShaderFunctionBuilder.exe
+H:\Website\Website\ShaderFunctionBuilder\bin\Release\ShaderFunctionBuilder.pdb
+H:\Website\Website\ShaderFunctionBuilder\bin\Release\Newtonsoft.Json.dll
+H:\Website\Website\ShaderFunctionBuilder\bin\Release\Newtonsoft.Json.xml
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.Properties.Resources.resources
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.csproj.GenerateResource.cache
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.csproj.CoreCompileInputs.cache
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.csproj.CopyComplete
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.exe
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.pdb
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.csproj.AssemblyReference.cache
+H:\Website\Website\ShaderFunctionBuilder\obj\Release\ShaderFunctionBuilder.ShaderFunctionBuilder.resources
