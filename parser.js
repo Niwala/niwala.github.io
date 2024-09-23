@@ -10,10 +10,37 @@ var sliderList;
 var toggleList;
 var colorFieldList;
 
+var currentFileName;
+var currentFunction;
+var currentExample
+
 function Parse()
 {
 	LoadTemplates();
-	ReadAllFunctions();
+	ReadFunctionsIndex();
+}
+
+
+function GetCleanURL()
+{
+	let url = document.URL;
+	return url.substring(0, url.indexOf('?'));
+}
+
+function GetURLParams() 
+{
+	var idx = document.URL.indexOf('?');
+	var params = new Array();
+	if (idx != -1) 
+	{
+		var pairs = document.URL.substring(idx+1, document.URL.length).split('&');
+		for (var i = 0; i < pairs.length; i++) 
+		{
+			nameVal = pairs[i].split('=');
+			params[nameVal[0]] = nameVal[1];
+	   }
+	}
+	return params;
 }
 
 function LoadTemplates()
@@ -30,51 +57,66 @@ function LoadTemplates()
 	container.style.display = 'none';
 }
 
-function ReadAllFunctions()
+function ReadFunctionsIndex()
 {
 	let index;
 		fetch("https://niwala.github.io/functions.json")
 		.then(response => response.json())
-		.then(jsonResponse => ReadFunctions(jsonResponse.functions))     
+		.then(jsonResponse => AddFunctions(jsonResponse.functions))     
 	  	.catch((e) => console.error(e));
 }
 
-function ReadFunctions(functions)
+function AddFunctions(functions)
 {
 	//Add buttons for functions
 	let list = "";
 	for (var i = 0; i < functions.length; i++) 
 	{
-		list += " <button type=\"button\" onclick=\"ReadFunction('" + functions[i] + "')\">" + functions[i] + "</button>";
+		list += " <button type=\"button\" onclick=\"ReadFunctionFile('" + functions[i] + "')\">" + functions[i] + "</button>";
 	}
 	let btnContainer = document.getElementById("function-list");
 	btnContainer.innerHTML = list;
 	
-	//
-	for (var i = 0; i < functions.length; i++) 
+	//Auto-read function from url params
+	let params = GetURLParams();
+	let functionFromParams = params["function"];
+	
+	if (functionFromParams != null)
 	{
-		let filename = "https://niwala.github.io/functions/" + functions[i];
-
-	  	fetch(filename)
-		.then(response => response.json())
-		.then(jsonResponse => ReadJson(jsonResponse)) 
-	  	.catch((e) => console.error(e));
+		funcLoop : for (var i = 0; i < functions.length; i++) 
+		{
+			if (RemoveExtension(functions[i]) == functionFromParams)
+			{
+				ReadFunctionFile(functions[i]);
+				break funcLoop;
+			}
+		}
 	}
 }
 
-function ReadFunction(functionName)
+function ReadFunctionFile(filename)
 {
-	let filename = "https://niwala.github.io/functions/" + functionName;
-
-	fetch(filename)
+	//Record new current filename
+	currentFileName = filename;
+	
+	//Read file
+	let fileUrl = "https://niwala.github.io/functions/" + filename;
+	fetch(fileUrl)
 	.then(response => response.json())
-	.then(jsonResponse => ReadJson(jsonResponse)) 
+	.then(jsonResponse => OpenFunction(jsonResponse)) 
 	.catch((e) => console.error(e));
 }
 
-function ReadJson(data)
+function RemoveExtension(filename)
 {
-	console.log(data);
+	return filename.replace(/\.[^/\\.]+$/, "")
+}
+
+function OpenFunction(data)
+{
+	//Record new current function
+	currentFunction = data;
+	
 	exampleList = new Array();
 	sliderList = new Array();
 	toggleList =  new Array();
@@ -219,6 +261,19 @@ function ReadJson(data)
 
 function OpenExample(id)
 {
+	//Record new current example
+	currentExample = currentFunction.examples[id];
+	
+	//Update url parameters
+	const url = new URL(document.URL);
+	url.searchParams.set('function', currentFunction.name);
+	url.searchParams.set('example', currentExample.name);
+	console.log(url.href);
+	
+	document.title = "Shader Functions (" + currentFunction.name + ")";
+	window.history.pushState('data', "Shader Functions (" + currentFunction.name + ")", url.href);
+
+	//Enable selected example
 	for	(let i = 0; i < exampleList.length; i++)
 	{
 		let example = document.getElementById(exampleList[i]);
