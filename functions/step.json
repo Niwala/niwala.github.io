@@ -1,14 +1,47 @@
 {
   "name": "Step",
   "tags": "",
-  "description": "",
+  "description": "Le step(edge, x) permet de faire une comparaison entre deux valeurs.\r\nSi la valeur x est plus petite que l'edge, la fonction va retourner 0, dans le cas inverse, la function va retourner 1.",
   "examples": [
     {
-      "name": "Example",
+      "name": "Uniforms",
       "description": "Empty example",
-      "shader": "//",
-      "code": "//",
-      "properties": null
+      "shader": "color = vec3(step(edge, x));",
+      "code": "float result = step(edge, x);",
+      "properties": [
+        {
+          "name": "Edge",
+          "id": "edge",
+          "type": "range",
+          "value": "0.25",
+          "min": "0",
+          "max": "1"
+        },
+        {
+          "name": "X",
+          "id": "x",
+          "type": "range",
+          "value": "0.75",
+          "min": "0",
+          "max": "1"
+        }
+      ]
+    },
+    {
+      "name": "Coordinates",
+      "description": "",
+      "shader": "color = vec3(step(edge, uv.x));",
+      "code": "float result = step(edge, uv.x);",
+      "properties": [
+        {
+          "name": "Edge",
+          "id": "edge",
+          "type": "range",
+          "value": "0.25",
+          "min": "0",
+          "max": "1"
+        }
+      ]
     }
   ]
 }
