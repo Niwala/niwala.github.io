@@ -85,6 +85,7 @@ pre
 	border-style: solid;
 	border-radius: 8px;
 	
+	color: white;
 	background-color: #1b2330;
 }
 
@@ -92,6 +93,35 @@ pre
 {
 	width: 200px;
 	height: 200px;
+	border-radius: 5px;
+	align-self: end;
+}
+
+button.function-box 
+{
+	text-align: left;
+	cursor: pointer;
+	width: 380px;
+	margin: 10px
+}
+
+button.function-box:hover
+{
+	cursor: pointer;
+	background-color: #2e3e56;
+}
+
+#function-list
+{
+	display: flex;
+  flex-wrap: wrap;
+	justify-self: center;	
+}
+
+.shader-index-preview
+{
+	width: 150px;
+	height: 150px;
 	border-radius: 5px;
 	align-self: end;
 }

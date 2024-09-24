@@ -72,7 +72,12 @@ function AddFunctions(functions)
 	let list = "";
 	for (var i = 0; i < functions.length; i++) 
 	{
-		list += " <button type=\"button\" onclick=\"ReadFunctionFile('" + functions[i] + "')\">" + functions[i] + "</button>";
+		//list += " <button type=\"button\" onclick=\"ReadFunctionFile('" + functions[i] + "')\">" + functions[i] + "</button>";
+		list += "<button class='function-box'><div class='horizontal'><div class='vertical'><h3>" +
+		functions[i] + 
+		"</h3><p>" + 
+		"Lorem Ipsum" + 
+		"</p></div><canvas id='example-canvas-id' width='150px' height='150px' class='shader-index-preview'></canvas></div></button>";
 	}
 	let btnContainer = document.getElementById("function-list");
 	btnContainer.innerHTML = list;
