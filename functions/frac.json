@@ -1,0 +1,16 @@
+{
+  "name": "Frac",
+  "tags": "repeat cycle",
+  "description": "",
+  "indexDescription": "",
+  "indexShader": "color = vec3(step(uv.y,  fract(uv.x + time)));",
+  "examples": [
+    {
+      "name": "Example",
+      "description": "",
+      "shader": "",
+      "code": "",
+      "properties": null
+    }
+  ]
+}

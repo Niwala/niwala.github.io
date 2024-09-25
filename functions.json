@@ -15,6 +15,13 @@
       "previewShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));"
     },
     {
+      "filename": "frac.json",
+      "name": "Frac",
+      "tags": "repeat cycle",
+      "description": "",
+      "previewShader": "color = vec3(step(uv.y,  fract(uv.x + time)));"
+    },
+    {
       "filename": "sine.json",
       "name": "Sin",
       "tags": "trigonometry circle",
