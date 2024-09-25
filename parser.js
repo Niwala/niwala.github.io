@@ -111,16 +111,14 @@ function AddFunctions(functions)
 	let searchList = "";
 	searchItems = new Map();
 	for (var i = 0; i < functions.length; i++) 
-	{
-		let shortName = RemoveExtension(functions[i]);
-		
-		list += "<button class='function-box' onclick=\"ReadFunctionFile('" + functions[i] + "')\"><div class='horizontal'><div class='vertical'><h3>" +
-		functions[i] + 
+	{		
+		list += "<button class='function-box' onclick=\"ReadFunctionFile('" + functions[i].filename + "')\"><div class='horizontal'><div class='vertical'><h3>" +
+		functions[i].name + 
 		"</h3><p>" + 
-		"Lorem Ipsum" + 
+		functions[i].description + 
 		"</p></div><canvas id='example-canvas-id' width='150px' height='150px' class='shader-index-preview'></canvas></div></button>";
 		
-		searchList += "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + shortName + "\" onclick=\"SelectSearchItem('" + functions[i] + "')\">" + shortName + "</button>";
+		searchList += "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functions[i].name + "\" onclick=\"SelectSearchItem('" + functions[i].filename + "')\">" + functions[i].name + "</button>";
 	}
 	let btnContainer = document.getElementById("function-list");
 	btnContainer.innerHTML = list;
@@ -129,8 +127,7 @@ function AddFunctions(functions)
 	//List search items
 	for (var i = 0; i < functions.length; i++) 
 	{
-		let shortName = RemoveExtension(functions[i]);
-		searchItems.set(shortName, document.getElementById("search-item-" + shortName));
+		searchItems.set(functions[i].name, document.getElementById("search-item-" + functions[i].name));
 		//searchItems.set(functions[i], searchBarList.querySelector("#search-item-" + shortName));
 	}
 	

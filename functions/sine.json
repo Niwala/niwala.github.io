@@ -2,6 +2,7 @@
   "name": "Sin",
   "tags": "trigonometry circle wave",
   "description": "Le sinus est très pratique pour créer une oscillation douce.",
+  "previewShader": "",
   "examples": [
     {
       "name": "Frequency",

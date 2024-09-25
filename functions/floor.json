@@ -1,7 +1,8 @@
 {
   "name": "Floor",
-  "tags": "",
+  "tags": "round stair",
   "description": "Floor va retourner la valeur du plus proche nombre entier égal ou inférieur à x.\r\n",
+  "previewShader": "",
   "examples": [
     {
       "name": "Scaling",

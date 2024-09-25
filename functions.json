@@ -1,8 +1,32 @@
 {
   "functions": [
-    "cosine.json",
-    "floor.json",
-    "sine.json",
-    "step.json"
+    {
+      "filename": "cosine.json",
+      "name": "Cos",
+      "tags": "trigonometry circle wave",
+      "description": "Le cosinus est très pratique pour créer une oscillation douce.",
+      "previewShader": ""
+    },
+    {
+      "filename": "floor.json",
+      "name": "Floor",
+      "tags": "round stair",
+      "description": "Floor va retourner la valeur du plus proche nombre entier égal ou inférieur à x.\r\n",
+      "previewShader": ""
+    },
+    {
+      "filename": "sine.json",
+      "name": "Sin",
+      "tags": "trigonometry circle wave",
+      "description": "Le sinus est très pratique pour créer une oscillation douce.",
+      "previewShader": ""
+    },
+    {
+      "filename": "step.json",
+      "name": "Step",
+      "tags": "branch if",
+      "description": "Le step(edge, x) permet de faire une comparaison entre deux valeurs.\r\nSi la valeur x est plus petite que l'edge, la fonction va retourner 0, dans le cas inverse, la function va retourner 1.",
+      "previewShader": ""
+    }
   ]
 }

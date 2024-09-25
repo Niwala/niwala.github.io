@@ -218,7 +218,7 @@ namespace ShaderFunctionBuilder
         private void SaveIndex()
         {
             FunctionCollection collection = new FunctionCollection();
-            collection.functions = files.ToList().Select(x => x.Name).ToArray();
+            collection.functions = files.ToList().Select(x => GetInfo(x)).ToArray();
 
             string filepath = workspace.Parent.FullName + "\\functions.json";
             JsonSerializerSettings settings = new JsonSerializerSettings();
@@ -226,6 +226,20 @@ namespace ShaderFunctionBuilder
             File.WriteAllText(filepath, jsonFile);
         }
 
+        private FunctionInfo GetInfo(FileInfo fileInfo)
+        {
+            string jsonFile = File.ReadAllText(fileInfo.FullName);
+            ShaderFunction function = JsonConvert.DeserializeObject<ShaderFunction>(jsonFile);
+
+            return new FunctionInfo()
+            {
+                filename = fileInfo.Name,
+                name = function.name,
+                tags = function.tags,
+                description = function.description,
+                previewShader = function.previewShader
+            };
+        }
 
         #region Field changes
         private void OnChangeFunctionName(object sender, EventArgs e)

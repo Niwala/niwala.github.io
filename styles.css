@@ -179,7 +179,7 @@ button.function-box
 	text-align: left;
 	cursor: pointer;
 	width: 380px;
-	margin: 10px
+	margin: 10px;
 }
 
 button.function-box:hover
@@ -191,8 +191,10 @@ button.function-box:hover
 #function-list
 {
 	display: flex;
-  flex-wrap: wrap;
+	flex-wrap: wrap;
 	justify-self: center;	
+	margin-left: -10px;
+	margin-right: -10px;
 }
 
 .shader-index-preview

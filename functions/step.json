@@ -1,7 +1,8 @@
 {
   "name": "Step",
-  "tags": "",
+  "tags": "branch if",
   "description": "Le step(edge, x) permet de faire une comparaison entre deux valeurs.\r\nSi la valeur x est plus petite que l'edge, la fonction va retourner 0, dans le cas inverse, la function va retourner 1.",
+  "previewShader": "",
   "examples": [
     {
       "name": "Uniforms",

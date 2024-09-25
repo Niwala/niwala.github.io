@@ -14,6 +14,7 @@ namespace ShaderFunctionBuilder
         [JsonConverter(typeof(EmptyStringConverter))] public string name;
         [JsonConverter(typeof(EmptyStringConverter))] public string tags;
         [JsonConverter(typeof(EmptyStringConverter))] public string description;
+        [JsonConverter(typeof(EmptyStringConverter))] public string previewShader;
 
         public ShaderExample[] examples;
     }
@@ -43,7 +44,16 @@ namespace ShaderFunctionBuilder
     [Serializable]
     public struct FunctionCollection
     {
-        public string[] functions;
+        public FunctionInfo[] functions;
+    }
+
+    public struct FunctionInfo
+    {
+        [JsonConverter(typeof(EmptyStringConverter))] public string filename;
+        [JsonConverter(typeof(EmptyStringConverter))] public string name;
+        [JsonConverter(typeof(EmptyStringConverter))] public string tags;
+        [JsonConverter(typeof(EmptyStringConverter))] public string description;
+        [JsonConverter(typeof(EmptyStringConverter))] public string previewShader;
     }
 
     public class EmptyStringConverter : JsonConverter

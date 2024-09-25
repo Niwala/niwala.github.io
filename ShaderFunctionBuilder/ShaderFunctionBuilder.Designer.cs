@@ -247,6 +247,7 @@
             this.functionTagsField.Size = new System.Drawing.Size(602, 20);
             this.functionTagsField.TabIndex = 8;
             this.functionTagsField.Text = "Function tags";
+            this.functionTagsField.TextChanged += new System.EventHandler(this.OnChangeFunctionTags);
             // 
             // panel2
             // 
@@ -652,7 +653,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1055, 686);
             this.Controls.Add(this.splitContainer1);
-            this.Name = "ShaderFunctionsBuilder";
+            this.Name = "ShaderFunctionBuilder";
             this.Text = "Shader Functions Builder";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
