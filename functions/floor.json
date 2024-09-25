@@ -1,9 +1,9 @@
 {
   "name": "Floor",
-  "tags": "Function tags",
+  "tags": "round stairs",
   "description": "Function description",
   "indexDescription": "//",
-  "indexShader": "color = vec3(step(uv.y * 5 + time,  floor(uv.x * 5 + time)));",
+  "indexShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));",
   "examples": [
     {
       "name": "Scaling",

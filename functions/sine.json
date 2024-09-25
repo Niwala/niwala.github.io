@@ -1,6 +1,6 @@
 {
   "name": "Sin",
-  "tags": "Function tags",
+  "tags": "trigonometry circle",
   "description": "Function description",
   "indexDescription": "Retourne le sinus de la valeur donnée.",
   "indexShader": "color = vec3(step(uv.y, sin(uv.x * 3.1415 + time) * 0.5 + 0.5));",

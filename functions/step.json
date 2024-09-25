@@ -1,6 +1,6 @@
 {
   "name": "Step",
-  "tags": "Function tags",
+  "tags": "branch if",
   "description": "Function description",
   "indexDescription": "//",
   "indexShader": "color = vec3(step(uv.y, uv.x));",
