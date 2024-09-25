@@ -12,7 +12,7 @@
       "name": "Floor",
       "tags": "Function tags",
       "description": "//",
-      "previewShader": "color = vec3(step(uv.y + time,  floor(uv.x + time)));"
+      "previewShader": "color = vec3(step(uv.y * 5 + time,  floor(uv.x * 5 + time)));"
     },
     {
       "filename": "sine.json",
@@ -26,7 +26,7 @@
       "name": "Step",
       "tags": "Function tags",
       "description": "//",
-      "previewShader": "color = vec3(step(uv.x, uv.y));"
+      "previewShader": "color = vec3(step(uv.y, uv.x));"
     }
   ]
 }

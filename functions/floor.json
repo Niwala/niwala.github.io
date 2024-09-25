@@ -3,7 +3,7 @@
   "tags": "Function tags",
   "description": "Function description",
   "indexDescription": "//",
-  "indexShader": "color = vec3(step(uv.y + time,  floor(uv.x + time)));",
+  "indexShader": "color = vec3(step(uv.y * 5 + time,  floor(uv.x * 5 + time)));",
   "examples": [
     {
       "name": "Scaling",
