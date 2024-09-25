@@ -1,11 +1,16 @@
-class ShaderRenderer
+function RendererFromExample(canvas, data, example)
 {
-	constructor(canvas, data, example)
+	return new ShaderRenderer(canvas, data.name + "-" + example.name, example.shader, example.properties);
+}
+
+class ShaderRenderer
+{	
+	constructor(canvas, shaderGuid, shaderFragContent, shaderProperties)
 	{
 		this.canvas = canvas;
-		this.data = data;
-		this.example = example;
-		
+		this.width = canvas.getAttribute("width");
+		this.height = canvas.getAttribute("height");
+
 		this.locations = new Map();
 		this.floatValues = new Map();
 		this.colorValues = new Map();
@@ -23,10 +28,10 @@ class ShaderRenderer
 		
 		//Build uniforms
 		let uniforms = "";
-		let propertyCount = this.example.properties == null ? 0 : this.example.properties.length;
+		let propertyCount = shaderProperties == null ? 0 : shaderProperties.length;
 		for (let j = 0; j < propertyCount; j++)
 		{
-			let property = this.example.properties[j];
+			let property = shaderProperties[j];
 			
 			switch (property.type)
 			{
@@ -69,16 +74,17 @@ varying highp vec2 vTextureCoord;
 uniform sampler2D uSampler;
 uniform highp vec4 testColor;
 uniform highp float time;
-	
+uniform highp vec2 uRectSize;
+
 //Custom properties` + uniforms + ` 
 
 void main(void) 
 {
-	highp vec2 uv = gl_FragCoord.xy / 200.0;
+	highp vec2 uv = gl_FragCoord.xy / uRectSize;
 	highp vec3 color = vec3(0.0);
 		
 	//Custom frag
-	` + this.example.shader + `
+	` + shaderFragContent + `
 		
 	gl_FragColor = vec4(color, 1.0);
 }
@@ -93,12 +99,13 @@ void main(void)
 		  
 		//Get properties locations > Built-in properties
 		this.timeLocation = this.gl.getUniformLocation(this.shaderProgram, "time");
+		this.rectSize = this.gl.getUniformLocation(this.shaderProgram, "uRectSize");
 		
 		//Get properties locations > Example properties
 		for	(let i = 0; i < propertyCount; i++)
 		{
-			let property = this.example.properties[i];
-			let propHtmlName = this.data.name + "-" + this.example.name + "-" + property.name
+			let property = shaderProperties[i];
+			let propHtmlName = shaderGuid + "-" + property.name
 			let loc = this.gl.getUniformLocation(this.shaderProgram, property.id);
 			this.locations.set(propHtmlName, loc);
 			
@@ -170,6 +177,7 @@ void main(void)
 	{
 		//Built-in Properties
 		this.gl.uniform1f(this.timeLocation, this.time);
+		this.gl.uniform2f(this.rectSize, this.width, this.height);
 		
 		//Example properties
 		this.floatValues.forEach((value, key) => 

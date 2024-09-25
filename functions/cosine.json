@@ -3,7 +3,7 @@
   "tags": "Function tags",
   "description": "Function description",
   "indexDescription": "//",
-  "indexShader": "//",
+  "indexShader": "color = vec3(step(uv.y, cos(uv.x * 3.1415 + time) * 0.5 + 0.5));",
   "examples": [
     {
       "name": "Blink",

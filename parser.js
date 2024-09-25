@@ -116,7 +116,7 @@ function AddFunctions(functions)
 		functions[i].name + 
 		"</h3><p>" + 
 		functions[i].description + 
-		"</p></div><canvas id='example-canvas-id' width='150px' height='150px' class='shader-index-preview'></canvas></div></button>";
+		"</p></div><canvas id='shader-preview-" + functions[i].name + "' width='150' height='150' class='shader-index-preview'></canvas></div></button>";
 		
 		searchList += "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functions[i].name + "\" onclick=\"SelectSearchItem('" + functions[i].filename + "')\">" + functions[i].name + "</button>";
 	}
@@ -124,11 +124,15 @@ function AddFunctions(functions)
 	btnContainer.innerHTML = list;
 	searchBarList.innerHTML = searchList;
 	
-	//List search items
+	
+	//List search items & Bind shader preview canvases
 	for (var i = 0; i < functions.length; i++) 
 	{
 		searchItems.set((functions[i].name + " " + functions[i].tags).toLowerCase(), document.getElementById("search-item-" + functions[i].name));
-		//searchItems.set(functions[i], searchBarList.querySelector("#search-item-" + shortName));
+		
+		let previewId = "shader-preview-" + functions[i].name;
+		let canvas = document.getElementById(previewId);
+		let shaderRenderer = new ShaderRenderer(canvas, previewId, functions[i].previewShader, null);
 	}
 	
 	
@@ -306,7 +310,7 @@ function OpenFunction(data, exampleID = 0)
 		let canvasID = data.name + "-" + data.examples[i].name + "-canvas"
 		let canvas = document.getElementById(canvasID);
 		
-		var shaderRenderer = new ShaderRenderer(canvas, data, data.examples[i]);
+		var shaderRenderer = RendererFromExample(canvas, data, data.examples[i]);
 		renderers.set(data.name + "-" + data.examples[i].name, shaderRenderer);
 	}
 	
