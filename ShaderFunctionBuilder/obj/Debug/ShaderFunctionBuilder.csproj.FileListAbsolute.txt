@@ -17,10 +17,10 @@ H:\Website\Website\ShaderFunctionBuilder\bin\Debug\ShaderFunctionBuilder.pdb
 H:\Website\Website\ShaderFunctionBuilder\bin\Debug\Newtonsoft.Json.dll
 H:\Website\Website\ShaderFunctionBuilder\bin\Debug\Newtonsoft.Json.xml
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.AssemblyReference.cache
-H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.Form1.resources
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.Properties.Resources.resources
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.GenerateResource.cache
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.CoreCompileInputs.cache
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.CopyComplete
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.exe
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.pdb
+H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.ShaderFunctionBuilder.resources

@@ -14,7 +14,8 @@ namespace ShaderFunctionBuilder
         [JsonConverter(typeof(EmptyStringConverter))] public string name;
         [JsonConverter(typeof(EmptyStringConverter))] public string tags;
         [JsonConverter(typeof(EmptyStringConverter))] public string description;
-        [JsonConverter(typeof(EmptyStringConverter))] public string previewShader;
+        [JsonConverter(typeof(EmptyStringConverter))] public string indexDescription;
+        [JsonConverter(typeof(EmptyStringConverter))] public string indexShader;
 
         public ShaderExample[] examples;
     }

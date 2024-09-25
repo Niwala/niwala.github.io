@@ -20,6 +20,13 @@ article
 	flex-direction: row;
 }
 
+h1
+{
+	color: white;
+	font-family: verdana;
+	font-size: 2rem;
+}
+
 h2
 {
 	margin-bottom: 0px;
@@ -78,7 +85,7 @@ pre
 	padding-left: 15px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	flex-grow: 0;
+	flex-grow: 1;
 
 	border-color: #3d444d;
 	border-width: 1px;
@@ -173,6 +180,13 @@ pre
 	border-color: #3d444d;
 	background-color: #5b6573;
 }
+
+button.transparent-button
+{
+	background-color: #00000000;
+	border-width: 0;
+	cursor: pointer;
+}
 	
 button.function-box 
 {
@@ -180,6 +194,7 @@ button.function-box
 	cursor: pointer;
 	width: 380px;
 	margin: 10px;
+	flex-grow:0;
 }
 
 button.function-box:hover

@@ -3,30 +3,30 @@
     {
       "filename": "cosine.json",
       "name": "Cos",
-      "tags": "trigonometry circle wave",
-      "description": "Le cosinus est très pratique pour créer une oscillation douce.",
-      "previewShader": ""
+      "tags": "Function tags",
+      "description": "//",
+      "previewShader": "//"
     },
     {
       "filename": "floor.json",
       "name": "Floor",
-      "tags": "round stair",
-      "description": "Floor va retourner la valeur du plus proche nombre entier égal ou inférieur à x.\r\n",
-      "previewShader": ""
+      "tags": "Function tags",
+      "description": "//",
+      "previewShader": "//"
     },
     {
       "filename": "sine.json",
       "name": "Sin",
-      "tags": "trigonometry circle wave",
-      "description": "Le sinus est très pratique pour créer une oscillation douce.",
-      "previewShader": ""
+      "tags": "Function tags",
+      "description": "Retourne le sinus de la valeur donnée.",
+      "previewShader": "color = vec3(step(uv.y, sin(uv.x * 3.1415 + time) * 0.5 + 0.5));"
     },
     {
       "filename": "step.json",
       "name": "Step",
-      "tags": "branch if",
-      "description": "Le step(edge, x) permet de faire une comparaison entre deux valeurs.\r\nSi la valeur x est plus petite que l'edge, la fonction va retourner 0, dans le cas inverse, la function va retourner 1.",
-      "previewShader": ""
+      "tags": "Function tags",
+      "description": "//",
+      "previewShader": "//"
     }
   ]
 }

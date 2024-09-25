@@ -20,6 +20,7 @@ namespace ShaderFunctionBuilder
         private ShaderFunction function;
         private ShaderFunction cachedFunction;
         private bool dirty;
+        private bool openningFile;
 
         public ShaderFunctionBuilder()
         {
@@ -100,6 +101,7 @@ namespace ShaderFunctionBuilder
         private void OpenFile(FileInfo file)
         {
             SaveBeforeChange();
+            openningFile = true;
 
             string jsonFile = File.ReadAllText(file.FullName);
             function = JsonConvert.DeserializeObject<ShaderFunction>(jsonFile);
@@ -110,6 +112,8 @@ namespace ShaderFunctionBuilder
             functionNameField.Text = function.name;
             functionTagsField.Text = function.tags;
             functionDescriptionField.Text = function.description;
+            indexDescriptionField.Text = function.indexDescription;
+            indexShaderField.Text = function.indexShader;
 
             //Set examples info
             exampleTabs.TabPages.Clear();
@@ -128,6 +132,7 @@ namespace ShaderFunctionBuilder
             }
             exampleTabs.SelectedIndex = 0;
             OnSelectTab(null, null);
+            openningFile = false;
         }
 
         private void OpenExample(ShaderExample example)
@@ -236,52 +241,30 @@ namespace ShaderFunctionBuilder
                 filename = fileInfo.Name,
                 name = function.name,
                 tags = function.tags,
-                description = function.description,
-                previewShader = function.previewShader
+                description = function.indexDescription,
+                previewShader = function.indexShader
             };
         }
 
         #region Field changes
-        private void OnChangeFunctionName(object sender, EventArgs e)
+        private void OnChangeFunction(object sender, EventArgs e)
         {
+            if (openningFile)
+                return;
+
             function.name = functionNameField.Text;
-            SetDirty();
-        }
-
-        private void OnChangeFunctionTags(object sender, EventArgs e)
-        {
             function.tags = functionTagsField.Text;
-            SetDirty();
-        }
-
-        private void OnChangeFunctionDescription(object sender, EventArgs e)
-        {
             function.description = functionDescriptionField.Text;
-            SetDirty();
-        }
-
-        private void OnChangeFunctionCode(object sender, EventArgs e)
-        {
-            int index = exampleTabs.SelectedIndex;
-            if (index < 0 || index >= function.examples.Length)
-                return;
-
-            function.examples[index].code = exampleCodeField.Text;
-            SetDirty();
-        }
-
-        private void OnChangeFunctionShader(object sender, EventArgs e)
-        {
-            int index = exampleTabs.SelectedIndex;
-            if (index < 0 || index >= function.examples.Length)
-                return;
-
-            function.examples[index].shader = exampleShaderField.Text;
+            function.indexDescription = indexDescriptionField.Text;
+            function.indexShader = indexShaderField.Text;
             SetDirty();
         }
 
         private void OnChangeExampleName(object sender, EventArgs e)
         {
+            if (openningFile)
+                return;
+
             int index = exampleTabs.SelectedIndex;
             if (index < 0 || index >= function.examples.Length)
                 return;
@@ -294,6 +277,9 @@ namespace ShaderFunctionBuilder
 
         private void OnChangeExampleDescription(object sender, EventArgs e)
         {
+            if (openningFile)
+                return;
+
             int index = exampleTabs.SelectedIndex;
             if (index < 0 || index >= function.examples.Length)
                 return;
@@ -301,6 +287,33 @@ namespace ShaderFunctionBuilder
             function.examples[index].description = exampleDescriptionField.Text;
             SetDirty();
         }
+
+        private void OnChangeExampleCode(object sender, EventArgs e)
+        {
+            if (openningFile)
+                return;
+
+            int index = exampleTabs.SelectedIndex;
+            if (index < 0 || index >= function.examples.Length)
+                return;
+
+            function.examples[index].code = exampleCodeField.Text;
+            SetDirty();
+        }
+
+        private void OnChangeExampleShader(object sender, EventArgs e)
+        {
+            if (openningFile)
+                return;
+
+            int index = exampleTabs.SelectedIndex;
+            if (index < 0 || index >= function.examples.Length)
+                return;
+
+            function.examples[index].shader = exampleShaderField.Text;
+            SetDirty();
+        }
+
         #endregion
 
         #region Function management

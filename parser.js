@@ -127,7 +127,7 @@ function AddFunctions(functions)
 	//List search items
 	for (var i = 0; i < functions.length; i++) 
 	{
-		searchItems.set(functions[i].name, document.getElementById("search-item-" + functions[i].name));
+		searchItems.set((functions[i].name + " " + functions[i].tags).toLowerCase(), document.getElementById("search-item-" + functions[i].name));
 		//searchItems.set(functions[i], searchBarList.querySelector("#search-item-" + shortName));
 	}
 	
@@ -141,13 +141,11 @@ function AddFunctions(functions)
 	if (functionFromParams != null)
 	{
 		funcLoop : for (var i = 0; i < functions.length; i++) 
-		{
-			console.log(RemoveExtension(functions[i]) + "  " + functionFromParams);
-			
-			if (RemoveExtension(functions[i]) == functionFromParams)
+		{			
+			if (RemoveExtension(functions[i].filename) == functionFromParams)
 			{
 				//Read function + example
-				ReadFunctionFile(functions[i], exampleID);
+				ReadFunctionFile(functions[i].filename, exampleID);
 								
 				//break
 				break funcLoop;
@@ -164,7 +162,7 @@ function SelectFirstSearchItem()
 		let inSearch = key.includes(searchText);
 		if (inSearch)
 		{
-			SelectSearchItem(key + ".json");
+			value.click();
 			return;
 		}
 	});
@@ -215,7 +213,6 @@ function OpenFunction(data, exampleID = 0)
 	let content = templateContainer;
 	content = content.replace(/template-title/g, data.name);
 	content = content.replace(/template-description/g, data.description);
-	
 	
 	//Example buttons
 	let exampleButtons = "";
@@ -284,9 +281,14 @@ function OpenFunction(data, exampleID = 0)
 	content = content.replace(/template-examples/g, examples);
 	
 	
-	//Apply new html
+	//Apply new html & show content container
 	let contentContainer = document.getElementById("content-container");
+	contentContainer.style.display = 'flex';
 	contentContainer.innerHTML = content;
+	
+	//Hide function list
+	let functionBox = document.getElementById("function-list");
+	functionBox.style.display = 'none';
 	
 	//Update Prism
 	Prism.highlightAll();
@@ -359,7 +361,6 @@ function OpenExample(id)
 	let shortName = RemoveExtension(currentFileName);
 	url.searchParams.set('function', shortName);
 	url.searchParams.set('example', id);
-	console.log(url.href);
 	
 	document.title = "Shader Functions (" + currentFunction.name + ")";
 	window.history.pushState('data', "Shader Functions (" + currentFunction.name + ")", url.href);
@@ -374,6 +375,31 @@ function OpenExample(id)
 		else
 			example.style.display = 'none';
 	}
+}
+
+function CloseFunction()
+{
+	//Update url parameters
+	const url = new URL(document.URL);
+	let shortName = RemoveExtension(currentFileName);
+	url.searchParams.delete('function');
+	url.searchParams.delete('example');
+	
+	document.title = "Shader Functions";
+	window.history.pushState('data', "Shader Functions", url.href);
+	
+	//Hide content container
+	let contentContainer = document.getElementById("content-container");
+	contentContainer.style.display = 'none'; 
+	
+	//Show function list
+	let functionBox = document.getElementById("function-list");
+	functionBox.style.display = 'flex';
+}
+
+function GoHome()
+{
+	CloseFunction();
 }
 
 function BuildExampleButton(example, group, id, selectedID = 0)
@@ -409,7 +435,7 @@ function BuildColorPicker(htmlID, dataExampleName, property)
 
 function SearchFunction(search)
 {
-	let searchText = searchBar.value;
+	let searchText = searchBar.value.toLowerCase();
 	
 	if (searchText.length == 0)
 	{

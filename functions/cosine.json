@@ -1,8 +1,9 @@
 {
   "name": "Cos",
-  "tags": "trigonometry circle wave",
-  "description": "Le cosinus est très pratique pour créer une oscillation douce.",
-  "previewShader": "",
+  "tags": "Function tags",
+  "description": "Function description",
+  "indexDescription": "//",
+  "indexShader": "//",
   "examples": [
     {
       "name": "Blink",
