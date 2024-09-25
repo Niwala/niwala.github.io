@@ -160,7 +160,15 @@ function AddFunctions(functions)
 
 function SelectFirstSearchItem()
 {
-	let searchText = searchBar.value;
+	let searchText = searchBar.value.toLowerCase();
+	
+	if (searchText == "home")
+	{
+		StopSearch();
+		GoHome();
+		return;
+	}
+	
 	searchItems.forEach((value, key) => 
 	{
 		let inSearch = key.includes(searchText);
