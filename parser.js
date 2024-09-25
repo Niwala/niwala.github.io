@@ -1,4 +1,5 @@
 Parse();
+SetupSearchHooks();
 
 //Templates
 var templateContainer;
@@ -14,12 +15,49 @@ var currentFileName;
 var currentFunction;
 var currentExample
 
+var searchBar;
+var searchBarList;
+var searchItems;
+
 function Parse()
 {
 	LoadTemplates();
 	ReadFunctionsIndex();
 }
 
+function SetupSearchHooks()
+{
+	searchBar = document.getElementById("search-bar");
+	searchBarList = document.getElementById("search-bar-list");
+	let searchForm = document.getElementById("search-form");
+	
+	searchBar.addEventListener("blur", function(event) 
+	{
+		if (event.relatedTarget == null || event.relatedTarget.getAttribute("class") != "search-bar-item")
+		{
+			StopSearch();
+		}
+    });
+	
+	searchForm.addEventListener("submit", function() 
+	{
+		event.preventDefault(); 
+		SelectFirstSearchItem();
+    });
+	
+	//Add shortcut on search bar
+	document.addEventListener("keydown", function(event) 
+	{
+		if (document.activeElement === searchBar)
+			return;
+				
+		if (event.key === "f" || event.key === "F") 
+		{
+			event.preventDefault();  // Empêche les comportements par défaut de la touche F
+			searchBar.focus();  // Focalise la barre de recherche
+		}
+	});
+}
 
 function GetCleanURL()
 {
@@ -70,32 +108,81 @@ function AddFunctions(functions)
 {
 	//Add buttons for functions
 	let list = "";
+	let searchList = "";
+	searchItems = new Map();
 	for (var i = 0; i < functions.length; i++) 
 	{
-		list += " <button type=\"button\" onclick=\"ReadFunctionFile('" + functions[i] + "')\">" + functions[i] + "</button>";
+		let shortName = RemoveExtension(functions[i]);
+		list += "<button type=\"button\" onclick=\"ReadFunctionFile('" + functions[i] + "')\">" + shortName + "</button>";
+		searchList += "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + shortName + "\" onclick=\"SelectSearchItem('" + functions[i] + "')\">" + shortName + "</button>";
 	}
 	let btnContainer = document.getElementById("function-list");
 	btnContainer.innerHTML = list;
+	searchBarList.innerHTML = searchList;
+	
+	//List search items
+	for (var i = 0; i < functions.length; i++) 
+	{
+		let shortName = RemoveExtension(functions[i]);
+		searchItems.set(shortName, document.getElementById("search-item-" + shortName));
+		//searchItems.set(functions[i], searchBarList.querySelector("#search-item-" + shortName));
+	}
+	
 	
 	//Auto-read function from url params
-	let params = GetURLParams();
+	let params = GetURLParams();	
 	let functionFromParams = params["function"];
+	let exampleFromParams = params["example"];
+	let exampleID = exampleFromParams == null ? 0 : exampleFromParams;
 	
 	if (functionFromParams != null)
 	{
 		funcLoop : for (var i = 0; i < functions.length; i++) 
 		{
+			console.log(RemoveExtension(functions[i]) + "  " + functionFromParams);
+			
 			if (RemoveExtension(functions[i]) == functionFromParams)
 			{
-				ReadFunctionFile(functions[i]);
+				//Read function + example
+				ReadFunctionFile(functions[i], exampleID);
+								
+				//break
 				break funcLoop;
 			}
 		}
 	}
 }
 
-function ReadFunctionFile(filename)
+function SelectFirstSearchItem()
 {
+	let searchText = searchBar.value;
+	searchItems.forEach((value, key) => 
+	{
+		let inSearch = key.includes(searchText);
+		if (inSearch)
+		{
+			SelectSearchItem(key + ".json");
+			return;
+		}
+	});
+}
+
+function SelectSearchItem(filename)
+{
+	StopSearch();
+	ReadFunctionFile(filename);
+}
+
+function StopSearch()
+{
+	searchBar.value= "";
+	searchBarList.style.display = 'none';
+}
+
+function ReadFunctionFile(filename, exampleID = 0)
+{
+	console.log("Read " + filename);
+	
 	//Record new current filename
 	currentFileName = filename;
 	
@@ -103,7 +190,7 @@ function ReadFunctionFile(filename)
 	let fileUrl = "https://niwala.github.io/functions/" + filename;
 	fetch(fileUrl)
 	.then(response => response.json())
-	.then(jsonResponse => OpenFunction(jsonResponse)) 
+	.then(jsonResponse => OpenFunction(jsonResponse, exampleID)) 
 	.catch((e) => console.error(e));
 }
 
@@ -112,7 +199,7 @@ function RemoveExtension(filename)
 	return filename.replace(/\.[^/\\.]+$/, "")
 }
 
-function OpenFunction(data)
+function OpenFunction(data, exampleID = 0)
 {
 	//Record new current function
 	currentFunction = data;
@@ -132,7 +219,7 @@ function OpenFunction(data)
 	let exampleCount = data.examples == null ? 0 : data.examples.length;
 	for	(let i = 0; i < exampleCount; i++)
 	{
-		exampleButtons += BuildExampleButton(data.examples[i], data.name, i);
+		exampleButtons += BuildExampleButton(data.examples[i], data.name, i, exampleID);
 	}
 	content = content.replace(/template-buttons/g, exampleButtons);
 	
@@ -202,8 +289,8 @@ function OpenFunction(data)
 	Prism.highlightAll();
 	
 	
-	//Open first example
-	OpenExample(0);
+	//Open example
+	OpenExample(exampleID);
 	
 	
 
@@ -260,14 +347,15 @@ function OpenFunction(data)
 }
 
 function OpenExample(id)
-{
+{	
 	//Record new current example
 	currentExample = currentFunction.examples[id];
 	
 	//Update url parameters
 	const url = new URL(document.URL);
-	url.searchParams.set('function', currentFunction.name);
-	url.searchParams.set('example', currentExample.name);
+	let shortName = RemoveExtension(currentFileName);
+	url.searchParams.set('function', shortName);
+	url.searchParams.set('example', id);
 	console.log(url.href);
 	
 	document.title = "Shader Functions (" + currentFunction.name + ")";
@@ -285,9 +373,9 @@ function OpenExample(id)
 	}
 }
 
-function BuildExampleButton(example, group, id)
+function BuildExampleButton(example, group, id, selectedID = 0)
 {
-	return "<input type=\"radio\" id=\"button-" + id + "\" name=\"button-" + group + "\" " + (id == 0 ? "checked" : "") + " onclick=\"OpenExample(" + id + ")\"><label for=\"button-" + id + "\">" + example.name + "</label></input>";
+	return "<input type=\"radio\" id=\"button-" + id + "\" name=\"button-" + group + "\" " + (id == selectedID ? "checked" : "") + " onclick=\"OpenExample(" + id + ")\"><label for=\"button-" + id + "\">" + example.name + "</label></input>";
 }
 
 function BuildSlider(htmlID, dataExampleName, property)
@@ -316,3 +404,23 @@ function BuildColorPicker(htmlID, dataExampleName, property)
 	"</div>";
 }
 
+function SearchFunction(search)
+{
+	let searchText = searchBar.value;
+	
+	if (searchText.length == 0)
+	{
+		searchBarList.style.display = 'none';
+	}
+	else
+	{
+		searchBarList.style.display = 'flex';
+	}
+	
+	searchItems.forEach((value, key) => 
+	{
+		let inSearch = key.includes(searchText);
+		value.style.display = inSearch ? 'flex' : 'none';
+	});
+	
+}
