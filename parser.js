@@ -113,7 +113,13 @@ function AddFunctions(functions)
 	for (var i = 0; i < functions.length; i++) 
 	{
 		let shortName = RemoveExtension(functions[i]);
-		list += "<button type=\"button\" onclick=\"ReadFunctionFile('" + functions[i] + "')\">" + shortName + "</button>";
+		
+		list += "<button class='function-box' onclick=\"ReadFunctionFile('" + functions[i] + "')\"><div class='horizontal'><div class='vertical'><h3>" +
+		functions[i] + 
+		"</h3><p>" + 
+		"Lorem Ipsum" + 
+		"</p></div><canvas id='example-canvas-id' width='150px' height='150px' class='shader-index-preview'></canvas></div></button>";
+		
 		searchList += "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + shortName + "\" onclick=\"SelectSearchItem('" + functions[i] + "')\">" + shortName + "</button>";
 	}
 	let btnContainer = document.getElementById("function-list");
