@@ -3,7 +3,7 @@
   "tags": "scruve",
   "description": "Permet de facilement réaliser une sCurve entre deux valeurs.",
   "indexDescription": "Permet de facilement réaliser une sCurve entre deux valeurs.",
-  "indexShader": "highp float a = abs((fract(uv.x + time) - 0.5) * 2.0);\r\nhighp int segment = ((int)floor(uv.x + time)) % 3;\r\nif (segment  == 1)\r\n\tcolor = vec3(step(uv.y,  smoothstep(0.0, 1.0, a)));\r\ncolor = vec3((float)segment);",
+  "indexShader": "color = vec3(step(uv.y, smoothstep(0.0, 1.0, uv.x)));",
   "examples": [
     {
       "name": "Example",

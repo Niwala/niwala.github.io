@@ -53,8 +53,8 @@
       "filename": "length.json",
       "name": "length",
       "tags": "",
-      "description": "",
-      "previewShader": "highp a = length(uv.xy - vec2(0.5)) - 0.35;\r\ncolor = vec3(smoothstep(0.01, 0.0, a));"
+      "description": "Permet d'obtenir la longueur d'un vecteur.",
+      "previewShader": "highp float a = length(uv.xy - vec2(0.5)) - 0.35;\r\ncolor = vec3(smoothstep(0.01, 0.0, a));"
     },
     {
       "filename": "lerp.json",
@@ -68,7 +68,7 @@
       "name": "Negate",
       "tags": "",
       "description": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
-      "previewShader": "highp float minusShape = max(abs(uv.x - 0.35) - 0.15, abs(uv.y - 0.5) - 0.05);\r\n\r\nhighp float angle = 3.1415 * 0.5;\r\nhighp vec2 rotUv = uv - vec2(0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x - 0.35) - 0.15, abs(rotUv.y - 0.5) - 0.05);\r\nhighp float crossB = max(abs(rotUv.x - 0.5) - 0.05, abs(rotUv.y - 0.35) - 0.15);\r\n\r\ncolor = vec3(step(minusShape, 0.0), step(crossA, 0.0), step(crossB, 0.0));"
+      "previewShader": "highp float minusShape = max(abs(uv.x - 0.4) - 0.15, abs(uv.y - 0.5) - 0.05);\r\n\r\nhighp float angle = 3.1415 * 0.25;\r\nhighp vec2 rotUv = uv - vec2(0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x + 0.1) - 0.2, abs(rotUv.y) - 0.05);\r\nhighp float crossB = max(abs(rotUv.x + 0.1) - 0.05, abs(rotUv.y) - 0.2);\r\n\r\ncolor = vec3(step(minusShape, 0.0), step(crossA, 0.0), step(crossB, 0.0));"
     },
     {
       "filename": "oneminus.json",
@@ -82,13 +82,13 @@
       "name": "Power",
       "tags": "curve gamma",
       "description": "",
-      "previewShader": "highp float a = power(uv.x, 0.1 + (sin(time) + 1.0))\r\ncolor = vec3(smoothstep(0.01, 0.0, a - uv.y));"
+      "previewShader": "highp float a = pow(uv.x, 0.1 + (sin(time) + 1.0));\r\ncolor = vec3(smoothstep(0.01, 0.0, a - uv.y));"
     },
     {
       "filename": "sine.json",
       "name": "Sin",
       "tags": "trigonometry circle",
-      "description": "Parfait pour faire des oscillations douces. Permet aussi de convertir un angle en direction.",
+      "description": "Parfait pour faire des oscillations douces.\r\nPermet aussi de convertir un angle en direction.",
       "previewShader": "color = vec3(step(uv.y, sin(uv.x * 3.1415 + time) * 0.5 + 0.5));"
     },
     {
@@ -96,7 +96,7 @@
       "name": "Smoothstep",
       "tags": "scruve",
       "description": "Permet de facilement réaliser une sCurve entre deux valeurs.",
-      "previewShader": "highp float a = abs((fract(uv.x + time) - 0.5) * 2.0);\r\nhighp int segment = ((int)floor(uv.x + time)) % 3;\r\nif (segment  == 1)\r\n\tcolor = vec3(step(uv.y,  smoothstep(0.0, 1.0, a)));\r\ncolor = vec3((float)segment);"
+      "previewShader": "color = vec3(step(uv.y, smoothstep(0.0, 1.0, uv.x)));"
     },
     {
       "filename": "step.json",
