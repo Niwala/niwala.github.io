@@ -19,7 +19,7 @@
       "name": "Distance",
       "tags": "",
       "description": "Permet de calculer la distance entre deux points (fonctionne en 1D aussi)",
-      "previewShader": "highp float a = distance(uv.xy, vec2(0.5, 0.5));\r\na = abs(a - 0.4) - 0.1;\r\ncolor = vec3(step(a, 0.0));"
+      "previewShader": "highp float d = distance(uv.xy, vec2(0.5, 0.5));\r\nd += sin(d + time) * 0.01;\r\nhighp float a = abs(d - 0.4) - 0.02;\r\nhighp float b = abs(d - 0.3) - 0.02;\r\nhighp float c = abs(d - 0.2) - 0.02;\r\nhighp float all = max(max(a, b), c);\r\n\r\ncolor = vec3(step(all, 0.0));"
     },
     {
       "filename": "floor.json",
@@ -47,7 +47,7 @@
       "name": "Lerp",
       "tags": "",
       "description": "Permet s’interpoler entre deux valeurs sur base d’ une valeur entre 0 et 1.",
-      "previewShader": "highp float a = sin(time) * 0.5 + 0.5;"
+      "previewShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(lerp(0.25,0.75, t)); \r\nhighp float circleDF = length(coords) - 0.2;\r\nhighp float squareDF = min(abs(coords.x - 0.2), abs(coords.y - 0.2));\r\nhighp float shape = lerp(circleDF, squareDF, t);\r\ncolor = vec3(shape);"
     },
     {
       "filename": "negate.json",
@@ -61,7 +61,7 @@
       "name": "OneMinus",
       "tags": "",
       "description": "Retourne l’inverse de votre valeur (dans setup de valeurs entre 0-1)",
-      "previewShader": "highp vec2 b = vec2(0.5 + sin(time) * 0.2, 0.5);\r\nhighp float c = step(distance(uv.xy, b), 0.3);\r\nif (uv.x < 0.5)\r\n\tcolor = vec3(c);\r\nelse\r\n\tcolor = vec3(1.0 - c);"
+      "previewShader": "highp vec2 b = vec2(0.5 + sin(time) * 0.15, 0.5);\r\nhighp float c = step(distance(uv.xy, b), 0.3);\r\nif (uv.x < 0.5)\r\n\tcolor = vec3(c);\r\nelse\r\n\tcolor = vec3(1.0 - c);"
     },
     {
       "filename": "sine.json",
