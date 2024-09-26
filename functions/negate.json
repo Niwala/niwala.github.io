@@ -3,13 +3,13 @@
   "tags": "",
   "description": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
   "indexDescription": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
-  "indexShader": "",
+  "indexShader": "highp float minusShape = min(abs(uv.x - 0.5) - 0.1, abs(uv.y - 0.3) - 0.2);\r\n\r\ncolor = vec3(step(0.0, minusShape));",
   "examples": [
     {
       "name": "Example",
-      "description": null,
-      "shader": null,
-      "code": null,
+      "description": "",
+      "shader": "",
+      "code": "",
       "properties": null
     }
   ]
