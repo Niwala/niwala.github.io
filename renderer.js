@@ -10,6 +10,8 @@ class ShaderRenderer
 		this.canvas = canvas;
 		this.width = canvas.getAttribute("width");
 		this.height = canvas.getAttribute("height");
+		this.shaderGuid = shaderGuid;
+		this.shaderFragContent = shaderFragContent;
 
 		this.locations = new Map();
 		this.floatValues = new Map();
@@ -91,13 +93,15 @@ void main(void)
 `;
 		
 		//Log shader for dev purposes
-		console.log("Frag shader : " + shaderGuid + 
-			 "\n" + fragmentShader);
+		//console.log("Frag shader : " + shaderGuid + "\n" + fragmentShader);
 
 		// Initialize a shader program; this is where all the lighting
 		// for the vertices and so forth is established.
 		this.shaderProgram = this.initShaderProgram(this.gl, vertexShader, fragmentShader);
-		  
+
+		if (!this.compiled)
+			return;
+
 		//Get properties locations > Built-in properties
 		this.timeLocation = this.gl.getUniformLocation(this.shaderProgram, "time");
 		this.rectSize = this.gl.getUniformLocation(this.shaderProgram, "uRectSize");
@@ -466,23 +470,32 @@ void main(void)
 	//
 	initShaderProgram(gl, vsSource, fsSource) 
 	{
-	  this.vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
-	  this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+		this.vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
+		this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
-	  // Create the shader program
-	  this.shaderProgram = gl.createProgram();
-	  gl.attachShader(this.shaderProgram, this.vertexShader);
-	  gl.attachShader(this.shaderProgram, this.fragmentShader);
-	  gl.linkProgram(this.shaderProgram);
+		// Create the shader program
+		this.shaderProgram = gl.createProgram();
 
-	  // If creating the shader program failed, alert
-	  if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) 
-	  {
-		console.error('Unable to initialize the shader program\n' + gl.getProgramInfoLog(this.shaderProgram));
-		return null;
-	  }
+		try
+		{
+			gl.attachShader(this.shaderProgram, this.vertexShader);
+			gl.attachShader(this.shaderProgram, this.fragmentShader);
+			gl.linkProgram(this.shaderProgram);
 
-	  return this.shaderProgram;
+			// If creating the shader program failed, alert
+			if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
+				console.error('Error on shader ' + this.shaderGuid + "\n" + gl.getProgramInfoLog(this.shaderProgram) + "\n\n" + this.shaderFragContent);
+				return null;
+			}
+		}
+		catch (e)
+		{
+			console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
+			return null;
+		}
+
+		this.compiled = true;
+		return this.shaderProgram;
 	}
 
 	//
