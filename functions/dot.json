@@ -3,13 +3,13 @@
   "tags": "",
   "description": "",
   "indexDescription": "",
-  "indexShader": "//Shpere normals\r\nhighp vec3 normal = vec3((uv - 0.5) * 2.0, 1.0);\r\nnormal.z = 1.0 - length(normal.xy);\r\n\r\nhighp float a = dot(vec3(0.2, 0.6, 0.2), normal);\r\ncolor = vec3(a);",
+  "indexShader": "//Shpere normals\r\nhighp vec3 normal = vec3((uv - 0.5) * 2.0, 1.0);\r\nnormal.z = 1.0 - length(normal.xy);\r\n\r\nhighp float a = dot(vec3(0.2, 0.6, 0.2), -normal);\r\ncolor = vec3(a);",
   "examples": [
     {
       "name": "Example",
-      "description": null,
-      "shader": null,
-      "code": null,
+      "description": "",
+      "shader": "",
+      "code": "",
       "properties": null
     }
   ]

@@ -12,7 +12,7 @@
       "name": "atan2",
       "tags": "",
       "description": "",
-      "previewShader": ""
+      "previewShader": "highp float angle = time;\r\nhighp vec2 rotUv = uv - vec2(0.5, 0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x + 0.5) - 0.25, abs(rotUv.y) - 0.02);"
     },
     {
       "filename": "cosine.json",
@@ -33,7 +33,7 @@
       "name": "Dot",
       "tags": "",
       "description": "",
-      "previewShader": "//Shpere normals\r\nhighp vec3 normal = vec3((uv - 0.5) * 2.0, 1.0);\r\nnormal.z = 1.0 - length(normal.xy);\r\n\r\nhighp float a = dot(vec3(0.2, 0.6, 0.2), normal);\r\ncolor = vec3(a);"
+      "previewShader": "//Shpere normals\r\nhighp vec3 normal = vec3((uv - 0.5) * 2.0, 1.0);\r\nnormal.z = 1.0 - length(normal.xy);\r\n\r\nhighp float a = dot(vec3(0.2, 0.6, 0.2), -normal);\r\ncolor = vec3(a);"
     },
     {
       "filename": "floor.json",
@@ -75,7 +75,7 @@
       "name": "Negate",
       "tags": "",
       "description": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
-      "previewShader": "highp float minusShape = max(abs(uv.x - 0.4) - 0.15, abs(uv.y - 0.5) - 0.05);\r\n\r\nhighp float angle = 3.1415 * 0.25;\r\nhighp vec2 rotUv = uv - vec2(0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x + 0.1) - 0.2, abs(rotUv.y) - 0.05);\r\nhighp float crossB = max(abs(rotUv.x + 0.1) - 0.05, abs(rotUv.y) - 0.2);\r\n\r\ncolor = vec3(step(minusShape, 0.0), step(crossA, 0.0), step(crossB, 0.0));"
+      "previewShader": "highp float minusShape = max(abs(uv.x - 0.27) - 0.1, abs(uv.y - 0.5) - 0.05);\r\n\r\nhighp float angle = 3.1415 * 0.25;\r\nhighp vec2 rotUv = uv - vec2(0.65, 0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x) - 0.25, abs(rotUv.y) - 0.05);\r\nhighp float crossB = max(abs(rotUv.x) - 0.05, abs(rotUv.y) - 0.25);\r\n\r\nhighp float shape = min(min(minusShape, crossA), crossB);\r\n\r\ncolor = vec3(step(shape , 0.0));"
     },
     {
       "filename": "oneminus.json",
@@ -89,7 +89,7 @@
       "name": "Power",
       "tags": "curve gamma",
       "description": "",
-      "previewShader": "highp float a = pow(uv.x, 0.1 + (sin(time) + 1.0));\r\ncolor = vec3(smoothstep(0.01, 0.0, a - uv.y));"
+      "previewShader": "highp float a = pow(uv.x, 0.1 + (sin(time) + 1.0) * 4.0);\r\ncolor = vec3(smoothstep(0.01, 0.0, uv.y - a));"
     },
     {
       "filename": "sine.json",

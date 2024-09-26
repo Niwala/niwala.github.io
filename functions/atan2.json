@@ -1,8 +1,16 @@
 {
   "name": "atan2",
-  "tags": null,
-  "description": null,
-  "indexDescription": null,
-  "indexShader": null,
-  "examples": null
+  "tags": "",
+  "description": "",
+  "indexDescription": "",
+  "indexShader": "highp float angle = time;\r\nhighp vec2 rotUv = uv - vec2(0.5, 0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x + 0.5) - 0.25, abs(rotUv.y) - 0.02);",
+  "examples": [
+    {
+      "name": "Example",
+      "description": "",
+      "shader": "",
+      "code": "",
+      "properties": null
+    }
+  ]
 }
