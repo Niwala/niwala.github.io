@@ -6,11 +6,36 @@
   "indexShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(mix(0.25, 0.75, t)); \r\nhighp float circleDF = length(coords) - 0.2;\r\nhighp float squareDF = min(abs(coords.x - 0.2), abs(coords.y - 0.2));\r\nhighp float shape = step(0.0, mix(circleDF, squareDF, t));\r\ncolor = vec3(circleDF, squareDF, t);",
   "examples": [
     {
-      "name": "Example",
+      "name": "Couleurs",
       "description": "",
-      "shader": "",
-      "code": "",
-      "properties": null
+      "shader": "color = mix(colorA, colorB, t);",
+      "code": "color = lerp(colorA, colorB, t);",
+      "properties": [
+        {
+          "name": "Color A",
+          "id": "colorA",
+          "type": "color",
+          "value": "#eb4034",
+          "min": "",
+          "max": ""
+        },
+        {
+          "name": "Color B",
+          "id": "colorB",
+          "type": "color",
+          "value": "#346beb",
+          "min": "",
+          "max": ""
+        },
+        {
+          "name": "t",
+          "id": "t",
+          "type": "range",
+          "value": "0.25",
+          "min": "0.0",
+          "max": "1.0"
+        }
+      ]
     }
   ]
 }
