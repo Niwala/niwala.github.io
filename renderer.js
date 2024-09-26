@@ -91,7 +91,8 @@ void main(void)
 `;
 		
 		//Log shader for dev purposes
-		console.log("Frag shader\n" + fragmentShader);
+		console.log("Frag shader : " + shaderGuid + 
+			 "\n" + fragmentShader);
 
 		// Initialize a shader program; this is where all the lighting
 		// for the vertices and so forth is established.
@@ -501,7 +502,7 @@ void main(void)
 	  // See if it compiled successfully
 	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
 	  {
-		alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+		//alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
 		gl.deleteShader(shader);
 		return null;
 	  }
