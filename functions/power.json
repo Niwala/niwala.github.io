@@ -1,8 +1,16 @@
 {
-  "name": "power",
-  "tags": null,
-  "description": null,
-  "indexDescription": null,
-  "indexShader": null,
-  "examples": null
+  "name": "Power",
+  "tags": "curve gamma",
+  "description": "",
+  "indexDescription": "",
+  "indexShader": "highp float a = power(uv.x, 0.1 + (sin(time) + 1.0))\r\ncolor = vec3(smoothstep(0.01, 0.0, a - uv.y));",
+  "examples": [
+    {
+      "name": "Example",
+      "description": "",
+      "shader": "",
+      "code": "",
+      "properties": null
+    }
+  ]
 }

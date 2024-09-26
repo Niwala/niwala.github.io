@@ -26,7 +26,7 @@
       "name": "Distance",
       "tags": "",
       "description": "Permet de calculer la distance entre deux points (fonctionne en 1D aussi)",
-      "previewShader": "highp float d = distance(uv.xy, vec2(0.5, 0.5));\r\nd += sin(d + time) * 0.01;\r\nhighp float a = abs(d - 0.4) - 0.02;\r\nhighp float b = abs(d - 0.3) - 0.02;\r\nhighp float c = abs(d - 0.2) - 0.02;\r\nhighp float all = min(min(a, b), c);\r\n\r\ncolor = vec3(step(all, 0.0));"
+      "previewShader": "highp float d = distance(uv.xy, vec2(0.5, 0.5));\r\nd += sin(d * 8.0 + time * 2.0) * 0.02;\r\nhighp float a = abs(d - 0.4) - 0.02;\r\nhighp float b = abs(d - 0.3) - 0.02;\r\nhighp float c = abs(d - 0.2) - 0.02;\r\nhighp float all = min(min(a, b), c);\r\n\r\ncolor = vec3(smoothstep(0.01, 0.0, all));"
     },
     {
       "filename": "floor.json",
@@ -54,35 +54,35 @@
       "name": "length",
       "tags": "",
       "description": "",
-      "previewShader": ""
+      "previewShader": "highp a = length(uv.xy - vec2(0.5)) - 0.35;\r\ncolor = vec3(smoothstep(0.01, 0.0, a));"
     },
     {
       "filename": "lerp.json",
       "name": "Lerp",
       "tags": "",
       "description": "Permet s’interpoler entre deux valeurs sur base d’ une valeur entre 0 et 1.",
-      "previewShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(mix(0.25, 0.75, t)); \r\nhighp float circleDF = distance(uv, coords) - 0.2;\r\nhighp float squareDF = min(abs(distance(coords.x, uv.x) - 0.2), abs(distance(coords.y, uv.y) - 0.2));\r\nhighp float shape = step(0.0, mix(circleDF, squareDF, t));\r\ncolor = vec3(circleDF, squareDF, t);"
+      "previewShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(mix(0.25, 0.75, t)); \r\nhighp float circleDF = distance(uv, coords) - 0.2;\r\nhighp vec2 square = abs(uv - coords) - vec2(0.2);\r\nhighp float squareDF = max(square.x, square.y);\r\nhighp float shape = step(mix(circleDF, squareDF, t), 0.0);\r\ncolor = vec3(shape);\r\n//color = vec3(circleDF, squareDF, t);"
     },
     {
       "filename": "negate.json",
       "name": "Negate",
       "tags": "",
       "description": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
-      "previewShader": "highp float minusShape = min(abs(uv.x - 0.5) - 0.1, abs(uv.y - 0.3) - 0.2);\r\n\r\ncolor = vec3(step(0.0, minusShape));"
+      "previewShader": "highp float minusShape = max(abs(uv.x - 0.35) - 0.15, abs(uv.y - 0.5) - 0.05);\r\n\r\nhighp float angle = 3.1415 * 0.5;\r\nhighp vec2 rotUv = uv - vec2(0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x - 0.35) - 0.15, abs(rotUv.y - 0.5) - 0.05);\r\nhighp float crossB = max(abs(rotUv.x - 0.5) - 0.05, abs(rotUv.y - 0.35) - 0.15);\r\n\r\ncolor = vec3(step(minusShape, 0.0), step(crossA, 0.0), step(crossB, 0.0));"
     },
     {
       "filename": "oneminus.json",
       "name": "OneMinus",
       "tags": "",
       "description": "Retourne l’inverse de la valeur entrée. <i>(Dans setup de valeurs entre 0-1)</i>",
-      "previewShader": "highp vec2 b = vec2(0.5 + sin(time) * 0.15, 0.5);\r\nhighp float c = step(distance(uv.xy, b), 0.3);\r\nif (uv.x < 0.5)\r\n\tcolor = vec3(c);\r\nelse\r\n\tcolor = vec3(1.0 - c);"
+      "previewShader": "highp vec2 b = vec2(0.5 + sin(time) * 0.15, 0.5);\r\nhighp float c = smoothstep(0.01, 0.0, distance(uv.xy, b) - 0.3);\r\nif (uv.x < 0.5)\r\n\tcolor = vec3(c);\r\nelse\r\n\tcolor = vec3(1.0 - c);"
     },
     {
       "filename": "power.json",
-      "name": "power",
-      "tags": "",
+      "name": "Power",
+      "tags": "curve gamma",
       "description": "",
-      "previewShader": ""
+      "previewShader": "highp float a = power(uv.x, 0.1 + (sin(time) + 1.0))\r\ncolor = vec3(smoothstep(0.01, 0.0, a - uv.y));"
     },
     {
       "filename": "sine.json",
@@ -96,7 +96,7 @@
       "name": "Smoothstep",
       "tags": "scruve",
       "description": "Permet de facilement réaliser une sCurve entre deux valeurs.",
-      "previewShader": "highp float a = abs((fract(uv.x + time) - 0.5) * 2.0);\r\ncolor = vec3(step(uv.y,  smoothstep(a, 0.0, 1.0)));"
+      "previewShader": "highp float a = abs((fract(uv.x + time) - 0.5) * 2.0);\r\nhighp int segment = ((int)floor(uv.x + time)) % 3;\r\nif (segment  == 1)\r\n\tcolor = vec3(step(uv.y,  smoothstep(0.0, 1.0, a)));\r\ncolor = vec3((float)segment);"
     },
     {
       "filename": "step.json",
