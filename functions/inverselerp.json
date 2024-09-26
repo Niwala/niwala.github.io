@@ -1,0 +1,16 @@
+{
+  "name": "InverseLerp",
+  "tags": "",
+  "description": "Converti une valeur dans un certain range vers une valeur entre 0 et 1.",
+  "indexDescription": "Converti une valeur dans un certain range vers une valeur entre 0 et 1.",
+  "indexShader": "",
+  "examples": [
+    {
+      "name": "Example",
+      "description": null,
+      "shader": null,
+      "code": null,
+      "properties": null
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Abs",
+  "tags": "",
+  "description": "Retourne l’équivalent positif de votre valeur si elle est en négatif.",
+  "indexDescription": "Retourne l’équivalent positif de votre valeur si elle est en négatif.",
+  "indexShader": "color = vec3(step(uv.y,  abs((fract(uv.x + time) - 0.5) * 2.0) ));",
+  "examples": [
+    {
+      "name": "Example",
+      "description": "",
+      "shader": "",
+      "code": "",
+      "properties": null
+    }
+  ]
+}

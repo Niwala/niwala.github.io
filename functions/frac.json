@@ -1,8 +1,8 @@
 {
   "name": "Frac",
   "tags": "repeat cycle",
-  "description": "",
-  "indexDescription": "",
+  "description": "Régulièrement utilisé pour réaliser des opérations cycliques, répéter une paterne.",
+  "indexDescription": "Régulièrement utilisé pour réaliser des opérations cycliques, répéter une paterne.",
   "indexShader": "color = vec3(step(uv.y,  fract(uv.x + time)));",
   "examples": [
     {

@@ -1,0 +1,16 @@
+{
+  "name": "Distance",
+  "tags": "",
+  "description": "Permet de calculer la distance entre deux points (fonctionne en 1D aussi)",
+  "indexDescription": "Permet de calculer la distance entre deux points (fonctionne en 1D aussi)",
+  "indexShader": "",
+  "examples": [
+    {
+      "name": "Example",
+      "description": null,
+      "shader": null,
+      "code": null,
+      "properties": null
+    }
+  ]
+}

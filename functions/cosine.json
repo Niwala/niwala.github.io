@@ -1,8 +1,8 @@
 {
   "name": "Cos",
   "tags": "trigonometry circle",
-  "description": "Function description",
-  "indexDescription": "//",
+  "description": "Parfait pour faire des oscillations douces. \r\nPermet aussi de convertir un angle en direction.",
+  "indexDescription": "Parfait pour faire des oscillations douces. Permet aussi de convertir un angle en direction.",
   "indexShader": "color = vec3(step(uv.y, cos(uv.x * 3.1415 + time) * 0.5 + 0.5));",
   "examples": [
     {

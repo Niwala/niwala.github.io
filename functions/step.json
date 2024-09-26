@@ -1,8 +1,8 @@
 {
   "name": "Step",
   "tags": "branch if",
-  "description": "Function description",
-  "indexDescription": "//",
+  "description": "Souvent utilisé comme forme d’embranchement à la place d’un “if”.",
+  "indexDescription": "Souvent utilisé comme forme d’embranchement à la place d’un “if”.",
   "indexShader": "color = vec3(step(uv.y, uv.x));",
   "examples": [
     {

@@ -1,38 +1,87 @@
 {
   "functions": [
     {
+      "filename": "abs.json",
+      "name": "Abs",
+      "tags": "",
+      "description": "Retourne l’équivalent positif de votre valeur si elle est en négatif.",
+      "previewShader": "color = vec3(step(uv.y,  abs((fract(uv.x + time) - 0.5) * 2.0) ));"
+    },
+    {
       "filename": "cosine.json",
       "name": "Cos",
       "tags": "trigonometry circle",
-      "description": "//",
+      "description": "Parfait pour faire des oscillations douces. Permet aussi de convertir un angle en direction.",
       "previewShader": "color = vec3(step(uv.y, cos(uv.x * 3.1415 + time) * 0.5 + 0.5));"
+    },
+    {
+      "filename": "distance.json",
+      "name": "Distance",
+      "tags": "",
+      "description": "Permet de calculer la distance entre deux points (fonctionne en 1D aussi)",
+      "previewShader": ""
     },
     {
       "filename": "floor.json",
       "name": "Floor",
       "tags": "round stairs",
-      "description": "//",
+      "description": "Arrondis à l’entier ≤ à votre valeur.",
       "previewShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));"
     },
     {
       "filename": "frac.json",
       "name": "Frac",
       "tags": "repeat cycle",
-      "description": "",
+      "description": "Régulièrement utilisé pour réaliser des opérations cycliques, répéter une paterne.",
       "previewShader": "color = vec3(step(uv.y,  fract(uv.x + time)));"
+    },
+    {
+      "filename": "inverselerp.json",
+      "name": "InverseLerp",
+      "tags": "",
+      "description": "Converti une valeur dans un certain range vers une valeur entre 0 et 1.",
+      "previewShader": ""
+    },
+    {
+      "filename": "lerp.json",
+      "name": "Lerp",
+      "tags": "",
+      "description": "Permet s’interpoler entre deux valeurs sur base d’ une valeur entre 0 et 1.",
+      "previewShader": "highp float a = sin(time) * 0.5 + 0.5;"
+    },
+    {
+      "filename": "negate.json",
+      "name": "Negate",
+      "tags": "",
+      "description": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
+      "previewShader": ""
+    },
+    {
+      "filename": "oneminus.json",
+      "name": "OneMinus",
+      "tags": "",
+      "description": "Retourne l’inverse de votre valeur (dans setup de valeurs entre 0-1)",
+      "previewShader": ""
     },
     {
       "filename": "sine.json",
       "name": "Sin",
       "tags": "trigonometry circle",
-      "description": "Retourne le sinus de la valeur donnée.",
+      "description": "Parfait pour faire des oscillations douces. Permet aussi de convertir un angle en direction.",
       "previewShader": "color = vec3(step(uv.y, sin(uv.x * 3.1415 + time) * 0.5 + 0.5));"
+    },
+    {
+      "filename": "smoothstep.json",
+      "name": "Smoothstep",
+      "tags": "scruve",
+      "description": "",
+      "previewShader": "highp float a = sin(time) * 0.5 + 0.5;\r\ncolor = vec3(step(uv.y, smoothstep(a, 0.4, 0.6)));"
     },
     {
       "filename": "step.json",
       "name": "Step",
       "tags": "branch if",
-      "description": "//",
+      "description": "Souvent utilisé comme forme d’embranchement à la place d’un “if”.",
       "previewShader": "color = vec3(step(uv.y, uv.x));"
     }
   ]

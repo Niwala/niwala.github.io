@@ -1,0 +1,16 @@
+{
+  "name": "Negate",
+  "tags": "",
+  "description": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
+  "indexDescription": "Retourne la négative de votre valeur, à ne pas confondre avec le one-minus.",
+  "indexShader": "",
+  "examples": [
+    {
+      "name": "Example",
+      "description": null,
+      "shader": null,
+      "code": null,
+      "properties": null
+    }
+  ]
+}

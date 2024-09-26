@@ -1,0 +1,16 @@
+{
+  "name": "OneMinus",
+  "tags": "",
+  "description": "Retourne l’inverse de votre valeur (dans setup de valeurs entre 0-1)",
+  "indexDescription": "Retourne l’inverse de votre valeur (dans setup de valeurs entre 0-1)",
+  "indexShader": "",
+  "examples": [
+    {
+      "name": "Example",
+      "description": null,
+      "shader": null,
+      "code": null,
+      "properties": null
+    }
+  ]
+}
