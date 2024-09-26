@@ -3,7 +3,7 @@
   "tags": "",
   "description": "Permet d’interpoler entre deux valeurs sur base d’ une valeur entre 0 et 1.",
   "indexDescription": "Permet s’interpoler entre deux valeurs sur base d’ une valeur entre 0 et 1.",
-  "indexShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(lerp(0.25,0.75, t)); \r\nhighp float circleDF = length(coords) - 0.2;\r\nhighp float squareDF = min(abs(coords.x - 0.2), abs(coords.y - 0.2));\r\nhighp float shape = mix(circleDF, squareDF, t);\r\ncolor = vec3(shape);",
+  "indexShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(mix(0.25,0.75, t)); \r\nhighp float circleDF = length(coords) - 0.2;\r\nhighp float squareDF = min(abs(coords.x - 0.2), abs(coords.y - 0.2));\r\nhighp float shape = mix(circleDF, squareDF, t);\r\ncolor = vec3(shape);",
   "examples": [
     {
       "name": "Example",
