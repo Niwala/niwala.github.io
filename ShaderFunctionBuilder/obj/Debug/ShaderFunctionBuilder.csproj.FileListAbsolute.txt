@@ -24,3 +24,16 @@ H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.exe
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.pdb
 H:\Website\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.ShaderFunctionBuilder.resources
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\bin\Debug\ShaderFunctionBuilder.exe.config
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\bin\Debug\ShaderFunctionBuilder.exe
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\bin\Debug\Newtonsoft.Json.dll
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\bin\Debug\Newtonsoft.Json.xml
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.AssemblyReference.cache
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.ShaderFunctionBuilder.resources
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.Properties.Resources.resources
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.GenerateResource.cache
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.csproj.CoreCompileInputs.cache
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFu.1A32B982.Up2Date
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.exe
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\obj\Debug\ShaderFunctionBuilder.pdb
+H:\Users\samuel.jemine\Desktop\Website\ShaderFunctionBuilder\bin\Debug\ShaderFunctionBuilder.pdb
