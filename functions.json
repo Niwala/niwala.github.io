@@ -29,6 +29,13 @@
       "previewShader": "highp float d = distance(uv.xy, vec2(0.5, 0.5));\r\nd += sin(d * 8.0 + time * 2.0) * 0.02;\r\nhighp float a = abs(d - 0.4) - 0.02;\r\nhighp float b = abs(d - 0.3) - 0.02;\r\nhighp float c = abs(d - 0.2) - 0.02;\r\nhighp float all = min(min(a, b), c);\r\n\r\ncolor = vec3(smoothstep(0.01, 0.0, all));"
     },
     {
+      "filename": "dot.json",
+      "name": "Dot",
+      "tags": "",
+      "description": "",
+      "previewShader": "//Shpere normals\r\nhighp vec3 normal = vec3((uv - 0.5) * 2.0, 1.0);\r\nnormal.z = 1.0 - length(normal.xy);\r\n\r\nhighp float a = dot(vec3(0.2, 0.6, 0.2), normal);\r\ncolor = vec3(a);"
+    },
+    {
       "filename": "floor.json",
       "name": "Floor",
       "tags": "round stairs",
