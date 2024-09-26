@@ -3,13 +3,13 @@
   "tags": "",
   "description": "Retourne l’inverse de votre valeur (dans setup de valeurs entre 0-1)",
   "indexDescription": "Retourne l’inverse de votre valeur (dans setup de valeurs entre 0-1)",
-  "indexShader": "",
+  "indexShader": "highp vec2 b = vec2(0.5 + sin(time) * 0.2, 0.5);\r\nhighp float c = step(distance(uv.xy, b), 0.3);\r\nif (uv.x < 0.5)\r\n\tcolor = vec3(c);\r\nelse\r\n\tcolor = vec3(1.0 - c);",
   "examples": [
     {
       "name": "Example",
-      "description": null,
-      "shader": null,
-      "code": null,
+      "description": "",
+      "shader": "",
+      "code": "",
       "properties": null
     }
   ]
