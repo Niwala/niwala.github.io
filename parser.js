@@ -19,10 +19,44 @@ var searchBar;
 var searchBarList;
 var searchItems;
 
+var functionListCanvas;
+var functionListRenderer;
+
 function Parse()
 {
+	LoadCanvas();
 	LoadTemplates();
 	ReadFunctionsIndex();
+}
+
+
+function LoadCanvas()
+{
+	functionListCanvas = document.getElementById("function-list-canvas");
+	functionListRenderer = new ShaderRenderer(functionListCanvas);
+}
+
+function LoadTemplates()
+{
+	//Template container
+	container = document.getElementById("template")
+	templateContainer = container.innerHTML;
+	
+	//Template example
+	let example = document.getElementById("template-example")
+	templateExample = example.innerHTML;
+	
+	//Hide template
+	container.style.display = 'none';
+}
+
+function ReadFunctionsIndex()
+{
+	let index;
+		fetch("https://niwala.github.io/functions.json")
+		.then(response => response.json())
+		.then(jsonResponse => AddFunctions(jsonResponse.functions))     
+	  	.catch((e) => console.error(e));
 }
 
 function SetupSearchHooks()
@@ -59,6 +93,7 @@ function SetupSearchHooks()
 	});
 }
 
+
 function GetCleanURL()
 {
 	let url = document.URL;
@@ -79,29 +114,6 @@ function GetURLParams()
 	   }
 	}
 	return params;
-}
-
-function LoadTemplates()
-{
-	//Template container
-	container = document.getElementById("template")
-	templateContainer = container.innerHTML;
-	
-	//Template example
-	let example = document.getElementById("template-example")
-	templateExample = example.innerHTML;
-	
-	//Hide template
-	container.style.display = 'none';
-}
-
-function ReadFunctionsIndex()
-{
-	let index;
-		fetch("https://niwala.github.io/functions.json")
-		.then(response => response.json())
-		.then(jsonResponse => AddFunctions(jsonResponse.functions))     
-	  	.catch((e) => console.error(e));
 }
 
 function AddFunctions(functions)
@@ -132,7 +144,8 @@ function AddFunctions(functions)
 		
 		let previewId = "shader-preview-" + functions[i].name;
 		let canvas = document.getElementById(previewId);
-		let shaderRenderer = new ShaderRenderer(canvas, previewId, functions[i].previewShader, null);
+		let shaderData = new ShaderData(canvas, previewId, functions[i].previewShader, null);
+		functionListRenderer.AddRenderer(shaderData);
 	}
 	
 	

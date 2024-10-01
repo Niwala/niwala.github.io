@@ -1,37 +1,28 @@
+
 function RendererFromExample(canvas, data, example)
 {
-	return new ShaderRenderer(canvas, data.name + "-" + example.name, example.shader, example.properties);
+	return new ShaderData(canvas, data.name + "-" + example.name, example.shader, example.properties);
 }
 
-class ShaderRenderer
-{	
-	constructor(canvas, shaderGuid, shaderFragContent, shaderProperties)
+class ShaderData
+{
+	constructor(element, shaderGuid, shaderFragment, shaderProperties)
 	{
-		this.canvas = canvas;
-		this.width = canvas.getAttribute("width");
-		this.height = canvas.getAttribute("height");
+		this.element = element;
+		this.width = element.getAttribute("width");
+		this.height = element.getAttribute("height");
 		this.shaderGuid = shaderGuid;
-		this.shaderFragContent = shaderFragContent;
+		this.shaderFragContent = shaderFragment;
 
 		this.locations = new Map();
 		this.floatValues = new Map();
 		this.colorValues = new Map();
-		
-		
-		//Load gl context
-		this.gl = canvas.getContext('webgl');
-		
-		if (!this.gl) 
-		{
-			alert('Unable to initialize WebGL. Your browser or machine may not support it.');
-			return;
-		}
-		
-		
+
+
 		//Build uniforms
 		let uniforms = "";
-		let propertyCount = shaderProperties == null ? 0 : shaderProperties.length;
-		for (let j = 0; j < propertyCount; j++)
+		this.propertyCount = shaderProperties == null ? 0 : shaderProperties.length;
+		for (let j = 0; j < this.propertyCount; j++)
 		{
 			let property = shaderProperties[j];
 			
@@ -51,67 +42,103 @@ class ShaderRenderer
 		
 		
 		//Build shaders > Vertex
-		let vertexShader = 
-`
-attribute vec4 aVertexPosition;
-attribute vec2 aTextureCoord;
+		this.vertexShader = 
+			`
+			attribute vec4 aVertexPosition;
+			attribute vec2 aTextureCoord;
 
-uniform mat4 uModelViewMatrix;
-uniform mat4 uProjectionMatrix;
+			uniform mat4 uModelViewMatrix;
+			uniform mat4 uProjectionMatrix;
 
-varying highp vec2 vTextureCoord;
+			varying highp vec2 vTextureCoord;
 
-void main(void) 
-{
-	gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-	vTextureCoord = aTextureCoord;
-}
-`;
+			void main(void) 
+			{
+				gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+				vTextureCoord = aTextureCoord;
+			}
+			`;
 
 		//Build shaders > Fragment
-		let fragmentShader = 
-`
-varying highp vec2 vTextureCoord;
+		this.fragmentShader = 
+			`
+			varying highp vec2 vTextureCoord;
 
-uniform sampler2D uSampler;
-uniform highp vec4 testColor;
-uniform highp float time;
-uniform highp vec2 uRectSize;
+			uniform sampler2D uSampler;
+			uniform highp float time;
+			uniform highp vec2 uRectSize;
 
-//Custom properties` + uniforms + ` 
+			//Custom properties` + uniforms + ` 
 
-void main(void) 
-{
-	highp vec2 uv = gl_FragCoord.xy / uRectSize;
-	highp vec3 color = vec3(0.0);
+			void main(void) 
+			{
+				//highp vec2 uv = gl_FragCoord.xy / uRectSize;
+				highp vec2 uv = vTextureCoord;
+				//uv *= 5.0;
+				//if (uv.x > 1.0 || uv.y > 1.0)
+				//	return;
+
+				gl_FragColor = vec4(uv, 0.0, 1.0);
+				return;
+
+				highp vec3 color = vec3(0.0);
+					
+				//Custom frag
+				` + shaderFragment + `
+					
+				gl_FragColor = vec4(color, 1.0);
+			}
+			`;
+	}
+
+	SetFloatValue(name, value)
+	{
+		this.floatValues.set(name, value);
+	}
+	
+	SetColorValue(name, value)
+	{
+		this.colorValues.set(name, value);
+	}
+
+	UpdateProperties(gl, time)
+	{
+		//Built-in Properties
+		gl.uniform1f(this.timeLocation, time);
+		gl.uniform2f(this.rectSize, this.width, this.height);
 		
-	//Custom frag
-	` + shaderFragContent + `
+		//Example properties
+		this.floatValues.forEach((value, key) => 
+		{
+			let loc = this.locations.get(key);
+			gl.uniform1f(loc, value);
+		});
 		
-	gl_FragColor = vec4(color, 1.0);
-}
-`;
-		
-		//Log shader for dev purposes
-		//console.log("Frag shader : " + shaderGuid + "\n" + fragmentShader);
+		this.colorValues.forEach((value, key) => 
+		{
+			let loc = this.locations.get(key);
+			gl.uniform3f(loc, value);
+		});
+	}
 
-		// Initialize a shader program; this is where all the lighting
-		// for the vertices and so forth is established.
-		this.shaderProgram = this.initShaderProgram(this.gl, vertexShader, fragmentShader);
+
+	Load(gl)
+	{
+		this.shaderProgram = this.initShaderProgram(gl, this.vertexShader, this.fragmentShader);
 
 		if (!this.compiled)
 			return;
 
 		//Get properties locations > Built-in properties
-		this.timeLocation = this.gl.getUniformLocation(this.shaderProgram, "time");
-		this.rectSize = this.gl.getUniformLocation(this.shaderProgram, "uRectSize");
+		this.timeLocation = gl.getUniformLocation(this.shaderProgram, "time");
+		this.rectSize = gl.getUniformLocation(this.shaderProgram, "uRectSize");
 		
 		//Get properties locations > Example properties
-		for	(let i = 0; i < propertyCount; i++)
+		for	(let i = 0; i < this.propertyCount; i++)
 		{
 			let property = shaderProperties[i];
 			let propHtmlName = shaderGuid + "-" + property.name
-			let loc = this.gl.getUniformLocation(this.shaderProgram, property.id);
+			let loc = gl.getUniformLocation(this.shaderProgram, property.id);
 			this.locations.set(propHtmlName, loc);
 			
 			switch(property.type)
@@ -135,20 +162,96 @@ void main(void)
 		this.programInfo = {
 			program: this.shaderProgram,
 			attribLocations: {
-			  vertexPosition: this.gl.getAttribLocation(this.shaderProgram, 'aVertexPosition'),
-			  textureCoord: this.gl.getAttribLocation(this.shaderProgram, 'aTextureCoord'),
+			  vertexPosition: gl.getAttribLocation(this.shaderProgram, 'aVertexPosition'),
+			  textureCoord: gl.getAttribLocation(this.shaderProgram, 'aTextureCoord'),
 			},
 			uniformLocations: {
-			  projectionMatrix: this.gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix'),
-			  modelViewMatrix: this.gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix'),
-			  uSampler: this.gl.getUniformLocation(this.shaderProgram, 'uSampler'),
+			  projectionMatrix: gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix'),
+			  modelViewMatrix: gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix'),
+			  uSampler: gl.getUniformLocation(this.shaderProgram, 'uSampler'),
 			}
 		  };
+	}
 
+	//
+	// Initialize a shader program, so WebGL knows how to draw our data
+	//
+	initShaderProgram(gl, vsSource, fsSource) 
+	{
+		this.vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
+		this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+		// Create the shader program
+		this.shaderProgram = gl.createProgram();
+
+		try
+		{
+			gl.attachShader(this.shaderProgram, this.vertexShader);
+			gl.attachShader(this.shaderProgram, this.fragmentShader);
+			gl.linkProgram(this.shaderProgram);
+
+			// If creating the shader program failed, alert
+			if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
+				console.error('Error on shader ' + this.shaderGuid + "\n" + gl.getProgramInfoLog(this.shaderProgram) + "\n\n" + this.shaderFragContent);
+				return null;
+			}
+		}
+		catch (e)
+		{
+			console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
+			return null;
+		}
+
+		this.compiled = true;
+		return this.shaderProgram;
+	}
+
+	//
+	// creates a shader of the given type, uploads the source and
+	// compiles it.
+	//
+	loadShader(gl, type, source) 
+	{
+	  let shader = gl.createShader(type);
+
+	  // Send the source to the shader object
+	  gl.shaderSource(shader, source);
+
+	  // Compile the shader program
+	  gl.compileShader(shader);
+
+	  // See if it compiled successfully
+	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
+	  {
+		//alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+		gl.deleteShader(shader);
+		return null;
+	  }
+
+	  return shader;
+	}
+}
+
+class ShaderRenderer
+{	
+	constructor(canvas)
+	{
+
+		this.shaderData = new Array();
+		
+		//Load gl context
+		this.gl = canvas.getContext('webgl');
+		
+		if (!this.gl) 
+		{
+			alert('Unable to initialize WebGL. Your browser or machine may not support it.');
+			return;
+		}
+		
+		
 		// Here's where we call the routine that builds all the
 		// objects we'll be drawing.
 		this.buffers = this.initBuffers(this.gl);
-
 
 		var then = 0;
 
@@ -160,49 +263,30 @@ void main(void)
 			then = now;
 			
 			this.time = now;
-						
-			this.drawScene(this.gl, this.programInfo, this.buffers, null, now, this.deltaTime);
 
+			for (var i = 0; i < this.shaderData.length; i++) 
+			{
+				console.log("Draw renderer " + this.shaderData[i].shaderGuid);
+				this.shaderData[i].UpdateProperties(this.gl, this.time);
+				this.drawScene(this.gl, this.shaderData[i].programInfo, this.buffers);
+				break;
+			}
+						
 			requestAnimationFrame(this.render);
 		}
 		requestAnimationFrame(this.render);
 	}
 	
-	SetFloatValue(name, value)
+
+	AddRenderer(shaderData)
 	{
-		this.floatValues.set(name, value);
+		this.shaderData.push(shaderData);
+		shaderData.Load(this.gl);
 	}
-	
-	SetColorValue(name, value)
-	{
-		this.colorValues.set(name, value);
-	}
-	
-	UpdateProperties()
-	{
-		//Built-in Properties
-		this.gl.uniform1f(this.timeLocation, this.time);
-		this.gl.uniform2f(this.rectSize, this.width, this.height);
-		
-		//Example properties
-		this.floatValues.forEach((value, key) => 
-		{
-			let loc = this.locations.get(key);
-			this.gl.uniform1f(loc, value);
-		});
-		
-		this.colorValues.forEach((value, key) => 
-		{
-			let loc = this.locations.get(key);
-			this.gl.uniform3f(loc, value);
-		});
-	}
+
 	
 	//
 	// initBuffers
-	//
-	// Initialize the buffers we'll need. For this demo, we just
-	// have one object -- a simple three-dimensional cube.
 	//
 	initBuffers(gl) 
 	{
@@ -332,9 +416,9 @@ void main(void)
 	//
 	// Draw the scene.
 	//
-	drawScene(gl, programInfo, buffers, texture, time, deltaTime) 
+	drawScene(gl, programInfo, buffers) 
 	{
-	  gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
+	  gl.clearColor(0.0, 0.0, 0.0, 0.0);  // Clear to black, fully opaque
 	  gl.clearDepth(1.0);                 // Clear everything
 	  gl.enable(gl.DEPTH_TEST);           // Enable depth testing
 	  gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -372,7 +456,7 @@ void main(void)
 
 	  mat4.translate(modelViewMatrix,     // destination matrix
 					 modelViewMatrix,     // matrix to translate
-					 [0.0, 0.0, -3.0]);  // amount to translate
+					 [0.0, 0.0, -6.0]);  // amount to translate
 	  // mat4.rotate(modelViewMatrix,  // destination matrix
 				  // modelViewMatrix,  // matrix to rotate
 				  // cubeRotation,     // amount to rotate in radians
@@ -457,69 +541,5 @@ void main(void)
 		let offset = 0;
 		gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
 	  }
-
-		//
-		this.UpdateProperties();
-
-	  
-	  //gl.uniform4f(testColorID, 1.0, 0.0, 0.5, 0.0);
-	}
-
-	//
-	// Initialize a shader program, so WebGL knows how to draw our data
-	//
-	initShaderProgram(gl, vsSource, fsSource) 
-	{
-		this.vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
-		this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
-
-		// Create the shader program
-		this.shaderProgram = gl.createProgram();
-
-		try
-		{
-			gl.attachShader(this.shaderProgram, this.vertexShader);
-			gl.attachShader(this.shaderProgram, this.fragmentShader);
-			gl.linkProgram(this.shaderProgram);
-
-			// If creating the shader program failed, alert
-			if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
-				console.error('Error on shader ' + this.shaderGuid + "\n" + gl.getProgramInfoLog(this.shaderProgram) + "\n\n" + this.shaderFragContent);
-				return null;
-			}
-		}
-		catch (e)
-		{
-			console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
-			return null;
-		}
-
-		this.compiled = true;
-		return this.shaderProgram;
-	}
-
-	//
-	// creates a shader of the given type, uploads the source and
-	// compiles it.
-	//
-	loadShader(gl, type, source) 
-	{
-	  let shader = gl.createShader(type);
-
-	  // Send the source to the shader object
-	  gl.shaderSource(shader, source);
-
-	  // Compile the shader program
-	  gl.compileShader(shader);
-
-	  // See if it compiled successfully
-	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
-	  {
-		//alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
-		gl.deleteShader(shader);
-		return null;
-	  }
-
-	  return shader;
 	}
 }

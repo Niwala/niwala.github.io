@@ -11,10 +11,10 @@
 	<link rel="stylesheet" href="./prism.css" type="text/css"/>
 	<link rel="stylesheet" href="./switch-buttons.css" type="text/css"/>
 	
+	<script src="gl-matrix-min.js" defer></script>
+  <script src="renderer.js" defer></script>
 	<script src="parser.js" defer></script>
 	<script src="prism.js" defer></script>
-	<script src="gl-matrix-min.js" defer></script>
-    <script src="renderer.js" defer></script>
 	
   </head>
 
@@ -44,6 +44,8 @@
 		<div class="centred">
 			<div class="vertical">
 			
+				<canvas id="function-list-canvas" class="overlay-canvas"></canvas>
+
 				<p>Ce site a pour objectif de référencer des fonctions basiques utilisables dans les shaders.</p>
 			
 				<div class="horizontal" id="function-list">
