@@ -74,12 +74,12 @@ class ShaderData
 			{
 				//highp vec2 uv = gl_FragCoord.xy / uRectSize;
 				highp vec2 uv = vTextureCoord;
-				//uv *= 5.0;
-				//if (uv.x > 1.0 || uv.y > 1.0)
+
+				//if (uv.x > 1.0 || uv.y > 1.0 || uv.x < 0.0 || uv.y < 0.0)
 				//	return;
 
-				gl_FragColor = vec4(uv, 0.0, 1.0);
-				return;
+				//gl_FragColor = vec4(uv, 0.0, 1.0);
+				//return;
 
 				highp vec3 color = vec3(0.0);
 					
@@ -236,8 +236,8 @@ class ShaderRenderer
 {	
 	constructor(canvas)
 	{
-
 		this.shaderData = new Array();
+		this.canvas = canvas;
 		
 		//Load gl context
 		this.gl = canvas.getContext('webgl');
@@ -264,12 +264,11 @@ class ShaderRenderer
 			
 			this.time = now;
 
+			this.clearScene(this.gl);
 			for (var i = 0; i < this.shaderData.length; i++) 
 			{
-				console.log("Draw renderer " + this.shaderData[i].shaderGuid);
 				this.shaderData[i].UpdateProperties(this.gl, this.time);
-				this.drawScene(this.gl, this.shaderData[i].programInfo, this.buffers);
-				break;
+				this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
 			}
 						
 			requestAnimationFrame(this.render);
@@ -303,10 +302,10 @@ class ShaderRenderer
 
 	  this.positions = [
 		// Front face
-		-1.0, -1.0,  1.0,
-		 1.0, -1.0,  1.0,
+		 0.0,  0.0,  1.0,
+		 1.0,  0.0,  1.0,
 		 1.0,  1.0,  1.0,
-		-1.0,  1.0,  1.0,
+		 0.0,  1.0,  1.0,
 	  ];
 
 	  // Now pass the list of positions into WebGL to build the
@@ -416,7 +415,7 @@ class ShaderRenderer
 	//
 	// Draw the scene.
 	//
-	drawScene(gl, programInfo, buffers) 
+	clearScene(gl) 
 	{
 	  gl.clearColor(0.0, 0.0, 0.0, 0.0);  // Clear to black, fully opaque
 	  gl.clearDepth(1.0);                 // Clear everything
@@ -425,7 +424,10 @@ class ShaderRenderer
 
 	  // Clear the canvas before we start drawing on it.
 	  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	}
 
+	drawObject(gl, programInfo, buffers, shaderData)
+	{
 	  // Create a perspective matrix, a special matrix that is
 	  // used to simulate the distortion of perspective in a camera.
 	  // Our field of view is 45 degrees, with a width/height
@@ -441,11 +443,17 @@ class ShaderRenderer
 
 	  // note: glmatrix.js always has the first argument
 	  // as the destination to receive the result.
-	  mat4.perspective(projectionMatrix,
-					   fieldOfView,
-					   aspect,
-					   zNear,
-					   zFar);
+	  //mat4.perspective(projectionMatrix,
+		//			   fieldOfView,
+		//			   aspect,
+		//			   zNear,
+		//			   zFar);
+
+		let bounds = this.canvas.getBoundingClientRect();
+
+	  	//Out mat, Left, Right, Bottom, Top, Near, Far
+  		mat4.ortho(projectionMatrix, -bounds.x, bounds.right, -bounds.y, bounds.bottom, 0.1, 100);
+  		//mat4.ortho(projectionMatrix, 0.0, 100.0, 0.0, 100.0, 0.1, 100);
 
 	  // Set the drawing position to the "identity" point, which is
 	  // the center of the scene.
@@ -454,9 +462,14 @@ class ShaderRenderer
 	  // Now move the drawing position a bit to where we want to
 	  // start drawing the square.
 
+	  let elBounds = shaderData.element.getBoundingClientRect();
+
 	  mat4.translate(modelViewMatrix,     // destination matrix
 					 modelViewMatrix,     // matrix to translate
-					 [0.0, 0.0, -6.0]);  // amount to translate
+					 [elBounds.x, bounds.height - elBounds.y - elBounds.height, -10.0]);  // amount to translate
+
+	  mat4.scale(modelViewMatrix, modelViewMatrix, [elBounds.width, elBounds.height, 1.0]);
+
 	  // mat4.rotate(modelViewMatrix,  // destination matrix
 				  // modelViewMatrix,  // matrix to rotate
 				  // cubeRotation,     // amount to rotate in radians
@@ -488,23 +501,23 @@ class ShaderRenderer
 
 	  // Tell WebGL how to pull out the texture coordinates from
 	  // the texture coordinate buffer into the textureCoord attribute.
-	  // {
-		// const numComponents = 2;
-		// const type = gl.FLOAT;
-		// const normalize = false;
-		// const stride = 0;
-		// const offset = 0;
-		// gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
-		// gl.vertexAttribPointer(
-			// programInfo.attribLocations.textureCoord,
-			// numComponents,
-			// type,
-			// normalize,
-			// stride,
-			// offset);
-		// gl.enableVertexAttribArray(
-			// programInfo.attribLocations.textureCoord);
-	  // }
+	   {
+		 const numComponents = 2;
+		 const type = gl.FLOAT;
+		 const normalize = false;
+		 const stride = 0;
+		 const offset = 0;
+		 gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
+		 gl.vertexAttribPointer(
+			 programInfo.attribLocations.textureCoord,
+			 numComponents,
+			 type,
+			 normalize,
+			 stride,
+			 offset);
+		 gl.enableVertexAttribArray(
+			 programInfo.attribLocations.textureCoord);
+	   }
 
 	  // Tell WebGL which indices to use to index the vertices
 	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
