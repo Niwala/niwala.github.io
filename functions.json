@@ -29,13 +29,6 @@
       "previewShader": ""
     },
     {
-      "filename": "cosine.json",
-      "name": "Cos",
-      "tags": "trigonometry circle",
-      "description": "Parfait pour faire des oscillations douces. Permet aussi de convertir un angle en direction.",
-      "previewShader": "color = vec3(step(uv.y, cos(uv.x * 3.1415 + time) * 0.5 + 0.5));"
-    },
-    {
       "filename": "cross.json",
       "name": "Cross",
       "tags": "",
