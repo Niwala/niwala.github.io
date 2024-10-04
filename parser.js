@@ -22,13 +22,25 @@ var searchItems;
 var functionListCanvas;
 var functionListRenderer;
 
+var bypassUrlAdaptation;
+
 function Parse()
 {
 	LoadCanvas();
 	LoadTemplates();
 	ReadFunctionsIndex();
+	
+	//Track and react to previous / next page of browser
+	window.addEventListener('popstate', (event) => 
+	{
+		if (event.state) 
+		{
+			bypassUrlAdaptation = true;
+			OpenFunctionFromURL();
+			bypassUrlAdaptation = false;
+		}
+	});
 }
-
 
 function LoadCanvas()
 {
@@ -152,6 +164,13 @@ function AddFunctions(functions)
 	
 	
 	//Auto-read function from url params
+	OpenFunctionFromURL();
+}
+
+function OpenFunctionFromURL()
+{
+	bypassUrlAdaptation = true;
+		
 	let params = GetURLParams();	
 	let functionFromParams = params["function"];
 	let exampleFromParams = params["example"];
@@ -159,18 +178,14 @@ function AddFunctions(functions)
 	
 	if (functionFromParams != null)
 	{
-		funcLoop : for (var i = 0; i < functions.length; i++) 
-		{			
-			if (RemoveExtension(functions[i].filename) == functionFromParams)
-			{
-				//Read function + example
-				ReadFunctionFile(functions[i].filename, exampleID);
-								
-				//break
-				break funcLoop;
-			}
-		}
+		ReadFunctionFile(functionFromParams + ".json", exampleID);
 	}
+	else
+	{
+		CloseFunction();
+	}
+	
+	bypassUrlAdaptation = false;
 }
 
 function SelectFirstSearchItem()
@@ -323,7 +338,6 @@ function OpenFunction(data, exampleID = 0)
 	OpenExample(exampleID);
 	
 	
-
 	//Bind canvas
 	const renderers = new Map();
 	for (let i = 0; i < exampleCount; i++)
@@ -384,13 +398,16 @@ function OpenExample(id)
 	currentExample = currentFunction.examples[id];
 	
 	//Update url parameters
-	const url = new URL(document.URL);
-	let shortName = RemoveExtension(currentFileName);
-	url.searchParams.set('function', shortName);
-	url.searchParams.set('example', id);
-	
-	document.title = "Shader Functions (" + currentFunction.name + ")";
-	window.history.pushState('data', "Shader Functions (" + currentFunction.name + ")", url.href);
+	if (!bypassUrlAdaptation)
+	{
+		const url = new URL(document.URL);
+		let shortName = RemoveExtension(currentFileName);
+		url.searchParams.set('function', shortName);
+		url.searchParams.set('example', id);
+		
+		document.title = "Shader Functions (" + currentFunction.name + ")";
+		window.history.pushState('data', "Shader Functions (" + currentFunction.name + ")", url.href);
+	}
 
 	//Enable selected example
 	for	(let i = 0; i < exampleList.length; i++)
@@ -406,14 +423,17 @@ function OpenExample(id)
 
 function CloseFunction()
 {
-	//Update url parameters
-	const url = new URL(document.URL);
-	let shortName = RemoveExtension(currentFileName);
-	url.searchParams.delete('function');
-	url.searchParams.delete('example');
-	
-	document.title = "Shader Functions";
-	window.history.pushState('data', "Shader Functions", url.href);
+	if (!bypassUrlAdaptation)
+	{
+		//Update url parameters
+		const url = new URL(document.URL);
+		let shortName = RemoveExtension(currentFileName);
+		url.searchParams.delete('function');
+		url.searchParams.delete('example');
+		
+		document.title = "Shader Functions";
+		window.history.pushState('data', "Shader Functions", url.href);
+	}
 	
 	//Hide content container
 	let contentContainer = document.getElementById("content-container");
