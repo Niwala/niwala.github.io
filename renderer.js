@@ -13,6 +13,7 @@ class ShaderData
 		this.height = element.getAttribute("height");
 		this.shaderGuid = shaderGuid;
 		this.shaderFragContent = shaderFragment;
+		this.shaderProperties = shaderProperties;
 
 		this.locations = new Map();
 		this.floatValues = new Map();
@@ -66,7 +67,6 @@ class ShaderData
 
 			uniform sampler2D uSampler;
 			uniform highp float time;
-			uniform highp vec2 uRectSize;
 
 			//Custom properties` + uniforms + ` 
 
@@ -74,7 +74,7 @@ class ShaderData
 			{
 				//highp vec2 uv = gl_FragCoord.xy / uRectSize;
 				highp vec2 uv = vTextureCoord;
-
+			
 				//if (uv.x > 1.0 || uv.y > 1.0 || uv.x < 0.0 || uv.y < 0.0)
 				//	return;
 
@@ -103,9 +103,10 @@ class ShaderData
 
 	UpdateProperties(gl, time)
 	{
+		gl.useProgram(this.shaderProgram);
+		
 		//Built-in Properties
 		gl.uniform1f(this.timeLocation, time);
-		gl.uniform2f(this.rectSize, this.width, this.height);
 		
 		//Example properties
 		this.floatValues.forEach((value, key) => 
@@ -117,7 +118,7 @@ class ShaderData
 		this.colorValues.forEach((value, key) => 
 		{
 			let loc = this.locations.get(key);
-			gl.uniform3f(loc, value);
+			gl.uniform3f(loc, value[0], value[1], value[2]);
 		});
 	}
 
@@ -129,15 +130,16 @@ class ShaderData
 		if (!this.compiled)
 			return;
 
+		gl.useProgram(this.shaderProgram);
+
 		//Get properties locations > Built-in properties
 		this.timeLocation = gl.getUniformLocation(this.shaderProgram, "time");
-		this.rectSize = gl.getUniformLocation(this.shaderProgram, "uRectSize");
 		
 		//Get properties locations > Example properties
 		for	(let i = 0; i < this.propertyCount; i++)
 		{
-			let property = shaderProperties[i];
-			let propHtmlName = shaderGuid + "-" + property.name
+			let property = this.shaderProperties[i];
+			let propHtmlName = this.shaderGuid + "-" + property.name
 			let loc = gl.getUniformLocation(this.shaderProgram, property.id);
 			this.locations.set(propHtmlName, loc);
 			
@@ -239,6 +241,9 @@ class ShaderRenderer
 		this.shaderData = new Array();
 		this.canvas = canvas;
 		
+		this.width = canvas.getAttribute("width");
+		this.height = canvas.getAttribute("height");
+		
 		//Load gl context
 		this.gl = canvas.getContext('webgl');
 		
@@ -253,27 +258,46 @@ class ShaderRenderer
 		// objects we'll be drawing.
 		this.buffers = this.initBuffers(this.gl);
 
-		var then = 0;
+		this.time = 0;
+		this.lastTime = 0;
+
+		
 
 		// Draw the scene repeatedly
-		this.render = (now) =>  
-		{
-			now *= 0.001;  // convert to seconds
-			this.deltaTime = now - then;
-			then = now;
-			
-			this.time = now;
+		requestAnimationFrame(this.Render);
+	}
+	
+	Render = (now) => 
+	{
+		this.time = now * 0.001;
+		this.deltaTime = this.time - this.lastTime;
+		this.lastTime = this.time;
 
-			this.clearScene(this.gl);
-			for (var i = 0; i < this.shaderData.length; i++) 
-			{
-				this.shaderData[i].UpdateProperties(this.gl, this.time);
-				this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
-			}
-						
-			requestAnimationFrame(this.render);
+		
+		//Keep canvas size sync
+		let bounds = this.canvas.getBoundingClientRect();
+		let currentWidth = bounds.width;
+		let currentHeight = bounds.height;
+		
+		if (this.width != currentWidth || this.height != currentHeight)
+		{
+			this.width = currentWidth;
+			this.height = currentHeight;
+			this.canvas.setAttribute("width", this.width);
+			this.canvas.setAttribute("height", this.height);
+			
+			this.gl.viewport.width = this.width;
+			this.gl.viewport.height = this.height;
 		}
-		requestAnimationFrame(this.render);
+
+		this.clearScene(this.gl);
+		for (var i = 0; i < this.shaderData.length; i++) 
+		{
+			this.shaderData[i].UpdateProperties(this.gl, this.time);
+			this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
+		}
+					
+		requestAnimationFrame(this.Render)
 	}
 	
 
@@ -417,33 +441,34 @@ class ShaderRenderer
 	//
 	clearScene(gl) 
 	{
-	  gl.clearColor(0.0, 0.0, 0.0, 0.0);  // Clear to black, fully opaque
-	  gl.clearDepth(1.0);                 // Clear everything
-	  gl.enable(gl.DEPTH_TEST);           // Enable depth testing
-	  gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+		gl.viewport(0, 0, this.width, this.height);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);  // Clear to black, fully opaque
+		gl.clearDepth(1.0);                 // Clear everything
+		gl.enable(gl.DEPTH_TEST);           // Enable depth testing
+		gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
 
-	  // Clear the canvas before we start drawing on it.
-	  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		// Clear the canvas before we start drawing on it.
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	}
 
 	drawObject(gl, programInfo, buffers, shaderData)
 	{
-	  // Create a perspective matrix, a special matrix that is
-	  // used to simulate the distortion of perspective in a camera.
-	  // Our field of view is 45 degrees, with a width/height
-	  // ratio that matches the display size of the canvas
-	  // and we only want to see objects between 0.1 units
-	  // and 100 units away from the camera.
+		// Create a perspective matrix, a special matrix that is
+		// used to simulate the distortion of perspective in a camera.
+		// Our field of view is 45 degrees, with a width/height
+		// ratio that matches the display size of the canvas
+		// and we only want to see objects between 0.1 units
+		// and 100 units away from the camera.
 
-	  let fieldOfView = 45 * Math.PI / 180;   // in radians
-	  let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-	  let zNear = 0.1;
-	  let zFar = 100.0;
-	  let projectionMatrix = mat4.create();
-
-	  // note: glmatrix.js always has the first argument
-	  // as the destination to receive the result.
-	  //mat4.perspective(projectionMatrix,
+		let fieldOfView = 45 * Math.PI / 180;   // in radians
+		let aspect = this.width / this.height;
+		let zNear = 0.1;
+		let zFar = 100.0;
+		let projectionMatrix = mat4.create();
+	
+		// note: glmatrix.js always has the first argument
+		// as the destination to receive the result.
+		//mat4.perspective(projectionMatrix,
 		//			   fieldOfView,
 		//			   aspect,
 		//			   zNear,
@@ -452,23 +477,26 @@ class ShaderRenderer
 		let bounds = this.canvas.getBoundingClientRect();
 
 	  	//Out mat, Left, Right, Bottom, Top, Near, Far
-  		mat4.ortho(projectionMatrix, -bounds.x, bounds.right, -bounds.y, bounds.bottom, 0.1, 100);
+  		mat4.ortho(projectionMatrix, 0, this.width, 0, this.height, 0.1, 100);
+
+
+
   		//mat4.ortho(projectionMatrix, 0.0, 100.0, 0.0, 100.0, 0.1, 100);
 
-	  // Set the drawing position to the "identity" point, which is
-	  // the center of the scene.
-	  let modelViewMatrix = mat4.create();
+		// Set the drawing position to the "identity" point, which is
+		// the center of the scene.
+		let modelViewMatrix = mat4.create();
+	
+		// Now move the drawing position a bit to where we want to
+		// start drawing the square.
+	
+		let elBounds = shaderData.element.getBoundingClientRect();
+	
+		mat4.translate(modelViewMatrix,     // destination matrix
+			modelViewMatrix,     // matrix to translate
+			[elBounds.x, this.height - (elBounds.y + elBounds.height), -10.0]);  // amount to translate
 
-	  // Now move the drawing position a bit to where we want to
-	  // start drawing the square.
-
-	  let elBounds = shaderData.element.getBoundingClientRect();
-
-	  mat4.translate(modelViewMatrix,     // destination matrix
-					 modelViewMatrix,     // matrix to translate
-					 [elBounds.x, bounds.height - elBounds.y - elBounds.height, -10.0]);  // amount to translate
-
-	  mat4.scale(modelViewMatrix, modelViewMatrix, [elBounds.width, elBounds.height, 1.0]);
+		mat4.scale(modelViewMatrix, modelViewMatrix, [elBounds.width, elBounds.height, 1.0]);
 
 	  // mat4.rotate(modelViewMatrix,  // destination matrix
 				  // modelViewMatrix,  // matrix to rotate

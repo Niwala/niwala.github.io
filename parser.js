@@ -140,8 +140,10 @@ function AddFunctions(functions)
 	//List search items & Bind shader preview canvases
 	for (var i = 0; i < functions.length; i++) 
 	{
+		//Add search item
 		searchItems.set((functions[i].name + " " + functions[i].tags).toLowerCase(), document.getElementById("search-item-" + functions[i].name));
 		
+		//Bind canvas
 		let previewId = "shader-preview-" + functions[i].name;
 		let canvas = document.getElementById(previewId);
 		let shaderData = new ShaderData(canvas, previewId, functions[i].previewShader, null);
@@ -206,9 +208,7 @@ function StopSearch()
 }
 
 function ReadFunctionFile(filename, exampleID = 0)
-{
-	console.log("Read " + filename);
-	
+{	
 	//Record new current filename
 	currentFileName = filename;
 	
@@ -328,11 +328,13 @@ function OpenFunction(data, exampleID = 0)
 	const renderers = new Map();
 	for (let i = 0; i < exampleCount; i++)
 	{
-		let canvasID = data.name + "-" + data.examples[i].name + "-canvas"
+		let exampleID = data.name + "-" + data.examples[i].name;
+		let canvasID = exampleID + "-canvas"
 		let canvas = document.getElementById(canvasID);
 		
-		var shaderRenderer = RendererFromExample(canvas, data, data.examples[i]);
-		renderers.set(data.name + "-" + data.examples[i].name, shaderRenderer);
+		let shaderData = new ShaderData(canvas, exampleID, data.examples[i].shader,  data.examples[i].properties);
+		functionListRenderer.AddRenderer(shaderData);
+		renderers.set(data.name + "-" + data.examples[i].name, shaderData);
 	}
 	
 	//Bind properties > Sliders
