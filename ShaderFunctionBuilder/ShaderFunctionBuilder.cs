@@ -92,7 +92,7 @@ namespace ShaderFunctionBuilder
         private void OnSelectTab(object sender, EventArgs e)
         {
             int index = exampleTabs.SelectedIndex;
-            if (index < 0 || function.examples == null ||  index >= function.examples.Length)
+            if (index < 0 || function.examples == null || index >= function.examples.Length)
                 return;
 
             OpenExample(function.examples[exampleTabs.SelectedIndex]);
@@ -217,7 +217,7 @@ namespace ShaderFunctionBuilder
             //Prompt.ShowSaveDialog("There are unsaved changes", "Unsaved changes", "Save", "Revert");
 
             //dirty = false;
-        
+
         }
 
         private void SaveIndex()
@@ -438,7 +438,7 @@ namespace ShaderFunctionBuilder
 
             (example.properties[index], example.properties[otherIndex]) = (example.properties[otherIndex], example.properties[index]);
             (propertyList.Items[index], propertyList.Items[otherIndex]) = (propertyList.Items[otherIndex], propertyList.Items[index]);
-            
+
             propertyList.SelectedIndex = otherIndex;
             SelectProperty(null, null);
             SetCurrentExample(example);
@@ -459,7 +459,7 @@ namespace ShaderFunctionBuilder
 
             (example.properties[index], example.properties[otherIndex]) = (example.properties[otherIndex], example.properties[index]);
             (propertyList.Items[index], propertyList.Items[otherIndex]) = (propertyList.Items[otherIndex], propertyList.Items[index]);
-            
+
             propertyList.SelectedIndex = otherIndex;
             SelectProperty(null, null);
             SetCurrentExample(example);
@@ -536,6 +536,59 @@ namespace ShaderFunctionBuilder
         {
             DialogResult result = colorPicker.ShowDialog();
             MessageBox.Show(result + "  " + colorPicker.Color);
+        }
+
+        private void HandleCtrlBackspace_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyData)
+            {
+                case (Keys.Back | Keys.Control):
+                    e.SuppressKeyPress = true;
+                    TextBox textbox = (TextBox)sender;
+                    int i;
+                    if (textbox.SelectionStart.Equals(0))
+                    {
+                        return;
+                    }
+                    int space = textbox.Text.LastIndexOf(' ', textbox.SelectionStart - 1);
+                    int line = textbox.Text.LastIndexOf("\r\n", textbox.SelectionStart - 1);
+                    if (space > line)
+                    {
+                        i = space;
+                    }
+                    else
+                    {
+                        i = line;
+                    }
+                    if (i > -1)
+                    {
+                        while (textbox.Text.Substring(i - 1, 1).Equals(' '))
+                        {
+                            if (i.Equals(0))
+                            {
+                                break;
+                            }
+                            i--;
+                        }
+                        textbox.Text = textbox.Text.Substring(0, i) + textbox.Text.Substring(textbox.SelectionStart);
+                        textbox.SelectionStart = i;
+                    }
+                    else if (i.Equals(-1))
+                    {
+                        textbox.Text = textbox.Text.Substring(textbox.SelectionStart);
+                    }
+                    break;
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                Save(null, null);
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
         }
     }
 }

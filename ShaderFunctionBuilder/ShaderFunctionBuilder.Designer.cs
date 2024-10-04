@@ -206,6 +206,7 @@
             this.indexShaderField.TabIndex = 16;
             this.indexShaderField.Text = "Index shader";
             this.indexShaderField.TextChanged += new System.EventHandler(this.OnChangeFunction);
+            this.indexShaderField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // label15
             // 
@@ -242,6 +243,7 @@
             this.indexDescriptionField.TabIndex = 13;
             this.indexDescriptionField.Text = "Index description";
             this.indexDescriptionField.TextChanged += new System.EventHandler(this.OnChangeFunction);
+            this.indexDescriptionField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // fileTitle
             // 
@@ -274,6 +276,7 @@
             this.functionNameField.TabIndex = 1;
             this.functionNameField.Text = "Function name";
             this.functionNameField.TextChanged += new System.EventHandler(this.OnChangeFunction);
+            this.functionNameField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // label2
             // 
@@ -300,6 +303,7 @@
             this.functionDescriptionField.TabIndex = 4;
             this.functionDescriptionField.Text = "Function description";
             this.functionDescriptionField.TextChanged += new System.EventHandler(this.OnChangeFunction);
+            this.functionDescriptionField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // functionTagsField
             // 
@@ -312,6 +316,7 @@
             this.functionTagsField.TabIndex = 8;
             this.functionTagsField.Text = "Function tags";
             this.functionTagsField.TextChanged += new System.EventHandler(this.OnChangeFunction);
+            this.functionTagsField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // label1
             // 
@@ -504,6 +509,7 @@
             this.propertyMaxField.Size = new System.Drawing.Size(62, 21);
             this.propertyMaxField.TabIndex = 26;
             this.propertyMaxField.TextChanged += new System.EventHandler(this.OnPropertyChanged);
+            this.propertyMaxField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // propertyMinField
             // 
@@ -513,6 +519,7 @@
             this.propertyMinField.Size = new System.Drawing.Size(62, 21);
             this.propertyMinField.TabIndex = 25;
             this.propertyMinField.TextChanged += new System.EventHandler(this.OnPropertyChanged);
+            this.propertyMinField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // propertyValueField
             // 
@@ -522,6 +529,7 @@
             this.propertyValueField.Size = new System.Drawing.Size(111, 21);
             this.propertyValueField.TabIndex = 24;
             this.propertyValueField.TextChanged += new System.EventHandler(this.OnPropertyChanged);
+            this.propertyValueField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // propertyShaderNameField
             // 
@@ -531,6 +539,7 @@
             this.propertyShaderNameField.Size = new System.Drawing.Size(271, 21);
             this.propertyShaderNameField.TabIndex = 23;
             this.propertyShaderNameField.TextChanged += new System.EventHandler(this.OnPropertyChanged);
+            this.propertyShaderNameField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // propertyNameField
             // 
@@ -540,6 +549,7 @@
             this.propertyNameField.Size = new System.Drawing.Size(271, 21);
             this.propertyNameField.TabIndex = 22;
             this.propertyNameField.TextChanged += new System.EventHandler(this.OnPropertyChanged);
+            this.propertyNameField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // label13
             // 
@@ -591,7 +601,7 @@
             this.button3.Font = new System.Drawing.Font("Arial", 9F);
             this.button3.Location = new System.Drawing.Point(423, 405);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(60, 23);
+            this.button3.Size = new System.Drawing.Size(68, 23);
             this.button3.TabIndex = 16;
             this.button3.Text = "Remove";
             this.button3.UseVisualStyleBackColor = true;
@@ -668,6 +678,7 @@
             this.exampleShaderField.TabIndex = 9;
             this.exampleShaderField.Text = "Example shader";
             this.exampleShaderField.TextChanged += new System.EventHandler(this.OnChangeExampleShader);
+            this.exampleShaderField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // label7
             // 
@@ -694,6 +705,7 @@
             this.exampleCodeField.TabIndex = 7;
             this.exampleCodeField.Text = "Example code";
             this.exampleCodeField.TextChanged += new System.EventHandler(this.OnChangeExampleCode);
+            this.exampleCodeField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // label6
             // 
@@ -730,6 +742,7 @@
             this.exampleDescriptionField.TabIndex = 5;
             this.exampleDescriptionField.Text = "Example description";
             this.exampleDescriptionField.TextChanged += new System.EventHandler(this.OnChangeExampleDescription);
+            this.exampleDescriptionField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // exampleNameField
             // 
@@ -742,6 +755,7 @@
             this.exampleNameField.TabIndex = 1;
             this.exampleNameField.Text = "Example name";
             this.exampleNameField.TextChanged += new System.EventHandler(this.OnChangeExampleName);
+            this.exampleNameField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HandleCtrlBackspace_KeyDown);
             // 
             // label5
             // 
@@ -789,6 +803,8 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "ShaderFunctionBuilder";
             this.Text = "Shader Functions Builder";
+            this.KeyPreview = true;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

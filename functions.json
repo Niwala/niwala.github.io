@@ -9,9 +9,9 @@
     },
     {
       "filename": "atan2.json",
-      "name": "atan2",
+      "name": "Atan2",
       "tags": "",
-      "description": "",
+      "description": "Permet de facilement convertir un vecteur normalisé en angle.",
       "previewShader": "highp float angle = time;\r\nhighp vec2 rotUv = uv - vec2(0.5, 0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x + 0.5) - 0.25, abs(rotUv.y) - 0.02);"
     },
     {
@@ -32,8 +32,8 @@
       "filename": "dot.json",
       "name": "Dot",
       "tags": "",
-      "description": "",
-      "previewShader": "highp float d = distance(uv.xy, vec2(0.5));\r\nhighp float a = abs(d - 0.3) - 0.05;\r\nhighp vec2 dir = normalize(uv.y - vec2(0.5));\r\nhighp float align = dot(dir, vec2(0.0, 1.0)) * 0.5 + 0.5;\r\n\r\ncolor = vec3(smoothstep(0.01, 0.0, a) * align);"
+      "description": "Permet d'obtenir l'alignement entre deux vecteurs.",
+      "previewShader": "highp float d = distance(uv.xy, vec2(0.5));\r\nhighp float a = abs(d - 0.25) - 0.1;\r\nhighp vec2 dir = normalize(uv.y - vec2(0.5));\r\nhighp float angle = time * 5.0;\r\nhighp vec2 targetDir = vec2(sin(angle), cos(angle));\r\nhighp float align = dot(dir, targetDir) * 0.5 + 0.5;\r\n\r\ncolor = vec3(smoothstep(0.01, 0.0, a) * align);"
     },
     {
       "filename": "floor.json",
