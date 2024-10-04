@@ -15,11 +15,32 @@
       "previewShader": "highp float angle = time;\r\nhighp vec2 rotUv = uv - vec2(0.5, 0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x + 0.5) - 0.25, abs(rotUv.y) - 0.02);"
     },
     {
+      "filename": "ceil.json",
+      "name": "Ceil",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
+    },
+    {
+      "filename": "clamp.json",
+      "name": "Clamp",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
+    },
+    {
       "filename": "cosine.json",
       "name": "Cos",
       "tags": "trigonometry circle",
       "description": "Parfait pour faire des oscillations douces. Permet aussi de convertir un angle en direction.",
       "previewShader": "color = vec3(step(uv.y, cos(uv.x * 3.1415 + time) * 0.5 + 0.5));"
+    },
+    {
+      "filename": "cross.json",
+      "name": "Cross",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
     },
     {
       "filename": "distance.json",
@@ -78,6 +99,13 @@
       "previewShader": "highp float minusShape = max(abs(uv.x - 0.27) - 0.1, abs(uv.y - 0.5) - 0.05);\r\n\r\nhighp float angle = 3.1415 * 0.25;\r\nhighp vec2 rotUv = uv - vec2(0.65, 0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x) - 0.25, abs(rotUv.y) - 0.05);\r\nhighp float crossB = max(abs(rotUv.x) - 0.05, abs(rotUv.y) - 0.25);\r\n\r\nhighp float shape = min(min(minusShape, crossA), crossB);\r\n\r\ncolor = vec3(step(shape , 0.0));"
     },
     {
+      "filename": "normalize.json",
+      "name": "Normalize",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
+    },
+    {
       "filename": "oneminus.json",
       "name": "OneMinus",
       "tags": "",
@@ -90,6 +118,27 @@
       "tags": "curve gamma",
       "description": "",
       "previewShader": "highp float a = pow(uv.x, 0.1 + (sin(time) + 1.0) * 4.0);\r\ncolor = vec3(smoothstep(0.01, 0.0, uv.y - a));"
+    },
+    {
+      "filename": "round.json",
+      "name": "Round",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
+    },
+    {
+      "filename": "saturate.json",
+      "name": "Saturate",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
+    },
+    {
+      "filename": "sign.json",
+      "name": "Sign",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
     },
     {
       "filename": "sine.json",

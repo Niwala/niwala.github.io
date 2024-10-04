@@ -1,0 +1,16 @@
+{
+  "name": "Cross",
+  "tags": "",
+  "description": "",
+  "indexDescription": "",
+  "indexShader": "",
+  "examples": [
+    {
+      "name": "Example",
+      "description": null,
+      "shader": null,
+      "code": null,
+      "properties": null
+    }
+  ]
+}
