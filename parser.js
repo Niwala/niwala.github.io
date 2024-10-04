@@ -395,6 +395,27 @@ function OpenFunction(data, exampleID = 0)
 			r.SetFloatValue(this.id, toggle.checked ? 1.0 : 0.0);
 		};
 	}
+	
+	//Bind properties > Colors
+	for (let i = 0; i < colorFieldList.length; i++)
+	{
+		let colorField = document.getElementById(colorFieldList[i]);
+
+		let exampleName = colorField.getAttribute("data-example-name");
+		let renderer = renderers.get(exampleName);
+
+		let color = HexToRGB(colorField.value);
+        renderer.SetColorValue(colorField.id, color);
+		
+		colorField.oninput = function() 
+		{
+			let dn = this.getAttribute("data-example-name");
+			let r = renderers.get(dn);
+			
+			let c = HexToRGB(this.value);
+			r.SetColorValue(this.id, c);
+		};
+	}
 }
 
 function OpenExample(id)
@@ -483,6 +504,30 @@ function BuildColorPicker(htmlID, dataExampleName, property)
 	"<p>" + property.name + "</p>" +
 	"<input type=\"color\" data-example-name=\"" + dataExampleName + "\" value=\"" + property.value + "\" class=\"color-picker\" id=\"" + htmlID + "\"/>" +
 	"</div>";
+}
+
+function HexToRGB(h) 
+{
+  let r = 0, g = 0, b = 0;
+
+  if (h.length == 4) {
+    r = "0x" + h[1] + h[1];
+    g = "0x" + h[2] + h[2];
+    b = "0x" + h[3] + h[3];
+    
+  } else if (h.length == 7) {
+    r = "0x" + h[1] + h[2];
+    g = "0x" + h[3] + h[4];
+    b = "0x" + h[5] + h[6];
+  }
+    
+  {
+    r = +(r / 255).toFixed(3);
+    g = +(g / 255).toFixed(3);
+    b = +(b / 255).toFixed(3);
+  }
+  
+  return [r, g, b];
 }
 
 function SearchFunction(search)

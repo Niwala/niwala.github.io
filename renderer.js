@@ -88,10 +88,9 @@ class ShaderData
 		this.floatValues.set(name, value);
 	}
 	
-	SetColorValue(name, value)
+	SetColorValue(name, color)
 	{
-		console.log(value);
-		this.colorValues.set(name, value);
+		this.colorValues.set(name, color);
 	}
 
 	UpdateProperties(gl, time)
