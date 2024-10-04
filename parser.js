@@ -136,7 +136,7 @@ function AddFunctions(functions)
 	searchItems = new Map();
 	for (var i = 0; i < functions.length; i++) 
 	{		
-		list += "<button class='function-box' onclick=\"ReadFunctionFile('" + functions[i].filename + "')\"><div class='horizontal'><div class='vertical'><h3>" +
+		list += "<button class='function-box' onclick=\"ReadFunctionFile('" + functions[i].filename + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
 		functions[i].name + 
 		"</h3><p>" + 
 		functions[i].description + 
