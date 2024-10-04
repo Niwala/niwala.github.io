@@ -15,15 +15,8 @@
       "previewShader": "highp float angle = time;\r\nhighp vec2 rotUv = uv - vec2(0.5, 0.5);\r\nrotUv = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * rotUv;\r\n\r\nhighp float crossA = max(abs(rotUv.x + 0.5) - 0.25, abs(rotUv.y) - 0.02);"
     },
     {
-      "filename": "ceil.json",
-      "name": "Ceil",
-      "tags": "",
-      "description": "",
-      "previewShader": ""
-    },
-    {
       "filename": "clamp.json",
-      "name": "Clamp",
+      "name": "Clamp & Saturate",
       "tags": "",
       "description": "",
       "previewShader": ""
@@ -53,7 +46,7 @@
       "filename": "floor.json",
       "name": "Floor",
       "tags": "round stairs",
-      "description": "Arrondis à l’entier ≤ à votre valeur.\r\n\r\n<h3>Ceil</3>",
+      "description": "Arrondis à l’entier ≤ à votre valeur.\r\n\r\n<h3>Round & Ceil</h3>\r\nSimilaire mais vers respectivement vers l'entier le plus proche et l'entier ≥ à votre valeur.",
       "previewShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));"
     },
     {
@@ -82,7 +75,14 @@
       "name": "Lerp",
       "tags": "",
       "description": "Permet s’interpoler entre deux valeurs sur base d’ une valeur entre 0 et 1.",
-      "previewShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(mix(0.25, 0.75, t)); \r\nhighp float circleDF = distance(uv, coords) - 0.2;\r\nhighp vec2 square = abs(uv - coords) - vec2(0.2);\r\nhighp float squareDF = max(square.x, square.y);\r\nhighp float shape = step(mix(circleDF, squareDF, t), 0.0);\r\ncolor = vec3(shape);\r\n//color = vec3(circleDF, squareDF, t);"
+      "previewShader": "highp float t = sin(time) * 0.5 + 0.5;\r\nhighp vec2 coords = vec2(mix(0.25, 0.75, t)); \r\nhighp float circleDF = distance(uv, coords) - 0.2;\r\nhighp vec2 square = abs(uv - coords) - vec2(0.2);\r\nhighp float squareDF = max(square.x, square.y);\r\nhighp float shape = smoothstep(0.01, 0.0, mix(circleDF, squareDF, t));\r\ncolor = vec3(shape);\r\n//color = vec3(circleDF, squareDF, t);"
+    },
+    {
+      "filename": "minmax.json",
+      "name": "Min & Max",
+      "tags": "",
+      "description": "",
+      "previewShader": ""
     },
     {
       "filename": "negate.json",
@@ -96,7 +96,7 @@
       "name": "Normalize",
       "tags": "",
       "description": "",
-      "previewShader": ""
+      "previewShader": "highp vec2 dir = uv - vec2(0.5);\r\nhighp float dist = length(dir);\r\nhighp vec2 normDir = dir / dist;\r\nhighp float angle = atan(dir.x, dir.y);\r\nhighp float section = floor(angle * 10.0);\r\nhighp float sectRand = sin(section * 96.2457) * 0.5 + 0.5;\r\nsectRand = sectRand * 0.3 + 0.1;\r\n\r\nhighp float disc = step(length(dir), 0.4);\r\nhighp float sectRange = step(dist, sectRand);\r\ncolor = vec3(disc, sectRange, disc * sectRange);"
     },
     {
       "filename": "oneminus.json",
@@ -111,20 +111,6 @@
       "tags": "curve gamma",
       "description": "",
       "previewShader": "highp float a = pow(uv.x, 0.1 + (sin(time) + 1.0) * 4.0);\r\ncolor = vec3(smoothstep(0.01, 0.0, uv.y - a));"
-    },
-    {
-      "filename": "round.json",
-      "name": "Round",
-      "tags": "",
-      "description": "",
-      "previewShader": ""
-    },
-    {
-      "filename": "saturate.json",
-      "name": "Saturate",
-      "tags": "",
-      "description": "",
-      "previewShader": ""
     },
     {
       "filename": "sign.json",

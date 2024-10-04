@@ -1,7 +1,7 @@
 {
-  "name": "Clamp & Saturate",
+  "name": "Min & Max",
   "tags": "",
-  "description": "Permet de rapidement donner un minimum et maximum à une valeur.",
+  "description": "",
   "indexDescription": "",
   "indexShader": "",
   "examples": [

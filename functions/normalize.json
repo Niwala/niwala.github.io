@@ -1,8 +1,16 @@
 {
   "name": "Normalize",
-  "tags": null,
-  "description": null,
-  "indexDescription": null,
-  "indexShader": null,
-  "examples": null
+  "tags": "",
+  "description": "",
+  "indexDescription": "",
+  "indexShader": "highp vec2 dir = uv - vec2(0.5);\r\nhighp float dist = length(dir);\r\nhighp vec2 normDir = dir / dist;\r\nhighp float angle = atan(dir.x, dir.y);\r\nhighp float section = floor(angle * 10.0);\r\nhighp float sectRand = sin(section * 96.2457) * 0.5 + 0.5;\r\nsectRand = sectRand * 0.3 + 0.1;\r\n\r\nhighp float disc = step(length(dir), 0.4);\r\nhighp float sectRange = step(dist, sectRand);\r\ncolor = vec3(disc, sectRange, disc * sectRange);",
+  "examples": [
+    {
+      "name": "Example",
+      "description": "",
+      "shader": "",
+      "code": "",
+      "properties": null
+    }
+  ]
 }
