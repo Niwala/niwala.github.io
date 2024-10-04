@@ -53,6 +53,21 @@ pre
 	
 }
 
+.inline-link
+{
+	background: #111721;
+	border-radius: 5px;
+	cursor: pointer;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.inline-link:hover
+{
+	background-color: #36445c;
+}
+
+
 .banner
 {
 	padding: 8px;

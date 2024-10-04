@@ -240,6 +240,11 @@ function RemoveExtension(filename)
 	return filename.replace(/\.[^/\\.]+$/, "")
 }
 
+function OpenPage(filename)
+{
+	console.log("Open " + filename);
+}
+
 function OpenFunction(data, exampleID = 0)
 {
 	//Record new current function
