@@ -77,6 +77,17 @@ pre
 	justify-self: center;
 }
 
+.overlay-canvas
+{
+	display: flex;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	background-color: transparent;
+	pointer-events: none;
+}
+
 .function-box
 {
 	display: flex;
