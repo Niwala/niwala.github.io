@@ -2,7 +2,7 @@
   "name": "Floor",
   "tags": "round stairs",
   "description": "Arrondis à l’entier ≤ à votre valeur.",
-  "indexDescription": "Arrondis à l’entier ≤ à votre valeur.",
+  "indexDescription": "Arrondis à l’entier ≤ à votre valeur.\r\n\r\n<h3>Ceil</3>",
   "indexShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));",
   "examples": [
     {

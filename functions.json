@@ -60,7 +60,7 @@
       "filename": "floor.json",
       "name": "Floor",
       "tags": "round stairs",
-      "description": "Arrondis à l’entier ≤ à votre valeur.",
+      "description": "Arrondis à l’entier ≤ à votre valeur.\r\n\r\n<h3>Ceil</3>",
       "previewShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));"
     },
     {
