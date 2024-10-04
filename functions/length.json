@@ -3,7 +3,7 @@
   "tags": "",
   "description": "",
   "indexDescription": "Permet d'obtenir la longueur d'un vecteur.",
-  "indexShader": "highp float a = length(uv.xy - vec2(0.5)) - 0.35;\r\ncolor = vec3(smoothstep(0.01, 0.0, a));",
+  "indexShader": "highp float a = length(uv.xy - vec2(0.5)) - (0.35 + (sin(time) * 0.5 + 0.5) * 0.1);\r\ncolor = vec3(smoothstep(0.01, 0.0, a));",
   "examples": [
     {
       "name": "Example",

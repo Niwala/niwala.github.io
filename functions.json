@@ -26,14 +26,14 @@
       "name": "Distance",
       "tags": "",
       "description": "Permet de calculer la distance entre deux points (fonctionne en 1D aussi)",
-      "previewShader": "highp float d = distance(uv.xy, vec2(0.5, 0.5));\r\nd += sin(d * 8.0 + time * 2.0) * 0.02;\r\nhighp float a = abs(d - 0.4) - 0.02;\r\nhighp float b = abs(d - 0.3) - 0.02;\r\nhighp float c = abs(d - 0.2) - 0.02;\r\nhighp float all = min(min(a, b), c);\r\n\r\ncolor = vec3(smoothstep(0.01, 0.0, all));"
+      "previewShader": "highp float d = distance(uv.xy, vec2(0.5, 0.5));\r\nd += sin(d * 8.0 + time * 4.0) * 0.02;\r\nhighp float a = abs(d - 0.4) - 0.02;\r\nhighp float b = abs(d - 0.3) - 0.02;\r\nhighp float c = abs(d - 0.2) - 0.02;\r\nhighp float all = min(min(a, b), c);\r\n\r\ncolor = vec3(smoothstep(0.01, 0.0, all));"
     },
     {
       "filename": "dot.json",
       "name": "Dot",
       "tags": "",
       "description": "",
-      "previewShader": "//Shpere normals\r\nhighp vec3 normal = vec3((uv - 0.5) * 2.0, 1.0);\r\nnormal.z = 1.0 - length(normal.xy);\r\n\r\nhighp float a = dot(vec3(0.2, 0.6, 0.2), -normal);\r\ncolor = vec3(a);"
+      "previewShader": "highp float d = distance(uv.xy, vec2(0.5));\r\nhighp float a = abs(d - 0.3) - 0.05;\r\nhighp vec2 dir = normalize(uv.y - vec2(0.5));\r\nhighp float align = dot(dir, vec2(0.0, 1.0)) * 0.5 + 0.5;\r\n\r\ncolor = vec3(smoothstep(0.01, 0.0, a) * align);"
     },
     {
       "filename": "floor.json",
@@ -61,7 +61,7 @@
       "name": "length",
       "tags": "",
       "description": "Permet d'obtenir la longueur d'un vecteur.",
-      "previewShader": "highp float a = length(uv.xy - vec2(0.5)) - 0.35;\r\ncolor = vec3(smoothstep(0.01, 0.0, a));"
+      "previewShader": "highp float a = length(uv.xy - vec2(0.5)) - (0.35 + (sin(time) * 0.5 + 0.5) * 0.1);\r\ncolor = vec3(smoothstep(0.01, 0.0, a));"
     },
     {
       "filename": "lerp.json",
@@ -81,7 +81,7 @@
       "filename": "oneminus.json",
       "name": "OneMinus",
       "tags": "",
-      "description": "Retourne l’inverse de la valeur entrée. <i>(Dans setup de valeurs entre 0-1)</i>",
+      "description": "Retourne l’inverse de la valeur entrée. <i>(Dans un contexte de valeurs entre 0-1)</i>",
       "previewShader": "highp vec2 b = vec2(0.5 + sin(time) * 0.15, 0.5);\r\nhighp float c = smoothstep(0.01, 0.0, distance(uv.xy, b) - 0.3);\r\nif (uv.x < 0.5)\r\n\tcolor = vec3(c);\r\nelse\r\n\tcolor = vec3(1.0 - c);"
     },
     {
