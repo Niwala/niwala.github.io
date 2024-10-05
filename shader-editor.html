@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<meta property="og:title" content="Shader functions" />
+	<meta property="og:description" content="Ce site a pour objectif de référencer des fonctions basiques utilisables dans les shaders" />
+	<meta property="og:image" content="https://niwala.github.io/media/banner.jpg" />
+	<meta property="og:url" content="https://niwala.github.io/" />
+	
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Shader functions">
+	<meta name="twitter:description" content="Ce site a pour objectif de référencer des fonctions basiques utilisables dans les shaders">
+	<meta name="twitter:image" content="https://niwala.github.io/media/banner.jpg">
+	
+    <title>Shader Functions</title>
+	<link rel="icon" href="./favicon.ico" type="image/x-icon">
+	
+    <link rel="stylesheet" href="./webgl.css" type="text/css"/>
+	<link rel="stylesheet" href="./styles.css" type="text/css"/>
+	<link rel="stylesheet" href="./prism.css" type="text/css"/>
+	<link rel="stylesheet" href="./switch-buttons.css" type="text/css"/>
+	
+	<script src="gl-matrix-min.js" defer></script>
+	<script src="renderer.js" defer></script>
+	<script src="shader-editor.js" defer></script>
+	<script src="prism.js" defer></script>
+	
+  </head>
+
+  <body>
+
+	<canvas width="1024" height="1024" id="overlay-canvas" class="overlay-canvas"></canvas>
+  
+	<div class="banner">
+	<div class="centred" style="justify-content: space-between; align-items: center; flex-wrap: wrap;">
+	
+	<button class="transparent-button" onclick="GoHome()">
+	<h1>Shader editor</h1>
+	</button>
+	<div>
+
+	
+	<div class="search-bar-list" id="search-bar-list" style="display: none;">
+	</div>
+	</div>
+	
+	</div>
+	</div>
+	
+	<article>
+		<div class="centred">
+			<div class="vertical">
+			
+				<textarea type="text" class="fragment-field" id="shader-text-area" onkeyup="CompileShader()">color = vec3(uv, 0.0);</textArea>
+				<canvas id="shader-canvas" width="400" height="400" class="shader-editor-preview" style="align-self: start;"></canvas>
+		
+			</div>
+		</div>
+	</article>
+	
+	
+  
+
+  </body>
+</html>

@@ -299,6 +299,10 @@ class ShaderRenderer
 		shaderData.Load(this.gl);
 	}
 
+	ClearRenderers()
+	{
+		this.shaderData = new Array();
+	}
 	
 	//
 	// initBuffers

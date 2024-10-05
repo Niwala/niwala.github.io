@@ -96,7 +96,7 @@
       "name": "Normalize",
       "tags": "",
       "description": "",
-      "previewShader": "highp vec2 dir = uv - vec2(0.5);\r\nhighp float dist = length(dir);\r\nhighp vec2 normDir = dir / dist;\r\nhighp float angle = atan(dir.x, dir.y);\r\nhighp float section = floor(angle / 6.2831853 * 10.0);\r\nhighp float rand2 = sin(section * 917.3551) * 0.5 + 0.5;\r\nhighp float sectRand = sin(section * 96.2457 + rand2 + time * 2.0) * 0.5 + 0.5;\r\nsectRand = sectRand * 0.3 + 0.2;\r\n\r\nhighp vec2 targetDir = vec2(sin(angle), cos(angle));\r\nhighp float align = dot(normDir, targetDir) * 0.5 + 0.5;\r\n//align = smoothstep(0.6, 1.0, align);\r\n\r\nsectRand = mix(sectRand, 0.4, align);\r\n\r\nhighp float disc = step(length(dir), 0.4);\r\nhighp float sectRange = step(dist, sectRand);\r\ncolor = vec3(disc, sectRange, disc * sectRange);"
+      "previewShader": "highp vec2 dir = uv - vec2(0.5);\r\nhighp float dist = length(dir);\r\nhighp vec2 normDir = dir / dist;\r\nhighp float angle = atan(dir.x, dir.y);\r\nhighp float section = floor(angle / 6.2831853 * 20.0);\r\n\r\nhighp float rand2 = sin(section * 917.3551) * 0.5 + 0.5;\r\nhighp float sectRand = sin(section * 96.2457 + rand2) * 0.5 + 0.5;\r\nsectRand = sectRand * 0.3 + 0.2;\r\n\r\nhighp vec2 targetDir = vec2(sin(time), cos(time));\r\nhighp float align = dot(normDir, targetDir) * 0.5 + 0.5;\r\nalign = smoothstep(0.6, 1.0, align);\r\nsectRand = mix(sectRand, 0.4, sin(time) * 0.5 + 0.5);\r\n\r\nhighp float disc = step(length(dir), 0.4);\r\nhighp float sectRange = step(dist, sectRand);\r\ncolor = vec3(sectRange);"
     },
     {
       "filename": "oneminus.json",
