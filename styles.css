@@ -337,6 +337,17 @@ button.function-box:hover
 	flex-grow: 1;
 }
 
+.code-container
+{
+	/* display: flex; */
+	flex-direction: column;
+	width: 100%;
+	overflow: hidden;
+	
+	box-sizing: border-box;
+	display:none;
+}
+
 .slider-container
 {
 	display: flex;
@@ -380,10 +391,13 @@ button.function-box:hover
 
 .slider 
 {
-	width: 300px;
+	max-width: 300px;
 	height: 15px;
 	margin-top: 5px;
 	margin-right: 10px;
+	
+	flex-grow: 1;
+	flex-shrink: 1;
 	
 	-webkit-appearance: none;
 	border-radius: 5px;  

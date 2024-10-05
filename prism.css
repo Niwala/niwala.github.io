@@ -35,7 +35,6 @@ pre[class*="language-"]
 {
 	padding: 1em;
 	margin: .5em 0;
-	overflow: scroll;
 	flex-grow: 1;
 	flex-shrink: 1;
 }
@@ -53,6 +52,9 @@ pre[class*="language-"]
 	padding: .1em;
 	border-radius: .3em;
 	white-space: normal;
+	
+	display: block;
+	white-space: pre;
 }
 
 .token.comment,
@@ -131,7 +133,7 @@ pre[class*="language-"]
 
 pre[class*="language-"].line-numbers {
 	position: relative;
-	padding-left: 3.8em;
+	padding-left: 2.8em;
 	counter-reset: linenumber;
 }
 
@@ -173,8 +175,19 @@ pre[class*="language-"].line-numbers > code {
 .token a {
 	color: inherit;
 }
-div.code-toolbar {
+div.code-toolbar 
+{
 	position: relative;
+
+     display: flex; /* Flex pour gérer le contenu interne */
+            flex-grow: 1; /* Prend l'espace disponible, sans le forcer */
+            max-width: 100%; /* Empêche le conteneur de dépasser la largeur de l'écran */
+            min-width: 0; /* Nécessaire pour permettre au flex de se réduire */
+            overflow-x: auto; /* Scroll horizontal si nécessaire */
+            overflow-y: hidden; /* Pas de scroll vertical */
+            border: 1px solid black;
+            padding: 10px;
+            box-sizing: border-box; 
 }
 
 div.code-toolbar > .toolbar {
