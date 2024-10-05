@@ -34,20 +34,25 @@
 
 	<canvas width="1024" height="1024" id="overlay-canvas" class="overlay-canvas"></canvas>
   
-	<div class="banner">
-	<div class="centred" style="justify-content: space-between; align-items: center; flex-wrap: wrap;">
-	
-	<button class="transparent-button" onclick="GoHome()">
-	<h1>Shader editor</h1>
-	</button>
-	<div>
+	<!-- Banner -->
+	<div id="banner">
+		<div class="centred" style="justify-content: space-between; align-items: center;">
+		
+			<!-- Left part -->
+			<div class="vertical">
+			
+				<!-- HEAJ logo -->
+				<div>
+					<a href="https://www.heaj.be/en/"><div class="main-logo"></div></a>
+				</div>
+				
+				<!-- Home button -->
+				<button class="transparent-button" onclick="GoHome()">
+					<h1 class="main-header">Shader editor</h1>
+				</button>
 
-	
-	<div class="search-bar-list" id="search-bar-list" style="display: none;">
-	</div>
-	</div>
-	
-	</div>
+			</div>
+		</div>
 	</div>
 	
 	<article>

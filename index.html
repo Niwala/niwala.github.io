@@ -34,41 +34,52 @@
 
   <canvas width="1024" height="1024" id="function-list-canvas" class="overlay-canvas"></canvas>
   
-	<div class="banner">
-	<div class="centred" style="justify-content: space-between; align-items: center; flex-wrap: wrap;">
-	
-	<button class="transparent-button" onclick="GoHome()">
-	<h1>Shader functions</h1>
-	</button>
-	<div>
-	
-	<form id="search-form">
-	<input type="text" class="search-bar" id="search-bar" onkeyup="SearchFunction()" placeholder="(F) Search for functions...">
-	</form>
-	
-	<div class="search-bar-list" id="search-bar-list" style="display: none;">
+	<!-- Banner -->
+	<div id="banner">
+		<div class="centred" style="justify-content: space-between; align-items: center;">
+		
+			<!-- Left part -->
+			<div class="vertical">
+			
+				<!-- HEAJ logo -->
+				<div>
+					<a href="https://www.heaj.be/en/"><div class="main-logo"></div></a>
+				</div>
+				
+				<!-- Home button -->
+				<button class="transparent-button" onclick="GoHome()">
+					<h1 class="main-header">Shader functions</h1>
+				</button>
+
+			</div>
+			
+			<!-- Search bar -->
+			<form id="search-form">
+				<input type="text" class="search-bar" id="search-bar" onkeyup="SearchFunction()" placeholder="(F) Search for functions...">
+				<div class="search-bar-list" id="search-bar-list" style="display: none;"></div>
+			</form>			
+		</div>
 	</div>
-	</div>
-	
-	</div>
-	</div>
+
 	
 	<article>
+	
+		<!-- Main content -->
 		<div class="centred">
 			<div class="vertical">
 
-				<p>Ce site a pour objectif de référencer des fonctions basiques utilisables dans les shaders.</p>
+				<p>Ce site a pour but de répertorier des fonctions basiques utilisables dans les shaders.</br>Vous n'y trouverez pas de descriptions techniques exhaustives, mais plutôt des démonstrations visuelles conçues à des fins pédagogiques.</p>
 			
 				<div class="horizontal" id="function-list">
 
 				<button class="function-box">
-						<div class="horizontal">
-								<div class="vertical" style="margin-right:10px;">
-									<h3>Sin</h3>
-									<p>Lorem ipsum</p>
-								</div>
-								<canvas id="example-canvas-id" width="150" height="150" class="shader-index-preview"></canvas>
+					<div class="horizontal">
+						<div class="vertical" style="margin-right:10px;">
+							<h3>Sin</h3>
+							<p>Lorem ipsum</p>
 						</div>
+						<canvas id="example-canvas-id" width="150" height="150" class="shader-index-preview"></canvas>
+					</div>
 				</button>
 
 				</div>

@@ -20,6 +20,13 @@ article
 	flex-direction: row;
 }
 
+div 
+{
+  line-height: 1.6;
+  display: flex;
+}
+
+
 h1
 {
 	color: white;
@@ -53,6 +60,36 @@ pre
 	
 }
 
+.main-logo
+{
+	width: 212px;
+	height: 60px;
+	flex-grow: 0;
+	
+	margin-top: 15px;
+	margin-bottom: 0;
+	
+	background-image: url('./media/heaj-white.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+    transition: background-image 0.05s ease-in-out; /* Smooth transition */
+}
+
+.main-logo:hover
+{
+	cursor: pointer;
+	
+	background-image: url('./media/heaj-red.png');
+    transition: background-image 0.05s ease-in-out; /* Smooth transition */
+}
+
+.main-header
+{
+	margin-bottom: 0;
+	margin-top: 3px;
+	text-align: start;
+}
+
 .inline-link
 {
 	background: #111721;
@@ -68,7 +105,7 @@ pre
 }
 
 
-.banner
+#banner
 {
 	padding: 8px;
 	flex-grow: 1;
@@ -76,7 +113,7 @@ pre
 	justify-content: center;
 	align-items: center;
 	
-	height: 120px;
+	min-height: 120px;
 	background-color: #010409;
 	
 	border-bottom-color: #3d444d;
@@ -91,6 +128,8 @@ pre
 	flex-grow: 1;
 	display: flex;
 	justify-self: center;
+	
+	flex-wrap: wrap;
 }
 
 .overlay-canvas
@@ -151,6 +190,13 @@ pre
 	border-style: solid;
 	border-radius: 5px;
 	border-color: #3d444d;
+}
+
+#search-form
+{
+	align-self: end;
+	margin-top: 15px;
+	margin-bottom: 5px;
 }
 
 .search-bar
@@ -261,9 +307,12 @@ button.function-box:hover
 {
 	display: flex;
 	flex-wrap: wrap;
-	justify-self: center;	
+
 	margin-left: -10px;
 	margin-right: -10px;
+	
+	justify-self: center;	
+	justify-content: space-between;
 }
 
 .shader-index-preview

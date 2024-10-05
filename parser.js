@@ -277,7 +277,7 @@ function OpenFunction(data, exampleID = 0)
 		let exampleContent = templateExample;
 		let example = data.examples[i];
 		let exampleHtmlID = data.name + "-" + example.name;
-		examples += "<div id=\"" + exampleHtmlID + "\">";
+		examples += "<div id=\"" + exampleHtmlID + "\" style='flex-wrap:wrap'>";
 		exampleList.push(exampleHtmlID);
 		
 		//Example > content
