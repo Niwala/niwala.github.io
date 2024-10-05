@@ -1,8 +1,8 @@
 {
-  "name": "Floor",
-  "tags": "round stairs",
-  "description": "Arrondis à l’entier ≤ à votre valeur.",
-  "indexDescription": "Arrondis à l’entier ≤ à votre valeur.\r\n\r\n<h3>Round & Ceil</h3>\r\nSimilaire mais vers respectivement vers l'entier le plus proche et l'entier ≥ à votre valeur.",
+  "name": "Floor, Ceil & Round",
+  "tags": "round ceil stairs",
+  "description": "Retourne le plus grand nombre entier plus petit ou égal à la valeur.\r\n\r\n<h2>Utilisations</h2>\r\nTrès semblable au f_Round ou f_Ceil, il va nous permettre de créer des \"paliers\".\r\n\r\nOn va l'utiliser dans les cas où l'on veut arrondir un nombre flotant à l'unité inférieur.\r\n\r\nOn peut facilement le retrouver pour réaliser une séquence. Avec un peu de logique en plus, la fonction f_Floor peut être utilisé au coeur d'un algorithme qui fait cycler une variable compatant de 0 à 3 par exemple.\r\n\r\nOn peut aussi le retrouver lorsqu'il s'agit de faire des variations de luminosité, de couleur ou un autre paramètre sur des bandes.",
+  "indexDescription": "Arrondi à l’entier le plus proche*",
   "indexShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));",
   "examples": [
     {

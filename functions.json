@@ -44,9 +44,9 @@
     },
     {
       "filename": "floor.json",
-      "name": "Floor",
-      "tags": "round stairs",
-      "description": "Arrondis à l’entier ≤ à votre valeur.\r\n\r\n<h3>Round & Ceil</h3>\r\nSimilaire mais vers respectivement vers l'entier le plus proche et l'entier ≥ à votre valeur.",
+      "name": "Floor, Ceil & Round",
+      "tags": "round ceil stairs",
+      "description": "Arrondi à l’entier le plus proche*",
       "previewShader": "color = vec3(step(uv.y * 5.0 + time,  floor(uv.x * 5.0 + time)));"
     },
     {
