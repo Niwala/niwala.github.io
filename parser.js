@@ -19,6 +19,7 @@ var searchBar;
 var searchBarList;
 var searchItems;
 
+var introduction;
 var functionListCanvas;
 var functionListRenderer;
 
@@ -44,6 +45,7 @@ function Parse()
 
 function LoadCanvas()
 {
+	introduction = document.getElementById("introduction");
 	functionListCanvas = document.getElementById("function-list-canvas");
 	functionListRenderer = new ShaderRenderer(functionListCanvas);
 }
@@ -247,6 +249,9 @@ function OpenPage(filename)
 
 function OpenFunction(data, exampleID = 0)
 {
+	//Hide introduction
+	introduction.style.display = "none";
+
 	//Record new current function
 	currentFunction = data;
 	
@@ -449,6 +454,9 @@ function OpenExample(id)
 
 function CloseFunction()
 {
+	//Close introduction
+	introduction.style.display = "flex";
+
 	if (!bypassUrlAdaptation)
 	{
 		//Update url parameters
