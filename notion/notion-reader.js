@@ -2,7 +2,7 @@ async function fetchNotionData()
 {
 	try 
 	{
-		const response = await fetch('https://sams-backend.vercel.app/api/fetch-notion');
+		const response = await fetch('https://backendfinalfinalv3.vercel.app/');
 		
 		if (!response.ok) 
 		{
