@@ -1,4 +1,15 @@
-async function fetchNotionData() 
+
+var notionContent;
+
+Initialize();
+FetchNotionData();
+
+function Initialize()
+{
+	notionContent = document.getElementById("notion-content");
+}
+
+async function FetchNotionData() 
 {
 	try 
 	{
@@ -10,6 +21,7 @@ async function fetchNotionData()
 		}
 		
 		const data = await response.json();
+		notionContent.innerText = data;
 		console.log(data);  // Affiche ou utilise les données reçues
 		
 	} 
@@ -19,4 +31,4 @@ async function fetchNotionData()
 	}
 }
 
-fetchNotionData();
+
