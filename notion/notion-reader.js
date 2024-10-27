@@ -1,11 +1,13 @@
 
 var notionContent;
+var content;
 
 Initialize();
 FetchNotionData();
 
 function Initialize()
 {
+	content = "";
 	notionContent = document.getElementById("notion-content");
 }
 
@@ -21,8 +23,12 @@ async function FetchNotionData()
 		}
 		
 		const data = await response.json();
-		notionContent.innerText = data;
-		console.log(data);  // Affiche ou utilise les données reçues
+		console.log(data);
+		
+		for	(let i = 0; i < data.results.length; i++)
+		{
+			ParsePageProperties(data.results[i]);
+		}
 		
 	} 
 	catch (error) 
@@ -31,4 +37,10 @@ async function FetchNotionData()
 	}
 }
 
+function ParsePageProperties(data)
+{
+	content += "\n" + data.properties.Name.title[0].plain_text;
+	
+	notionContent.innerText = content;
+}
 
