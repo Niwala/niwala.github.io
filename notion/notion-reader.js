@@ -34,26 +34,32 @@ async function FetchNotion(command, callback)
 
 function FetchNotionData() 
 {
-	FetchNotion("database/query/12b5d96b946d8060b5e9d08b0167fce1", (data) => 
+	FetchNotion("database/get-data/12b5d96b946d8060b5e9d08b0167fce1", (data) => 
 	{
-		for	(let i = 0; i < data.results.length; i++)
+		for(let i = 0; i < data.results.length; i++)
 		{
 			ParsePageProperties(data.results[i]);
 		}
 	});
 }
 
+function FetchNotionPage(pageID)
+{
+	FetchNotion("page/get-children/" + pageID, (data) => 
+	{
+		ParsePageContent(data);
+	});
+}
+
 function ParsePageProperties(data)
 {
 	content += "\n" + data.properties.Name.title[0].plain_text;
-	ParsePageContent(data.id);
+	FetchNotionPage(data.id);
 	
 	notionContent.innerText = content;
-	
-	
 }
 
 function ParsePageContent(data)
 {
-	
+	console.log(data);
 }
