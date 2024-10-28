@@ -11,11 +11,11 @@ function Initialize()
 	notionContent = document.getElementById("notion-content");
 }
 
-async function FetchNotionData() 
+async function FetchNotion(command, callback)
 {
 	try 
 	{
-		const response = await fetch('https://backendfinalfinalv3.vercel.app/api');
+		const response = await fetch('https://backendfinalfinalv3.vercel.app/notion/' + command);
 		
 		if (!response.ok) 
 		{
@@ -24,12 +24,7 @@ async function FetchNotionData()
 		
 		const data = await response.json();
 		console.log(data);
-		
-		for	(let i = 0; i < data.results.length; i++)
-		{
-			ParsePageProperties(data.results[i]);
-		}
-		
+		callback(data);
 	} 
 	catch (error) 
 	{
@@ -37,10 +32,28 @@ async function FetchNotionData()
 	}
 }
 
+function FetchNotionData() 
+{
+	FetchNotion("database/query/12b5d96b946d8060b5e9d08b0167fce1", (data) => 
+	{
+		for	(let i = 0; i < data.results.length; i++)
+		{
+			ParsePageProperties(data.results[i]);
+		}
+	});
+}
+
 function ParsePageProperties(data)
 {
 	content += "\n" + data.properties.Name.title[0].plain_text;
+	ParsePageContent(data.id);
 	
 	notionContent.innerText = content;
+	
+	
 }
 
+function ParsePageContent(data)
+{
+	
+}
