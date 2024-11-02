@@ -121,6 +121,20 @@ pre
 	border-bottom-style: solid;
 }
 
+#loading
+{
+	justify-content: center;
+	align-items: center;
+	width: 200;
+	height: 200;
+	background-color: #e14323;
+	z-index: 5;
+
+	margin-top: 40px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .centred
 {
 	max-width: 1200px;

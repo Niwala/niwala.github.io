@@ -63,22 +63,54 @@ class ShaderData
 		//Build shaders > Fragment
 		this.fragmentShader = 
 			`
-			varying highp vec2 vTextureCoord;
+			precision highp float;
+			varying vec2 vTextureCoord;
 
 			uniform sampler2D uSampler;
-			uniform highp float time;
+			uniform float time;
+			
+			#define frac(x) fract(x)
+			#define lerp(a, b, c) mix(a, b, c)
+			#define saturate(x) clamp(x, 0.0, 1.0)
+			#define PI 3.1415926532
+			#define TAU 6.283185307
+			#define float2 vec2
+			#define float3 vec3
+			#define float4 vec4
+			
+			float smin(float a, float b, float k)
+			{
+				float h = saturate(0.5 + 0.5 * (b - a) / k);
+				return lerp(b, a, h) - k * h * (1.0 - h);
+			}
+
+			mat2 rotate(float angle) 
+			{
+				float cosA = cos(angle);
+				float sinA = sin(angle);
+				return mat2(
+					cosA, -sinA,
+					sinA,  cosA
+				);
+			}
+			
+			float2 rotate(float2 space, float angle) 
+			{
+				return rotate(angle) * space;
+			}
 
 			//Custom properties` + uniforms + ` 
 
 			void main(void) 
 			{
-				highp vec2 uv = vTextureCoord;
-				highp vec3 color = vec3(0.0);
+				vec2 uv = vTextureCoord;
+				vec3 color = vec3(0.0);
+				float opacity = 1.0;
 					
 				//Custom frag
 				` + shaderFragment + `
 					
-				gl_FragColor = vec4(color, 1.0);
+				gl_FragColor = vec4(color, opacity);
 			}
 			`;
 	}
@@ -123,6 +155,8 @@ class ShaderData
 			return;
 
 		gl.useProgram(this.shaderProgram);
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
 		//Get properties locations > Built-in properties
 		this.timeLocation = gl.getUniformLocation(this.shaderProgram, "time");

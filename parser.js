@@ -19,6 +19,8 @@ var searchBar;
 var searchBarList;
 var searchItems;
 
+var loading;
+
 var introduction;
 var functionListCanvas;
 var functionListRenderer;
@@ -29,6 +31,7 @@ function Parse()
 {
 	LoadCanvas();
 	LoadTemplates();
+	LoadLoadingShader();
 	ReadFunctionsIndex();
 	
 	//Track and react to previous / next page of browser
@@ -62,6 +65,13 @@ function LoadTemplates()
 	
 	//Hide template
 	container.style.display = 'none';
+}
+
+function LoadLoadingShader()
+{
+	fetch('./shaders/loading.glsl').then(response => console.log(response));
+
+	loading = document.getElementById("loading");
 }
 
 function ReadFunctionsIndex()
