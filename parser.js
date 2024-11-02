@@ -69,9 +69,23 @@ function LoadTemplates()
 
 function LoadLoadingShader()
 {
-	fetch('./shaders/loading.glsl').then(response => console.log(response));
-
 	loading = document.getElementById("loading");
+
+	fetch('https://niwala.github.io/shaders/loading.glsl')
+	.then(response => response.text())
+	.then(shader => 
+		{
+
+			let shaderData = new ShaderData(loading, "loading", shader,  null);
+			functionListRenderer.AddRenderer(shaderData);
+		}
+	);
+
+
+
+
+
+
 }
 
 function ReadFunctionsIndex()

@@ -127,12 +127,14 @@ pre
 	align-items: center;
 	width: 200;
 	height: 200;
-	background-color: #e14323;
+	background-color: #00000000;
 	z-index: 5;
 
 	margin-top: 40px;
 	margin-left: auto;
 	margin-right: auto;
+
+	border-width: 0;
 }
 
 .centred
