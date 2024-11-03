@@ -26,7 +26,6 @@ div
   display: flex;
 }
 
-
 h1
 {
 	color: white;
@@ -336,7 +335,6 @@ button.function-box:hover
 	width: 150px;
 	height: 150px;
 	border-radius: 5px;
-	align-self: end;
 }
 
 .vertical
