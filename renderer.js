@@ -104,13 +104,12 @@ class ShaderData
 			void main(void) 
 			{
 				vec2 uv = vTextureCoord;
-				vec3 color = vec3(0.0);
-				float opacity = 1.0;
+				vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 					
 				//Custom frag
 				` + shaderFragment + `
 					
-				gl_FragColor = vec4(color, opacity);
+				gl_FragColor = color;
 			}
 			`;
 	}
