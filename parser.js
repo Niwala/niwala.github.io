@@ -128,6 +128,7 @@ function AddFunctionPreview(functionPreview)
 	let canvas = document.getElementById(previewId);
 	let shaderData = new ShaderData(canvas, previewId, functionPreview.preview, null);
 	functionListRenderer.AddRenderer(shaderData);
+	console.log("Add preview " + canvas.id + "\n" + previewId + "\n" + functionPreview.preview + "\n" + canvas);
 }
 
 

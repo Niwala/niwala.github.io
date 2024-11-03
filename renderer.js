@@ -320,6 +320,7 @@ class ShaderRenderer
 		{
 			this.shaderData[i].UpdateProperties(this.gl, this.time);
 			this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
+			console.log("Draw " + this.shaderData[i].shaderGuid);
 		}
 					
 		requestAnimationFrame(this.Render)
@@ -489,10 +490,10 @@ class ShaderRenderer
 		// and we only want to see objects between 0.1 units
 		// and 100 units away from the camera.
 
-		let fieldOfView = 45 * Math.PI / 180;   // in radians
-		let aspect = this.width / this.height;
-		let zNear = 0.1;
-		let zFar = 100.0;
+		// let fieldOfView = 45 * Math.PI / 180;   // in radians
+		// let aspect = this.width / this.height;
+		// let zNear = 0.1;
+		// let zFar = 100.0;
 		let projectionMatrix = mat4.create();
 	
 		// note: glmatrix.js always has the first argument
@@ -502,8 +503,6 @@ class ShaderRenderer
 		//			   aspect,
 		//			   zNear,
 		//			   zFar);
-
-		let bounds = this.canvas.getBoundingClientRect();
 
 	  	//Out mat, Left, Right, Bottom, Top, Near, Far
   		mat4.ortho(projectionMatrix, 0, this.width, 0, this.height, 0.1, 100);
@@ -520,6 +519,7 @@ class ShaderRenderer
 		// start drawing the square.
 	
 		let elBounds = shaderData.element.getBoundingClientRect();
+		console.log(elBounds);
 	
 		mat4.translate(modelViewMatrix,     // destination matrix
 			modelViewMatrix,     // matrix to translate
