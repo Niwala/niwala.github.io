@@ -24,8 +24,10 @@ var loading;
 var introduction;
 var functionListCanvas;
 var functionListRenderer;
+var functionList;
 
 var bypassUrlAdaptation;
+
 
 
 function Parse()
@@ -53,8 +55,11 @@ function Parse()
 function LoadCanvas()
 {
 	introduction = document.getElementById("introduction");
+	functionList = document.getElementById("function-list");
 	functionListCanvas = document.getElementById("function-list-canvas");
 	functionListRenderer = new ShaderRenderer(functionListCanvas);
+
+	functionList.innerHTML = "";
 }
 
 function LoadTemplates()
@@ -86,12 +91,6 @@ function LoadLoadingShader()
 			functionListRenderer.AddRenderer(shaderData);
 		}
 	);
-
-
-
-
-
-
 }
 
 function LoadNotionHome()
@@ -114,8 +113,8 @@ function AddFunctionPreview(functionPreview)
 	
 	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functionPreview.name + "\" onclick=\"SelectSearchItem('" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
 
-	let btnContainer = document.getElementById("function-list");
-	btnContainer.innerHTML += functionBox;
+
+	functionList.innerHTML += functionBox;
 	searchBarList.innerHTML += searchButton;
 	
 	
