@@ -32,6 +32,8 @@ function Parse()
 	LoadCanvas();
 	LoadTemplates();
 	LoadLoadingShader();
+	LoadNotionHome();
+
 	ReadFunctionsIndex();
 	
 	//Track and react to previous / next page of browser
@@ -86,6 +88,14 @@ function LoadLoadingShader()
 
 
 
+}
+
+function LoadNotionHome()
+{
+	FetchNotionDatabase((result) => 
+	{
+		console.log(result);
+	});
 }
 
 function ReadFunctionsIndex()
