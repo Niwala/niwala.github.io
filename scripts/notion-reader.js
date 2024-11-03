@@ -23,12 +23,7 @@ function FetchNotionDatabase(callback)
 {
 	FetchNotion("database/get-data/12b5d96b946d8060b5e9d08b0167fce1", (data) => 
 	{
-		for(let i = 0; i < data.results.length; i++)
-		{
-			callback(data.results[i]);
-
-			//ParsePageProperties(data.results[i]);
-		}
+		callback(data);
 	});
 }
 

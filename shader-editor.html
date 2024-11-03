@@ -59,7 +59,7 @@
 		<div class="centred">
 			<div class="vertical">
 			
-				<textarea type="text" class="fragment-field" id="shader-text-area" onkeyup="CompileShader()">color = vec3(uv, 0.0);</textArea>
+				<textarea type="text" class="fragment-field" id="shader-text-area" onkeyup="CompileShader()">color = vec4(uv, sin(time) * 0.5 + 0.5, 1.0);</textArea>
 				<canvas id="shader-canvas" width="400" height="400" class="shader-editor-preview" style="align-self: start;"></canvas>
 		
 			</div>

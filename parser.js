@@ -28,6 +28,8 @@ var functionList;
 
 var bypassUrlAdaptation;
 
+var functionNameToData;
+
 
 
 function Parse()
@@ -95,10 +97,24 @@ function LoadLoadingShader()
 
 function LoadNotionHome()
 {
-	FetchNotionDatabase((result) => 
+	FetchNotionDatabase((data) => 
 	{
-		let functionPreview = new FunctionPreview(result);
-		AddFunctionPreview(functionPreview);
+		functionNameToData = new Map();
+
+		//Foreach entry in database
+		for(let i = 0; i < data.results.length; i++)
+		{
+			let functionPreview = new FunctionPreview(data.results[i]);
+			functionNameToData.set(functionPreview.name, functionPreview);
+
+			//Add function to the homepage list if public
+			if (functionPreview.public)
+			{
+				AddFunctionPreview(functionPreview);
+			}
+		}
+
+		BindHomepageCanvases();
 	});
 }
 
@@ -117,20 +133,25 @@ function AddFunctionPreview(functionPreview)
 	functionList.innerHTML += functionBox;
 	searchBarList.innerHTML += searchButton;
 	
-	
-	//List search items & Bind shader preview canvases
 
 	//Add search item
 	searchItems.set((functionPreview.name + " " + functionPreview.tags).toLowerCase(), document.getElementById("search-item-" + functionPreview.name));
-	
-	//Bind canvas
-	let previewId = "shader-preview-" + functionPreview.name;
-	let canvas = document.getElementById(previewId);
-	let shaderData = new ShaderData(canvas, previewId, functionPreview.preview, null);
-	functionListRenderer.AddRenderer(shaderData);
-	console.log("Add preview " + canvas.id + "\n" + previewId + "\n" + functionPreview.preview + "\n" + canvas);
 }
 
+function BindHomepageCanvases()
+{
+	functionNameToData.forEach((value, key) =>
+	{
+		if (!value.public)
+			return;
+
+		//Bind canvas
+		let previewId = "shader-preview-" + value.name;
+		let canvas = document.getElementById(previewId);
+		let shaderData = new ShaderData(canvas, previewId, value.preview, null);
+		functionListRenderer.AddRenderer(shaderData);
+	});
+}
 
 
 

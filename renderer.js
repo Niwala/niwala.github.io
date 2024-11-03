@@ -320,7 +320,6 @@ class ShaderRenderer
 		{
 			this.shaderData[i].UpdateProperties(this.gl, this.time);
 			this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
-			console.log("Draw " + this.shaderData[i].shaderGuid);
 		}
 					
 		requestAnimationFrame(this.Render)
@@ -519,7 +518,6 @@ class ShaderRenderer
 		// start drawing the square.
 	
 		let elBounds = shaderData.element.getBoundingClientRect();
-		console.log(elBounds);
 	
 		mat4.translate(modelViewMatrix,     // destination matrix
 			modelViewMatrix,     // matrix to translate
