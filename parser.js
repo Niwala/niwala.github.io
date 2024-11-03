@@ -61,6 +61,7 @@ function LoadCanvas()
 	functionListCanvas = document.getElementById("function-list-canvas");
 	functionListRenderer = new ShaderRenderer(functionListCanvas);
 
+	introduction.style.display = "none";
 	functionList.innerHTML = "";
 }
 
@@ -115,6 +116,7 @@ function LoadNotionHome()
 		}
 
 		BindHomepageCanvases();
+		introduction.style.display = "flex";
 		loading.style.display = "none";
 	});
 }
