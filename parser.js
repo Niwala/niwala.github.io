@@ -115,6 +115,7 @@ function LoadNotionHome()
 		}
 
 		BindHomepageCanvases();
+		loading.style.display = "none";
 	});
 }
 
