@@ -68,18 +68,17 @@ pre
 	margin-top: 15px;
 	margin-bottom: 0;
 	
-	background-image: url('./media/heaj-white.png');
+	background-image: url('./media/heaj-red.png');
 	background-size: contain;
 	background-repeat: no-repeat;
-    transition: background-image 0.05s ease-in-out; /* Smooth transition */
+   transition: filter 0.1s ease;
+	filter: brightness(1000%) saturate(0%);
 }
 
 .main-logo:hover
 {
 	cursor: pointer;
-	
-	background-image: url('./media/heaj-red.png');
-    transition: background-image 0.05s ease-in-out; /* Smooth transition */
+	filter: brightness(100%) saturate(100%);
 }
 
 .main-header
