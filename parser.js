@@ -27,14 +27,16 @@ var functionListRenderer;
 
 var bypassUrlAdaptation;
 
+
 function Parse()
 {
 	LoadCanvas();
 	LoadTemplates();
 	LoadLoadingShader();
-	LoadNotionHome();
 
 	ReadFunctionsIndex();
+
+	LoadNotionHome();
 	
 	//Track and react to previous / next page of browser
 	window.addEventListener('popstate', (event) => 
@@ -95,9 +97,40 @@ function LoadNotionHome()
 	FetchNotionDatabase((result) => 
 	{
 		let functionPreview = new FunctionPreview(result);
-		console.log(functionPreview.description);
+		AddFunctionPreview(functionPreview);
 	});
 }
+
+function AddFunctionPreview(functionPreview)
+{
+	//Add buttons for functions
+	let functionBox = "<button class='function-box' onclick=\"ReadFunctionFile('" + functionPreview.name + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
+	functionPreview.niceName + 
+	"</h3><p>" + 
+	functionPreview.description + 
+	"</p></div><canvas id='shader-preview-" + functionPreview.name + "' width='150' height='150' class='shader-index-preview'></canvas></div></button>";
+	
+	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functionPreview.name + "\" onclick=\"SelectSearchItem('" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
+
+	let btnContainer = document.getElementById("function-list");
+	btnContainer.innerHTML += functionBox;
+	searchBarList.innerHTML += searchButton;
+	
+	
+	//List search items & Bind shader preview canvases
+
+	//Add search item
+	searchItems.set((functionPreview.name + " " + functionPreview.tags).toLowerCase(), document.getElementById("search-item-" + functionPreview.name));
+	
+	//Bind canvas
+	let previewId = "shader-preview-" + functionPreview.name;
+	let canvas = document.getElementById(previewId);
+	let shaderData = new ShaderData(canvas, previewId, functionPreview.preview, null);
+	functionListRenderer.AddRenderer(shaderData);
+}
+
+
+
 
 function ReadFunctionsIndex()
 {
