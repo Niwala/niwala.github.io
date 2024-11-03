@@ -94,7 +94,8 @@ function LoadNotionHome()
 {
 	FetchNotionDatabase((result) => 
 	{
-		console.log(result);
+		let functionPreview = new FunctionPreview(result);
+		console.log(functionPreview.description);
 	});
 }
 
