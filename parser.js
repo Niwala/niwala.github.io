@@ -34,9 +34,9 @@ function Parse()
 	LoadTemplates();
 	LoadLoadingShader();
 
-	ReadFunctionsIndex();
-
 	LoadNotionHome();
+
+	//ReadFunctionsIndex();
 	
 	//Track and react to previous / next page of browser
 	window.addEventListener('popstate', (event) => 
@@ -59,6 +59,8 @@ function LoadCanvas()
 
 function LoadTemplates()
 {
+	searchItems = new Map();
+
 	//Template container
 	container = document.getElementById("template")
 	templateContainer = container.innerHTML;
