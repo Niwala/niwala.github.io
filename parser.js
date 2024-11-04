@@ -26,6 +26,9 @@ var functionListCanvas;
 var functionListRenderer;
 var functionList;
 
+var page;
+var pageContent;
+
 var bypassUrlAdaptation;
 
 var functionNameToData;
@@ -76,6 +79,10 @@ function LoadTemplates()
 	//Template example
 	let example = document.getElementById("template-example")
 	templateExample = example.innerHTML;
+
+	//Page
+	page = document.getElementById("page")
+	pageContent = document.getElementById("page-content")
 	
 	//Hide template
 	container.style.display = 'none';
@@ -283,7 +290,7 @@ function ReadFunctionFile(filename, exampleID = 0)
 	let functionID = functionNameToData.get(filename).id;
 	FetchNotionPage(functionID, (pageData) => 
 	{
-		console.log(pageData);
+		pageContent.innerHTML = BuildHtmlFromPage(pageData);
 	});
 
 
