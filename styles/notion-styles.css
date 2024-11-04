@@ -4,7 +4,7 @@
 	color: white;
 	margin-top: 3px;
 	font-family: verdana;
-	font-size: 2rem;
+	font-size: 2.5rem;
 }
 
 .heading_2
@@ -13,7 +13,7 @@
 	font-family: verdana;
 	margin-top: 3px;
 	margin-bottom: 0px;
-	font-size: 1.5rem;
+	font-size: 2.0rem;
 }
 
 .heading_3
@@ -22,7 +22,7 @@
 	font-family: verdana;
 	margin-top: 3px;
 	margin-bottom: 0px;
-	font-size: 1.17rem;
+	font-size: 1.5rem;
 }
 
 .callout
@@ -43,4 +43,10 @@
 	border-radius: 5px;
 	padding: 8px;
 	margin-bottom: 0 !important;
+}
+
+hr.rounded 
+{
+  border-top: 8px solid #bbb;
+  border-radius: 5px;
 }

@@ -18,6 +18,12 @@ function ValueFromCheckbox(property)
    return property.checkbox;
 }
 
+function ValueFromPageID(property)
+{
+   return property.page_id;
+}
+
+
 class FunctionPreview
 {
    constructor(json)

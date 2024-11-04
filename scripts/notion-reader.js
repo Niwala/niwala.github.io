@@ -57,5 +57,12 @@ function BuildBlockHtml(blockData)
 		case "paragraph": return "<p>" + ValueFromRichText(blockData.paragraph) + "</div>"; break;
 		case "code": return "<div class='code-container'><pre class='line-numbers'><code class='language-hlsl'>" + ValueFromRichText(blockData.code) + "</code></pre></div>"; break;
 		case "callout": return "<div class='callout'>Callout</div>"; break;
+		case "bulleted_list_item": return "<ul><li>" + ValueFromRichText(blockData.bulleted_list_item) + "</li></ul>"; break;
+		case "numbered_list_item": return "<ol><li>" + ValueFromRichText(blockData.numbered_list_item) + "</li></ol>"; break;
+		case "divider": return "<hr class='rounded'>"; break;
+		case "divider": return "<hr class='rounded'>"; break;
+		case "toggle": return "</br>toggle"; break;
+		case "quote": return "<blockquote>" + ValueFromRichText(blockData.quote) + "</blockquote>"; break;
+		case "link_to_page": return "<a href='" + ValueFromPageID(blockData.link_to_page) + "'>link_to_page</a>"; break;
 	}
 }
