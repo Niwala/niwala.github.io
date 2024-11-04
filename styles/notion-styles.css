@@ -27,6 +27,7 @@
 
 .callout
 {
+	margin-top: 10px;
 	background: #1b2330;
 	margin-right: 10px;
 	border-radius: 5px;
@@ -36,6 +37,7 @@
 
 .code
 {
+	margin-top: 10px;
 	background: #1b2330;
 	margin-right: 10px;
 	border-radius: 5px;

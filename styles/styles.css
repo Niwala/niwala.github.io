@@ -68,7 +68,7 @@ pre
 	margin-top: 15px;
 	margin-bottom: 0;
 	
-	background-image: url('./media/heaj-red.png');
+	background-image: url('../media/heaj-red.png');
 	background-size: contain;
 	background-repeat: no-repeat;
    transition: filter 0.1s ease;
@@ -215,7 +215,7 @@ pre
 
 .search-bar
 {
-	background-image: url('./media/search.png');
+	background-image: url('../media/search.png');
 	background-position: 0px 0px;
 	background-size: contain;
 	background-repeat: no-repeat;
