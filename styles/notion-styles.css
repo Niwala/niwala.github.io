@@ -2,24 +2,32 @@
 .heading_1
 {
 	color: white;
+	margin-top: 3px;
 	font-family: verdana;
 	font-size: 2rem;
 }
 
 .heading_2
 {
+	color: white;
+	font-family: verdana;
+	margin-top: 3px;
 	margin-bottom: 0px;
+	font-size: 1.5rem;
 }
 
 .heading_3
 {
+	color: white;
+	font-family: verdana;
 	margin-top: 3px;
 	margin-bottom: 0px;
+	font-size: 1.17rem;
 }
 
 .callout
 {
-	background: #111721;
+	background: #1b2330;
 	margin-right: 10px;
 	border-radius: 5px;
 	padding: 8px;
@@ -28,7 +36,7 @@
 
 .code
 {
-	background: #111721;
+	background: #1b2330;
 	margin-right: 10px;
 	border-radius: 5px;
 	padding: 8px;
