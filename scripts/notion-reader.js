@@ -27,13 +27,14 @@ function FetchNotionDatabase(callback)
 	});
 }
 
-// function FetchNotionPage(pageID)
-// {
-// 	FetchNotion("page/get-children/" + pageID, (data) => 
-// 	{
-// 		ParsePageContent(data);
-// 	});
-// }
+ function FetchNotionPage(pageID, callback)
+ {
+ 	console.log("page/get-children/" + pageID);
+ 	FetchNotion("page/get-children/" + pageID, (data) => 
+ 	{
+ 		callback(data);
+ 	});
+ }
 
 // function ParsePageProperties(data)
 // {

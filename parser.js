@@ -157,16 +157,6 @@ function BindHomepageCanvases()
 }
 
 
-
-function ReadFunctionsIndex()
-{
-	let index;
-		fetch("https://niwala.github.io/functions.json")
-		.then(response => response.json())
-		.then(jsonResponse => AddFunctions(jsonResponse.functions))     
-	  	.catch((e) => console.error(e));
-}
-
 function SetupSearchHooks()
 {
 	searchBar = document.getElementById("search-bar");
@@ -222,45 +212,6 @@ function GetURLParams()
 	   }
 	}
 	return params;
-}
-
-function AddFunctions(functions)
-{
-	//Add buttons for functions
-	let list = "";
-	let searchList = "";
-	searchItems = new Map();
-	for (var i = 0; i < functions.length; i++) 
-	{		
-		list += "<button class='function-box' onclick=\"ReadFunctionFile('" + functions[i].filename + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
-		functions[i].name + 
-		"</h3><p>" + 
-		functions[i].description + 
-		"</p></div><canvas id='shader-preview-" + functions[i].name + "' width='150' height='150' class='shader-index-preview'></canvas></div></button>";
-		
-		searchList += "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functions[i].name + "\" onclick=\"SelectSearchItem('" + functions[i].filename + "')\">" + functions[i].name + "</button>";
-	}
-	let btnContainer = document.getElementById("function-list");
-	btnContainer.innerHTML = list;
-	searchBarList.innerHTML = searchList;
-	
-	
-	//List search items & Bind shader preview canvases
-	for (var i = 0; i < functions.length; i++) 
-	{
-		//Add search item
-		searchItems.set((functions[i].name + " " + functions[i].tags).toLowerCase(), document.getElementById("search-item-" + functions[i].name));
-		
-		//Bind canvas
-		let previewId = "shader-preview-" + functions[i].name;
-		let canvas = document.getElementById(previewId);
-		let shaderData = new ShaderData(canvas, previewId, functions[i].previewShader, null);
-		functionListRenderer.AddRenderer(shaderData);
-	}
-	
-	
-	//Auto-read function from url params
-	OpenFunctionFromURL();
 }
 
 function OpenFunctionFromURL()
@@ -322,13 +273,24 @@ function ReadFunctionFile(filename, exampleID = 0)
 {	
 	//Record new current filename
 	currentFileName = filename;
-	
+
+	if (!functionNameToData.has(filename))
+	{
+		console.error("Function not found : " + filename);
+		return;
+	}
+
+	let functionID = functionNameToData.get(filename).id;
+	FetchNotionPage(functionID, (pageData) => 
+	{
+		console.log(pageData);
+	});
+
+
 	//Read file
-	let fileUrl = "https://niwala.github.io/functions/" + filename;
-	fetch(fileUrl)
-	.then(response => response.json())
-	.then(jsonResponse => OpenFunction(jsonResponse, exampleID)) 
-	.catch((e) => console.error(e));
+	//.then(response => response.json())
+	//.then(jsonResponse => OpenFunction(jsonResponse, exampleID)) 
+	//.catch((e) => console.error(e));
 }
 
 function RemoveExtension(filename)
