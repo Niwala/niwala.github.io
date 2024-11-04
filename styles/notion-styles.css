@@ -1,0 +1,36 @@
+
+.heading_1
+{
+	color: white;
+	font-family: verdana;
+	font-size: 2rem;
+}
+
+.heading_2
+{
+	margin-bottom: 0px;
+}
+
+.heading_3
+{
+	margin-top: 3px;
+	margin-bottom: 0px;
+}
+
+.callout
+{
+	background: #111721;
+	margin-right: 10px;
+	border-radius: 5px;
+	padding: 8px;
+	margin-bottom: 0 !important;
+}
+
+.code
+{
+	background: #111721;
+	margin-right: 10px;
+	border-radius: 5px;
+	padding: 8px;
+	margin-bottom: 0 !important;
+}
