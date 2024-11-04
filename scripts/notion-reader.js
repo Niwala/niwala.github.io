@@ -36,15 +36,26 @@ function FetchNotionDatabase(callback)
  	});
  }
 
-// function ParsePageProperties(data)
-// {
-// 	content += "\n" + data.properties.Name.title[0].plain_text;
-// 	FetchNotionPage(data.id);
-	
-// 	notionContent.innerText = content;
-// }
+ function BuildHtmlFromPage(pageData)
+ {
+ 	let html = "";
+ 	for (var i = 0; i < pageData.results.length; i++) 
+ 	{
+ 		html += BuildBlockHtml(pageData.results[i]);
+ 	}
+ 	return html;
+ }
 
-// function ParsePageContent(data)
-// {
-// 	console.log(data);
-// }
+
+function BuildBlockHtml(blockData)
+{
+	switch(blockData.type)
+	{
+		case "heading_1": return "<div class='heading_1'>" + ValueFromRichText(blockData.heading_1) + "</div>"; break;
+		case "heading_2": return "<div class='heading_2'>" + ValueFromRichText(blockData.heading_2) + "</div>"; break;
+		case "heading_3": return "<div class='heading_3'>" + ValueFromRichText(blockData.heading_3) + "</div>"; break;
+		case "paragraph": return "<p>" + ValueFromRichText(blockData.paragraph) + "</div>"; break;
+		case "code": return "<div class='code-container'><pre class='line-numbers'><code class='language-hlsl'>" + ValueFromRichText(blockData.code) + "</code></pre></div>"; break;
+		case "callout": return "<div class='callout'>Callout</div>"; break;
+	}
+}
