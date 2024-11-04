@@ -59,8 +59,7 @@ function BuildBlockHtml(blockData)
 		case "callout": return "<div class='callout'>Callout</div>"; break;
 		case "bulleted_list_item": return "<ul><li>" + ValueFromRichText(blockData.bulleted_list_item) + "</li></ul>"; break;
 		case "numbered_list_item": return "<ol><li>" + ValueFromRichText(blockData.numbered_list_item) + "</li></ol>"; break;
-		case "divider": return "<hr class='rounded'>"; break;
-		case "divider": return "<hr class='rounded'>"; break;
+		case "divider": return "<div class='divider'></div>"; break;
 		case "toggle": return "</br>toggle"; break;
 		case "quote": return "<blockquote>" + ValueFromRichText(blockData.quote) + "</blockquote>"; break;
 		case "link_to_page": return "<a href='" + ValueFromPageID(blockData.link_to_page) + "'>link_to_page</a>"; break;

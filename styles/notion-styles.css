@@ -45,8 +45,9 @@
 	margin-bottom: 0 !important;
 }
 
-hr.rounded 
+.divider
 {
-  border-top: 8px solid #bbb;
-  border-radius: 5px;
+  width: 100%;
+  height: 1px;
+  background-color: #ffffff2a;
 }
