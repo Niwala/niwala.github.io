@@ -26,6 +26,7 @@ var functionListCanvas;
 var functionListRenderer;
 var functionList;
 
+var homepage;
 var page;
 var pageContent;
 
@@ -80,6 +81,9 @@ function LoadTemplates()
 	let example = document.getElementById("template-example")
 	templateExample = example.innerHTML;
 
+	//Homepage
+	homepage = document.getElementById("homepage")
+
 	//Page
 	page = document.getElementById("page")
 	pageContent = document.getElementById("page-content")
@@ -123,6 +127,8 @@ function LoadNotionHome()
 		}
 
 		BindHomepageCanvases();
+
+		homepage.style.display = "flex";
 		introduction.style.display = "flex";
 		loading.style.display = "none";
 	});

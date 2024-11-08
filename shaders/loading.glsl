@@ -24,4 +24,4 @@ for (int i = 0; i < 10; i ++)
   d = smin(d, dist, smooth); 
 }
     
-color.w = smoothstep(0.003, 0.0, d);
+color.w = smoothstep(0.003, 0.0, d) * saturate(time);
