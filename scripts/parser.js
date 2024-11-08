@@ -296,7 +296,12 @@ function ReadFunctionFile(filename, exampleID = 0)
 	let functionID = functionNameToData.get(filename).id;
 	FetchNotionPage(functionID, (pageData) => 
 	{
-		pageContent.innerHTML = BuildHtmlFromPage(pageData);
+		BuildHtmlFromPage(pageData).then(pageHtml => 
+			{
+				pageContent.innerHTML = pageHtml;
+				page.display = "flex";
+			}
+		);
 	});
 
 

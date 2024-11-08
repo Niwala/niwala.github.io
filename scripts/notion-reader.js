@@ -29,39 +29,27 @@ function FetchNotionDatabase(callback)
 
  function FetchNotionPage(pageID, callback)
  {
- 	console.log("page/get-children/" + pageID);
  	FetchNotion("page/get-children/" + pageID, (data) => 
  	{
  		callback(data);
  	});
  }
 
- function BuildHtmlFromPage(pageData)
+ async function BuildHtmlFromPage(pageData) 
  {
- 	let html = "";
- 	for (var i = 0; i < pageData.results.length; i++) 
- 	{
- 		html += BuildBlockHtml(pageData.results[i]);
- 	}
- 	return html;
- }
+    let html = "";
 
+    // Crée une liste de promesses pour chaque bloc Notion
+    const blockPromises = pageData.results.map(result => {
+        const notionBlock = new NotionBlock(result);
+        return notionBlock.promise; // Renvoie la promesse de chaque bloc
+    });
 
-function BuildBlockHtml(blockData)
-{
-	switch(blockData.type)
-	{
-		case "heading_1": return "<div class='heading_1'>" + ValueFromRichText(blockData.heading_1) + "</div>"; break;
-		case "heading_2": return "<div class='heading_2'>" + ValueFromRichText(blockData.heading_2) + "</div>"; break;
-		case "heading_3": return "<div class='heading_3'>" + ValueFromRichText(blockData.heading_3) + "</div>"; break;
-		case "paragraph": return "<p>" + ValueFromRichText(blockData.paragraph) + "</div>"; break;
-		case "code": return "<div class='code-container'><pre class='line-numbers'><code class='language-hlsl'>" + ValueFromRichText(blockData.code) + "</code></pre></div>"; break;
-		case "callout": return "<div class='callout'>Callout</div>"; break;
-		case "bulleted_list_item": return "<ul><li>" + ValueFromRichText(blockData.bulleted_list_item) + "</li></ul>"; break;
-		case "numbered_list_item": return "<ol><li>" + ValueFromRichText(blockData.numbered_list_item) + "</li></ol>"; break;
-		case "divider": return "<div class='divider'></div>"; break;
-		case "toggle": return "</br>toggle"; break;
-		case "quote": return "<blockquote>" + ValueFromRichText(blockData.quote) + "</blockquote>"; break;
-		case "link_to_page": return "<a href='" + ValueFromPageID(blockData.link_to_page) + "'>link_to_page</a>"; break;
-	}
+    // Attends que toutes les promesses soient résolues
+    const allHtmlBlocks = await Promise.all(blockPromises);
+
+    // Concatène le HTML final
+    html = allHtmlBlocks.join(""); 
+
+    return html;
 }
