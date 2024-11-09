@@ -299,7 +299,7 @@ function ReadFunctionFile(filename, exampleID = 0)
 		BuildHtmlFromPage(pageData).then(pageHtml => 
 			{
 				pageContent.innerHTML = pageHtml;
-				page.display = "flex";
+				page.style.display = "flex";
 			}
 		);
 	});
