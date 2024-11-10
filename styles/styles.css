@@ -309,6 +309,7 @@ button.function-box
 	width: 380px;
 	margin: 10px;
 	flex-grow:0;
+	border-width: 0;
 }
 
 button.function-box:hover
@@ -359,16 +360,6 @@ button.function-box:hover
 	
 	box-sizing: border-box;
 	display:none;
-}
-
-.page-code-container
-{
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	overflow: hidden;
-	
-	box-sizing: border-box;
 }
 
 .slider-container

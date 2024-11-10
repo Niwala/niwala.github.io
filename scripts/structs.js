@@ -84,23 +84,42 @@ class NotionBlock
       callback(html);
    }
 
+   HtmlFromRichText(property)
+   {
+      let html = "";
+      for (let i = 0; i < property.rich_text.length; i++) 
+      {
+         const element = property.rich_text[i];
+         if (element.href == null)
+         {
+            html += element.plain_text;
+         }
+         else
+         {
+            html += "<a href='" + element.href + "'>" + element.plain_text + "</a>";
+         }
+      }
+
+      return html;
+   }
+
    GenerateHtml(childsHtml)
    {
       let s = "";
 
       switch(this.json.type)
       {
-         case "heading_1": s += "<div class='heading_1'>" + ValueFromRichText(this.json.heading_1) + "</div>"; break;
-         case "heading_2": s +=  "<div class='heading_2'>" + ValueFromRichText(this.json.heading_2) + "</div>"; break;
-         case "heading_3": s +=  "<div class='heading_3'>" + ValueFromRichText(this.json.heading_3) + "</div>"; break;
-         case "paragraph": s +=  "<p>" + ValueFromRichText(this.json.paragraph) + "</p>"; break;
-         case "code": s +=  "<div class='page-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + ValueFromRichText(this.json.code) + "</code></pre></div>"; break;
-         case "callout": s +=  "<div class='callout'>" + childsHtml + "</div>"; break;
-         case "bulleted_list_item": s +=  "<ul><li>" + ValueFromRichText(this.json.bulleted_list_item) + "</li>" + childsHtml + "</ul>"; break;
-         case "numbered_list_item": s +=  "<ol><li>" + ValueFromRichText(this.json.numbered_list_item) + "</li>" + childsHtml + "</ol>"; break;
+         case "heading_1": s += "<div class='heading_1'>" + this.HtmlFromRichText(this.json.heading_1) + "</div>"; break;
+         case "heading_2": s +=  "<div class='heading_2'>" + this.HtmlFromRichText(this.json.heading_2) + "</div>"; break;
+         case "heading_3": s +=  "<div class='heading_3'>" + this.HtmlFromRichText(this.json.heading_3) + "</div>"; break;
+         case "paragraph": s +=  "<p>" + this.HtmlFromRichText(this.json.paragraph) + "</p>"; break;
+         case "code": s +=  "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code) + "</code></pre></div>"; break;
+         case "callout": s +=  "<div class='callout'><div class='callout-icon'></div><div class='callout-content'>" + childsHtml + "</div></div>"; break;
+         case "bulleted_list_item": s +=  "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item) + "</li>" + childsHtml + "</ul>"; break;
+         case "numbered_list_item": s +=  "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item) + "</li>" + childsHtml + "</ol>"; break;
          case "divider": s +=  "<div class='divider'></div>"; break;
          case "toggle": s +=  "<div>toggle" + childsHtml + "</div>"; break;
-         case "quote": s +=  "<blockquote>" + ValueFromRichText(this.json.quote) + "</blockquote>"; break;
+         case "quote": s +=  "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote) + "</blockquote>"; break;
          case "link_to_page": s +=  "<a href='" + ValueFromPageID(this.json.link_to_page) + "'>link_to_page</a>"; break;
       }
 
