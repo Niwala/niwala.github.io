@@ -1,4 +1,9 @@
 
+function UrlOfImage(property)
+{
+   return property.external.url;
+}
+
 function ValueFromRichText(property)
 {
    if (property.rich_text.length == 0)
@@ -121,6 +126,7 @@ class NotionBlock
          case "toggle": s +=  "<div>toggle" + childsHtml + "</div>"; break;
          case "quote": s +=  "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote) + "</blockquote>"; break;
          case "link_to_page": s +=  "<a href='" + ValueFromPageID(this.json.link_to_page) + "'>link_to_page</a>"; break;
+         case "image": s +=  "<img src='" + UrlOfImage(this.json.image) + "'>"; break;
          
          case "column_list": s += "<div class='notion-columns'>" + childsHtml + "</div>"; break;
          case "block": s += "<div class='notion-bloc'>" + childsHtml + "</div>"; break;

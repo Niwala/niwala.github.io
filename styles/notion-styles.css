@@ -86,10 +86,12 @@
 .notion-columns
 {
 	flex-direction: row;
+	flex-grow: 1;
 }
 
 .notion-column
 {
 	flex-direction: column;
 	padding: 8px;
+	flex-grow: 1;
 }
