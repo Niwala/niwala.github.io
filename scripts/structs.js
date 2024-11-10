@@ -93,13 +93,13 @@ class NotionBlock
          case "heading_1": s += "<div class='heading_1'>" + ValueFromRichText(this.json.heading_1) + "</div>"; break;
          case "heading_2": s +=  "<div class='heading_2'>" + ValueFromRichText(this.json.heading_2) + "</div>"; break;
          case "heading_3": s +=  "<div class='heading_3'>" + ValueFromRichText(this.json.heading_3) + "</div>"; break;
-         case "paragraph": s +=  "<p>" + ValueFromRichText(this.json.paragraph) + "</div>"; break;
-         case "code": s +=  "<div class='code-container'><pre class='line-numbers'><code class='language-hlsl'>" + ValueFromRichText(this.json.code) + "</code></pre></div>"; break;
+         case "paragraph": s +=  "<p>" + ValueFromRichText(this.json.paragraph) + "</p>"; break;
+         case "code": s +=  "<div class='page-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + ValueFromRichText(this.json.code) + "</code></pre></div>"; break;
          case "callout": s +=  "<div class='callout'>" + childsHtml + "</div>"; break;
-         case "bulleted_list_item": s +=  "<ul><li>" + ValueFromRichText(this.json.bulleted_list_item) + "</li></ul>"; break;
-         case "numbered_list_item": s +=  "<ol><li>" + ValueFromRichText(this.json.numbered_list_item) + "</li></ol>"; break;
+         case "bulleted_list_item": s +=  "<ul><li>" + ValueFromRichText(this.json.bulleted_list_item) + "</li>" + childsHtml + "</ul>"; break;
+         case "numbered_list_item": s +=  "<ol><li>" + ValueFromRichText(this.json.numbered_list_item) + "</li>" + childsHtml + "</ol>"; break;
          case "divider": s +=  "<div class='divider'></div>"; break;
-         case "toggle": s +=  "</br>toggle"; break;
+         case "toggle": s +=  "<div>toggle" + childsHtml + "</div>"; break;
          case "quote": s +=  "<blockquote>" + ValueFromRichText(this.json.quote) + "</blockquote>"; break;
          case "link_to_page": s +=  "<a href='" + ValueFromPageID(this.json.link_to_page) + "'>link_to_page</a>"; break;
       }

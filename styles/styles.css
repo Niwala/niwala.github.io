@@ -361,6 +361,16 @@ button.function-box:hover
 	display:none;
 }
 
+.page-code-container
+{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	overflow: hidden;
+	
+	box-sizing: border-box;
+}
+
 .slider-container
 {
 	display: flex;
