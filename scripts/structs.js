@@ -52,6 +52,7 @@ class NotionBlock
          {
                FetchNotionPage(json.id, async (childsData) => 
                {
+                  console.log("Fetch " + json.id + "  " + json.type);
                   await this.CompileChildsHtml(childsData, this.GenerateHtml.bind(this));
                   resolve(this.html);
                });
@@ -71,7 +72,6 @@ class NotionBlock
       // Crée une liste de promesses pour chaque bloc Notion
       const blockPromises = childsData.results.map(result => 
       {
-         console.log(result);
          const notionBlock = new NotionBlock(result);
          return notionBlock.promise; // Renvoie la promesse de chaque bloc
       });
@@ -121,6 +121,13 @@ class NotionBlock
          case "toggle": s +=  "<div>toggle" + childsHtml + "</div>"; break;
          case "quote": s +=  "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote) + "</blockquote>"; break;
          case "link_to_page": s +=  "<a href='" + ValueFromPageID(this.json.link_to_page) + "'>link_to_page</a>"; break;
+         
+         case "column_list": s += "<div class='notion-columns'>" + childsHtml + "</div>"; break;
+         case "block": s += "<div class='notion-bloc'>" + childsHtml + "</div>"; break;
+         case "column": s += "<div class='notion-column'>" + childsHtml + "</div>"; break;
+
+         default: s += "<p>Unknown type : " + this.json.type + "</p>"
+
       }
 
       this.html = s;
