@@ -95,3 +95,9 @@
 	padding: 8px;
 	flex-grow: 1;
 }
+
+.notion-image
+{
+	width: 254px;
+	height: 254px;
+}
