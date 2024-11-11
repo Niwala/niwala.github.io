@@ -50,7 +50,7 @@ class NotionBlock
       this.json = json;
       this.html = "";
 
-      // Créons une promesse pour signaler quand le bloc est terminé
+
       this.promise = new Promise(async (resolve) => 
       {
          if (json.has_children) 
@@ -65,7 +65,7 @@ class NotionBlock
          else 
          {
                this.GenerateHtml("");
-               resolve(this.html); // Résout immédiatement si pas d'enfants
+               resolve(this.html);
          }
       });
    }
@@ -74,17 +74,14 @@ class NotionBlock
    {
       let html = "";
 
-      // Crée une liste de promesses pour chaque bloc Notion
       const blockPromises = childsData.results.map(result => 
       {
          const notionBlock = new NotionBlock(result);
-         return notionBlock.promise; // Renvoie la promesse de chaque bloc
+         return notionBlock.promise;
       });
 
-      // Attends que toutes les promesses soient résolues
       const allHtmlBlocks = await Promise.all(blockPromises);
 
-      // Concatène le HTML final
       html = allHtmlBlocks.join(""); 
       callback(html);
    }

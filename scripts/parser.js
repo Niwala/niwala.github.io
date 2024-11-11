@@ -5,7 +5,7 @@ SetupSearchHooks();
 var templateContainer;
 var templateExample;
 
-
+var exampleButtonsContainer;
 var exampleList;
 var sliderList;
 var toggleList;
@@ -87,7 +87,8 @@ function LoadTemplates()
 	//Page
 	page = document.getElementById("page")
 	pageContent = document.getElementById("page-content")
-	
+	exampleButtonsContainer = document.getElementById("example-buttons-container");
+
 	//Hide template
 	container.style.display = 'none';
 }
@@ -352,7 +353,7 @@ function OpenFunction(data, exampleID = 0)
 		exampleButtons += BuildExampleButton(data.examples[i], data.name, i, exampleID);
 	}
 	content = content.replace(/template-buttons/g, exampleButtons);
-	
+	exampleButtonsContainer.innerHTML = exampleButtons;
 	
 	//Add all examples
 	let examples = "";
