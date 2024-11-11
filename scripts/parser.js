@@ -284,6 +284,11 @@ function StopSearch()
 
 function ReadFunctionFile(filename, exampleID = 0)
 {	
+
+	homepage.style.display = "none";
+	loading.style.display = "flex"
+
+
 	//Record new current filename
 	currentFileName = filename;
 
@@ -299,6 +304,7 @@ function ReadFunctionFile(filename, exampleID = 0)
 		BuildHtmlFromPage(pageData).then(pageHtml => 
 			{
 				pageContent.innerHTML = pageHtml;
+				loading.style.display = "none"
 				page.style.display = "flex";
 			}
 		);
