@@ -50,14 +50,17 @@ class NotionBlock
       this.json = json;
       this.html = "";
 
-
       this.promise = new Promise(async (resolve) => 
       {
          if (json.has_children) 
          {
                FetchNotionPage(json.id, async (childsData) => 
                {
-                  console.log("Fetch " + json.id + "  " + json.type);
+                  await this.CompileChildsHtml(childsData, this.GenerateHtml.bind(this));
+                  resolve(this.html);
+               }, async (special) => 
+               {
+                  console.log("Special");
                   await this.CompileChildsHtml(childsData, this.GenerateHtml.bind(this));
                   resolve(this.html);
                });
@@ -70,12 +73,21 @@ class NotionBlock
       });
    }
 
-   async CompileChildsHtml(childsData, callback)
+   async CompileChildsHtml(childsData, callback, special)
    {
       let html = "";
+      let spe = false;
 
       const blockPromises = childsData.results.map(result => 
       {
+         if (result.type == "heading_3")
+         {
+            if (ValueFromRichText(result.heading_3) == "Examples")
+            {
+               spe = true;
+            }
+         }
+
          const notionBlock = new NotionBlock(result);
          return notionBlock.promise;
       });
@@ -83,7 +95,15 @@ class NotionBlock
       const allHtmlBlocks = await Promise.all(blockPromises);
 
       html = allHtmlBlocks.join(""); 
-      callback(html);
+
+      if (spe)
+      {
+         special(html);
+      }
+      else
+      {
+         callback(html);
+      }
    }
 
    HtmlFromRichText(property)
