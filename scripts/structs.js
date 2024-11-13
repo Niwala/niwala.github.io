@@ -54,13 +54,11 @@ class NotionBlock
       {
          if (json.has_children) 
          {
-               FetchNotionPage(json.id, async (childsData) => 
+               FetchNotionPage(json.id, async (childsData, specialCase) => 
                {
-                  await this.CompileChildsHtml(childsData, this.GenerateHtml.bind(this));
-                  resolve(this.html);
-               }, async (special) => 
-               {
-                  console.log("Special");
+                  if (specialCase)
+                     console.log("Special case");
+
                   await this.CompileChildsHtml(childsData, this.GenerateHtml.bind(this));
                   resolve(this.html);
                });
@@ -73,7 +71,7 @@ class NotionBlock
       });
    }
 
-   async CompileChildsHtml(childsData, callback, special)
+   async CompileChildsHtml(childsData, callback, blah)
    {
       let html = "";
       let spe = false;
@@ -96,14 +94,7 @@ class NotionBlock
 
       html = allHtmlBlocks.join(""); 
 
-      if (spe)
-      {
-         special(html);
-      }
-      else
-      {
-         callback(html);
-      }
+      callback(html, spe);
    }
 
    HtmlFromRichText(property)

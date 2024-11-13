@@ -19,7 +19,7 @@ for (int i = 0; i < 10; i ++)
   float dist = length(uv + o) - 0.02;
   if (dist<d)
   {
-    color.xyz = lerp(vec3(0.0, 0.2, 0.35), vec3(1.0, 1.0, 1.0), 1.0 - (cos(t * s) * 0.5 + 0.5));
+    color.xyz = vec3(1.0, 1.0, 1.0);//lerp(vec3(0.0, 0.2, 0.35), vec3(1.0, 1.0, 1.0), 1.0 - (cos(t * s) * 0.5 + 0.5));
   }
   d = smin(d, dist, smooth); 
 }
