@@ -239,7 +239,7 @@ function OpenFunctionFromURL()
 	
 	if (functionFromParams != null)
 	{
-		ReadFunctionFile(functionFromParams + ".json", exampleID);
+		ReadFunctionFile(functionFromParams, exampleID);
 	}
 	else
 	{

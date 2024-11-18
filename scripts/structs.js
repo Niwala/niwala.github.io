@@ -80,8 +80,9 @@ class NotionBlock
       {
          if (result.type == "heading_3")
          {
-            if (ValueFromRichText(result.heading_3) == "Examples")
+            if (result.heading_3.color == "default" &&  result.heading_3.rich_text[0].plain_text == "Examples")
             {
+               console.log("Special");
                spe = true;
             }
          }
@@ -139,6 +140,10 @@ class NotionBlock
          case "column_list": s += "<div class='notion-columns'>" + childsHtml + "</div>"; break;
          case "block": s += "<div class='notion-bloc'>" + childsHtml + "</div>"; break;
          case "column": s += "<div class='notion-column'>" + childsHtml + "</div>"; break;
+
+
+         //Unsupported
+         case "unsupported": break;
 
          default: s += "<p>Unknown type : " + this.json.type + "</p>"
 
