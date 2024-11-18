@@ -53,7 +53,6 @@ class PageContent
       this.links = []; // List of link blocks
       this.children = []; // Child blocks
       this.onPageUpdate = onPageUpdate;
-      console.log(onPageUpdate);
 
       for (let i = 0; i < json.results.length; i++) 
       {
@@ -66,13 +65,11 @@ class PageContent
     // Updates the HTML of the page
     UpdatePageHtml() 
     {
-            console.log(this.onPageUpdate);
          this.html = "";
          for (let i = 0; i < this.children.length; i++) 
          {
             this.html += this.children[i].html;
          }
-         console.log("Page updated:", this.html);
          this.onPageUpdate(this.html);
     }
 }
@@ -95,7 +92,7 @@ class NotionBlock
       this.UpdateHtml();
 
       // Fetch children recursively unless specific conditions are met
-      if (this.json.has_children && !this.ShouldIgnoreChildren())
+      if (this.json.has_children && (!this.ShouldIgnoreChildren()))
       {
          this.FetchChildren();
       }
@@ -103,7 +100,11 @@ class NotionBlock
 
    UpdateHtml()
    {
+      console.log("Update html " + this.json.type + "  " + this.children.length);
       this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
+
+      if (this.notifyHtmlUpdate != null)
+         this.notifyHtmlUpdate();
    }
 
     // Determines if this block should skip fetching children
@@ -130,19 +131,28 @@ class NotionBlock
    async FetchChildren() 
    {
       const childList = await this.fetchChildrenCallback(this.json.id); // Get children from API
+      let htmlChanged = false;
 
       for (let i = 0; i < childList.results.length; i++) 
       {
          const element = childList.results[i];
-         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, this.UpdateHtml);
+         console.log(element);
+
+         if (element.type == "child_page" || element.type == "child_database" || element.type == "unsupported")
+            continue;
+
+         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, null);
          this.children.push(childNotionBlock);
+         htmlChanged |= (childNotionBlock.html != "");
+         childNotionBlock.notifyHtmlUpdate = this.UpdateHtml.bind(this);
+
          this.childrenHtml += childNotionBlock.html;
+         console.log(this.json.type + " Add child " + i + "  " + childNotionBlock.json.type);
       }
 
-      // Notify that the full HTML is ready
-      if (this.notifyHtmlUpdate) 
+      if (htmlChanged)
       {
-         this.notifyHtmlUpdate();
+         this.UpdateHtml();
       }
    }
 
@@ -156,15 +166,15 @@ class NotionBlock
          case "paragraph": this.prefix = "<p>" + this.HtmlFromRichText(this.json.paragraph); this.postfix = "</p>"; break;
          case "code": this.prefix = "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code); this.postfix = "</code></pre></div>"; break;
          case "callout": this.prefix = "<div class='callout'><div class='callout-icon'></div><div class='callout-content'>"; this.postfix = "</div></div>"; break;
-         case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item) + "</li>"; this.postfix = "</ul>"; break;
-         case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item) + "</li>"; this.postfix = "</ol>"; break;
+         case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item); this.postfix = "</li></ul>"; break;
+         case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item); this.postfix = "</li></ol>"; break;
          case "divider": this.prefix = "<div class='divider'>"; this.postfix = "</div>"; break;
          case "toggle": this.prefix = "<div>toggle"; this.postfix = "</div>"; break;
          case "quote": this.prefix = "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote); this.postfix = "</blockquote>"; break;
          case "link_to_page": this.prefix = "<a href='" + ValueFromPageID(this.json.link_to_page); this.postfix = "'>link_to_page</a>"; break;
          case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
          
-         case "column_list": this.prefix = "<div class='notion-columns'>"; this.postfix =  "</div>"; break;
+         case "column_list": this.prefix = "<div class='notion-columns'>"; this.postfix = "</div>"; break;
          case "block": this.prefix = "<div class='notion-bloc'>"; this.postfix = "</div>"; break;
          case "column": this.prefix = "<div class='notion-column'>"; this.postfix = "</div>"; break;
 
