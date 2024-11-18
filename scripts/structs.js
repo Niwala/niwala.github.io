@@ -56,7 +56,7 @@ class PageContent
 
       for (let i = 0; i < json.results.length; i++) 
       {
-         let notionBlock = new NotionBlock(json.results[i], fetchChildrenCallback, this.UpdatePageHtml.bind(this));
+         let notionBlock = new NotionBlock(json.results[i], fetchChildrenCallback, this.UpdatePageHtml.bind(this), this.ManageSpecialCase.bind(this));
          this.children.push(notionBlock);
          this.html += notionBlock.html;
       }
@@ -72,37 +72,75 @@ class PageContent
          }
          this.onPageUpdate(this.html);
     }
+
+    ManageSpecialCase(type, containers)
+    {
+         switch(type)
+         {
+            case "Examples":
+               {
+                  console.log("Examples : " + containers[0].children.length);
+                  for (let i = 0; i < containers[0].children.length; i++) 
+                  {
+                     
+                  }
+               }
+               break;
+
+            case "Links":
+               {
+                  console.log("Links : " + containers[0].children.length);
+               }
+               break;
+         }
+
+      console.log("Special " + type + " " + containers.length);
+    }
 }
 
 class NotionBlock
 {
-   constructor(json, fetchChildrenCallback, notifyHtmlUpdate) 
+   constructor(json, fetchChildrenCallback, notifyHtmlUpdate, specialCallback)
    {
       this.json = json; // Original JSON from Notion API
       this.children = []; // Child blocks
       this.fetchChildrenCallback = fetchChildrenCallback; // Function to fetch child blocks
       this.notifyHtmlUpdate = notifyHtmlUpdate; // Callback to notify partial/full HTML updates
+      this.specialCallback = specialCallback;
 
       this.prefix = "";
       this.postfix = "";
       this.html = "";
+      this.hide = false;
 
       // Generate prefix and postfix
       this.GeneratePrePost();
       this.UpdateHtml();
 
       // Fetch children recursively unless specific conditions are met
-      console.log(this.json);
-      console.log(this.json.type + "  " + this.ShouldIgnoreChildren());
-      if (this.json.has_children && (!this.ShouldIgnoreChildren()))
+      if (this.ShouldIgnoreChildren())
       {
-         this.FetchChildren();
+         specialCallback(this.GetSpecialCaseType(), []);
+      }
+      else
+      {
+         if (this.json.has_children)
+         {
+            this.FetchChildren();
+         }
       }
    }
 
    UpdateHtml()
    {
-      this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
+      if (this.hide)
+      {
+         this.html = "";
+      }
+      else
+      {
+         this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
+      }
 
       if (this.notifyHtmlUpdate != null)
          this.notifyHtmlUpdate();
@@ -114,16 +152,27 @@ class NotionBlock
       if (this.json.type == "heading_3" &&
          this.json.heading_3.color == "default")
       {
-         let text = this.json.heading_3.rich_text?.[0]?.plain_text;
+         let text = this.GetSpecialCaseType();
          console.log(text);
          if (text == "Examples" || text == "Links")
          {
-            console.log("special");
             return true;
          }
       }
 
       return false;
+   }
+
+   GetSpecialCaseType()
+   {
+      return this.json.heading_3.rich_text?.[0]?.plain_text;
+   }
+
+   MarkHasSpecialCase(type, containers)
+   {
+      this.hide = true;
+      containers.push(this);
+      this.specialCallback(type, containers);
    }
 
    // Fetches children for the current block recursively
@@ -139,7 +188,7 @@ class NotionBlock
          if (element.type == "child_page" || element.type == "child_database" || element.type == "unsupported")
             continue;
 
-         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, null);
+         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, null, this.MarkHasSpecialCase.bind(this));
          this.children.push(childNotionBlock);
          htmlChanged |= (childNotionBlock.html != "");
          childNotionBlock.notifyHtmlUpdate = this.UpdateHtml.bind(this);
