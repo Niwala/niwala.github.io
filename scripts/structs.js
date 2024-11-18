@@ -49,18 +49,18 @@ class NotionBlock
    {
       this.json = json;
       this.html = "";
+      this.isExamples = false;
+      this.isLinks = false;
 
       this.promise = new Promise(async (resolve) => 
       {
          if (json.has_children) 
          {
-               FetchNotionPage(json.id, async (childsData, specialCase) => 
+               FetchNotionPage(json.id, async (childsData) => 
                {
-                  if (specialCase)
-                     console.log("Special case");
-
-                  await this.CompileChildsHtml(childsData, this.GenerateHtml.bind(this));
-                  resolve(this.html);
+                  const notionBlock = await this.CompileChildsHtml(childsData);
+                  const childHtml = this.GenerateHtml(notionBlock.GenerateHtml());
+                  resolve(childHtml);
                });
          }
          else 
@@ -71,23 +71,23 @@ class NotionBlock
       });
    }
 
-   async CompileChildsHtml(childsData, callback, blah)
+   async CompileChildsHtml(childsData, callback)
    {
       let html = "";
-      let spe = false;
 
       const blockPromises = childsData.results.map(result => 
       {
+         const notionBlock = new NotionBlock(result);
+
          if (result.type == "heading_3")
          {
             if (result.heading_3.color == "default" &&  result.heading_3.rich_text[0].plain_text == "Examples")
             {
                console.log("Special");
-               spe = true;
+               notionBlock.isExamples = true;
             }
          }
 
-         const notionBlock = new NotionBlock(result);
          return notionBlock.promise;
       });
 
@@ -95,7 +95,7 @@ class NotionBlock
 
       html = allHtmlBlocks.join(""); 
 
-      callback(html, spe);
+      callback(html);
    }
 
    HtmlFromRichText(property)
@@ -120,6 +120,11 @@ class NotionBlock
    GenerateHtml(childsHtml)
    {
       let s = "";
+
+      if (childsHtml.isExamples)
+      {
+         s += "<div>Special case : Examples</div>";
+      }
 
       switch(this.json.type)
       {
