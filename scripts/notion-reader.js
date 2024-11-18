@@ -1,22 +1,9 @@
-async function FetchNotion(command, callback)
+function FetchNotion(command, callback)
 {
-	try 
-	{
-		const response = await fetch('https://backendfinalfinalv3.vercel.app/notion/' + command);
-		
-		if (!response.ok) 
-		{
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		
-		const data = await response.json();
-		console.log(data);
-		callback(data);
-	} 
-	catch (error) 
-	{
-		console.error('Error fetching data:', error);
-	}
+	fetch('https://backendfinalfinalv3.vercel.app/notion/' + command)
+		.then(response => response.json())
+		.then(data => callback(data))
+		.catch(error => console.error(error));
 }
 
 function FetchNotionDatabase(callback) 
@@ -35,21 +22,17 @@ function FetchNotionDatabase(callback)
  	});
  }
 
- async function BuildHtmlFromPage(pageData) 
- {
-    let html = "";
-
-    // Crée une liste de promesses pour chaque bloc Notion
-    const blockPromises = pageData.results.map(result => {
-        const notionBlock = new NotionBlock(result);
-        return notionBlock.promise; // Renvoie la promesse de chaque bloc
+async function FetchNotionBlock(blockID) 
+{
+    return new Promise(resolve => {
+        FetchNotion("page/get-children/" + blockID, (data) => 
+		  {
+            resolve(data);
+        });
     });
+}
 
-    // Attends que toutes les promesses soient résolues
-    const allHtmlBlocks = await Promise.all(blockPromises);
-
-    // Concatène le HTML final
-    html = allHtmlBlocks.join(""); 
-
-    return html;
+ async function BuildHtmlFromPage(pageData, onPageUpdate) 
+ {
+	let notionPage = new PageContent(pageData, FetchNotionBlock, onPageUpdate);
 }

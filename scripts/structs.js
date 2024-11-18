@@ -43,59 +43,137 @@ class FunctionPreview
    }
 }
 
+class PageContent 
+{
+    constructor(json, fetchChildrenCallback, onPageUpdate)
+    {
+      this.json = json; // Original JSON from Notion API      
+      this.html = ""; // Full HTML of the page
+      this.examples = []; // List of example blocks
+      this.links = []; // List of link blocks
+      this.children = []; // Child blocks
+      this.onPageUpdate = onPageUpdate;
+      console.log(onPageUpdate);
+
+      for (let i = 0; i < json.results.length; i++) 
+      {
+         let notionBlock = new NotionBlock(json.results[i], fetchChildrenCallback, this.UpdatePageHtml.bind(this));
+         this.children.push(notionBlock);
+         this.html += notionBlock.html;
+      }
+    }
+
+    // Updates the HTML of the page
+    UpdatePageHtml() 
+    {
+            console.log(this.onPageUpdate);
+         this.html = "";
+         for (let i = 0; i < this.children.length; i++) 
+         {
+            this.html += this.children[i].html;
+         }
+         console.log("Page updated:", this.html);
+         this.onPageUpdate(this.html);
+    }
+}
+
 class NotionBlock
 {
-   constructor(json)
+   constructor(json, fetchChildrenCallback, notifyHtmlUpdate) 
    {
-      this.json = json;
-      this.html = "";
-      this.isExamples = false;
-      this.isLinks = false;
+      this.json = json; // Original JSON from Notion API
+      this.children = []; // Child blocks
+      this.fetchChildrenCallback = fetchChildrenCallback; // Function to fetch child blocks
+      this.notifyHtmlUpdate = notifyHtmlUpdate; // Callback to notify partial/full HTML updates
 
-      this.promise = new Promise(async (resolve) => 
+      this.prefix = "";
+      this.postfix = "";
+      this.html = "";
+
+      // Generate prefix and postfix
+      this.GeneratePrePost();
+      this.UpdateHtml();
+
+      // Fetch children recursively unless specific conditions are met
+      if (this.json.has_children && !this.ShouldIgnoreChildren())
       {
-         if (json.has_children) 
-         {
-               FetchNotionPage(json.id, async (childsData) => 
-               {
-                  const notionBlock = await this.CompileChildsHtml(childsData);
-                  const childHtml = this.GenerateHtml(notionBlock.GenerateHtml());
-                  resolve(childHtml);
-               });
-         }
-         else 
-         {
-               this.GenerateHtml("");
-               resolve(this.html);
-         }
-      });
+         this.FetchChildren();
+      }
    }
 
-   async CompileChildsHtml(childsData, callback)
+   UpdateHtml()
    {
-      let html = "";
+      this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
+   }
 
-      const blockPromises = childsData.results.map(result => 
+    // Determines if this block should skip fetching children
+   ShouldIgnoreChildren() 
+   {
+      if (this.json.type === "heading_3" &&
+         this.json.color === "default" &&
+         this.json.rich_text?.[0]?.plain_text === "Examples") 
       {
-         const notionBlock = new NotionBlock(result);
+         return true;
+      }
 
-         if (result.type == "heading_3")
-         {
-            if (result.heading_3.color == "default" &&  result.heading_3.rich_text[0].plain_text == "Examples")
-            {
-               console.log("Special");
-               notionBlock.isExamples = true;
-            }
-         }
+      if (this.json.type === "heading_3" &&
+         this.json.color === "default" &&
+         this.json.rich_text?.[0]?.plain_text === "Links") 
+      {
+         return true;
+      }
 
-         return notionBlock.promise;
-      });
+        return false;
+   }
 
-      const allHtmlBlocks = await Promise.all(blockPromises);
+   // Fetches children for the current block recursively
+   async FetchChildren() 
+   {
+      const childList = await this.fetchChildrenCallback(this.json.id); // Get children from API
 
-      html = allHtmlBlocks.join(""); 
+      for (let i = 0; i < childList.results.length; i++) 
+      {
+         const element = childList.results[i];
+         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, this.UpdateHtml);
+         this.children.push(childNotionBlock);
+         this.childrenHtml += childNotionBlock.html;
+      }
 
-      callback(html);
+      // Notify that the full HTML is ready
+      if (this.notifyHtmlUpdate) 
+      {
+         this.notifyHtmlUpdate();
+      }
+   }
+
+   GeneratePrePost()
+   {
+      switch(this.json.type)
+      {
+         case "heading_1": this.prefix = "<div class='heading_1'>" + this.HtmlFromRichText(this.json.heading_1); this.postfix = "</div>"; break;
+         case "heading_2": this.prefix = "<div class='heading_2'>" + this.HtmlFromRichText(this.json.heading_2); this.postfix = "</div>"; break;
+         case "heading_3": this.prefix = "<div class='heading_3'>" + this.HtmlFromRichText(this.json.heading_3); this.postfix = "</div>"; break;
+         case "paragraph": this.prefix = "<p>" + this.HtmlFromRichText(this.json.paragraph); this.postfix = "</p>"; break;
+         case "code": this.prefix = "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code); this.postfix = "</code></pre></div>"; break;
+         case "callout": this.prefix = "<div class='callout'><div class='callout-icon'></div><div class='callout-content'>"; this.postfix = "</div></div>"; break;
+         case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item) + "</li>"; this.postfix = "</ul>"; break;
+         case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item) + "</li>"; this.postfix = "</ol>"; break;
+         case "divider": this.prefix = "<div class='divider'>"; this.postfix = "</div>"; break;
+         case "toggle": this.prefix = "<div>toggle"; this.postfix = "</div>"; break;
+         case "quote": this.prefix = "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote); this.postfix = "</blockquote>"; break;
+         case "link_to_page": this.prefix = "<a href='" + ValueFromPageID(this.json.link_to_page); this.postfix = "'>link_to_page</a>"; break;
+         case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
+         
+         case "column_list": this.prefix = "<div class='notion-columns'>"; this.postfix =  "</div>"; break;
+         case "block": this.prefix = "<div class='notion-bloc'>"; this.postfix = "</div>"; break;
+         case "column": this.prefix = "<div class='notion-column'>"; this.postfix = "</div>"; break;
+
+
+         //Unsupported
+         case "unsupported": break;
+
+         default: this.prefix = "<p>Unknown type : " + this.json.type; this.postfix = "</p>"
+      }
    }
 
    HtmlFromRichText(property)
@@ -115,45 +193,5 @@ class NotionBlock
       }
 
       return html;
-   }
-
-   GenerateHtml(childsHtml)
-   {
-      let s = "";
-
-      if (childsHtml.isExamples)
-      {
-         s += "<div>Special case : Examples</div>";
-      }
-
-      switch(this.json.type)
-      {
-         case "heading_1": s += "<div class='heading_1'>" + this.HtmlFromRichText(this.json.heading_1) + "</div>"; break;
-         case "heading_2": s +=  "<div class='heading_2'>" + this.HtmlFromRichText(this.json.heading_2) + "</div>"; break;
-         case "heading_3": s +=  "<div class='heading_3'>" + this.HtmlFromRichText(this.json.heading_3) + "</div>"; break;
-         case "paragraph": s +=  "<p>" + this.HtmlFromRichText(this.json.paragraph) + "</p>"; break;
-         case "code": s +=  "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code) + "</code></pre></div>"; break;
-         case "callout": s +=  "<div class='callout'><div class='callout-icon'></div><div class='callout-content'>" + childsHtml + "</div></div>"; break;
-         case "bulleted_list_item": s +=  "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item) + "</li>" + childsHtml + "</ul>"; break;
-         case "numbered_list_item": s +=  "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item) + "</li>" + childsHtml + "</ol>"; break;
-         case "divider": s +=  "<div class='divider'></div>"; break;
-         case "toggle": s +=  "<div>toggle" + childsHtml + "</div>"; break;
-         case "quote": s +=  "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote) + "</blockquote>"; break;
-         case "link_to_page": s +=  "<a href='" + ValueFromPageID(this.json.link_to_page) + "'>link_to_page</a>"; break;
-         case "image": s +=  "<img class='notion-image' src='" + UrlOfImage(this.json.image) + "'>"; break;
-         
-         case "column_list": s += "<div class='notion-columns'>" + childsHtml + "</div>"; break;
-         case "block": s += "<div class='notion-bloc'>" + childsHtml + "</div>"; break;
-         case "column": s += "<div class='notion-column'>" + childsHtml + "</div>"; break;
-
-
-         //Unsupported
-         case "unsupported": break;
-
-         default: s += "<p>Unknown type : " + this.json.type + "</p>"
-
-      }
-
-      this.html = s;
    }
 }

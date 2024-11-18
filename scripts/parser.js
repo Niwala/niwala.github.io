@@ -137,6 +137,8 @@ function LoadNotionHome()
 
 function AddFunctionPreview(functionPreview)
 {
+				console.log("Add function preview");
+
 	//Add buttons for functions
 	let functionBox = "<button class='function-box' onclick=\"ReadFunctionFile('" + functionPreview.name + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
 	functionPreview.niceName + 
@@ -302,15 +304,10 @@ function ReadFunctionFile(filename, exampleID = 0)
 	let functionID = functionNameToData.get(filename).id;
 	FetchNotionPage(functionID, (pageData) => 
 	{
-		BuildHtmlFromPage(pageData).then(pageHtml => 
-			{
-				pageContent.innerHTML = pageHtml;
-				loading.style.display = "none"
-				page.style.display = "flex";
-			}
-		);
+		BuildHtmlFromPage(pageData, (updatedHtml) => {pageContent.innerHTML = updatedHtml;});
 	});
 
+	page.style.display = "flex";
 
 	//Read file
 	//.then(response => response.json())
