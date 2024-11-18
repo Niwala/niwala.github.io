@@ -92,6 +92,8 @@ class NotionBlock
       this.UpdateHtml();
 
       // Fetch children recursively unless specific conditions are met
+      console.log(this.json);
+      console.log(this.json.type + "  " + this.ShouldIgnoreChildren());
       if (this.json.has_children && (!this.ShouldIgnoreChildren()))
       {
          this.FetchChildren();
@@ -100,7 +102,6 @@ class NotionBlock
 
    UpdateHtml()
    {
-      console.log("Update html " + this.json.type + "  " + this.children.length);
       this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
 
       if (this.notifyHtmlUpdate != null)
@@ -110,21 +111,19 @@ class NotionBlock
     // Determines if this block should skip fetching children
    ShouldIgnoreChildren() 
    {
-      if (this.json.type === "heading_3" &&
-         this.json.color === "default" &&
-         this.json.rich_text?.[0]?.plain_text === "Examples") 
+      if (this.json.type == "heading_3" &&
+         this.json.heading_3.color == "default")
       {
-         return true;
+         let text = this.json.heading_3.rich_text?.[0]?.plain_text;
+         console.log(text);
+         if (text == "Examples" || text == "Links")
+         {
+            console.log("special");
+            return true;
+         }
       }
 
-      if (this.json.type === "heading_3" &&
-         this.json.color === "default" &&
-         this.json.rich_text?.[0]?.plain_text === "Links") 
-      {
-         return true;
-      }
-
-        return false;
+      return false;
    }
 
    // Fetches children for the current block recursively
@@ -136,7 +135,6 @@ class NotionBlock
       for (let i = 0; i < childList.results.length; i++) 
       {
          const element = childList.results[i];
-         console.log(element);
 
          if (element.type == "child_page" || element.type == "child_database" || element.type == "unsupported")
             continue;
@@ -147,7 +145,6 @@ class NotionBlock
          childNotionBlock.notifyHtmlUpdate = this.UpdateHtml.bind(this);
 
          this.childrenHtml += childNotionBlock.html;
-         console.log(this.json.type + " Add child " + i + "  " + childNotionBlock.json.type);
       }
 
       if (htmlChanged)

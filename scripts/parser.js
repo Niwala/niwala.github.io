@@ -305,14 +305,9 @@ function ReadFunctionFile(filename, exampleID = 0)
 	FetchNotionPage(functionID, (pageData) => 
 	{
 		BuildHtmlFromPage(pageData, (updatedHtml) => {pageContent.innerHTML = updatedHtml;});
+		page.style.display = "flex";
+		loading.style.display = "none";
 	});
-
-	page.style.display = "flex";
-
-	//Read file
-	//.then(response => response.json())
-	//.then(jsonResponse => OpenFunction(jsonResponse, exampleID)) 
-	//.catch((e) => console.error(e));
 }
 
 function RemoveExtension(filename)
