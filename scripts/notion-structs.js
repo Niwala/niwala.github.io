@@ -153,6 +153,10 @@ class NotionBlock
             let size = 100.0 / this.parent.children.length;
             this.prefix = "<div class='notion-column' style='width:" + size + "%'>"
          }
+         else if (this.json.type == "callout" && this.children?.length == 0)
+         {
+            return "";
+         }
 
          this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
       }
