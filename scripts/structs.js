@@ -258,8 +258,61 @@ class NotionBlock
 
 class NotionExample
 {
+
    constructor(json)
    {
+      console.log("Example-----------");
       console.log(json);
+      this.json = json;
+      this.hasTable = false;
+      this.hasCode = false;
+
+      for (var i = 0; i < json.results.length; i++) 
+      {
+         if (!this.hasTable && json.results[i].type == "table")
+         {
+            this.hasTable = true;
+            this.ReadPropertiesTable(json.results[i].id);
+         }
+         else if (!this.hasCode && json.results[i].type == "code")
+         {
+            this.hasCode = true;
+            this.ReadCode(json.results[i]);
+         }
+      }
+   }
+
+   async ReadPropertiesTable(tableID)
+   {
+      const tableJson = await FetchNotionBlock(tableID);
+      console.log(tableJson); 
+
+      for (var i = 1; i < tableJson.results.length; i++) //Ignore the first row (labels)
+      {
+         let row = tableJson.results[i].table_row;
+         switch (row.cells[0]?.[0]?.plain_text)
+         {
+            case "Toggle":
+               console.log("build toggle");
+               break;
+
+            case "Float":
+               console.log("build float");
+               break;
+
+            case "Slider":
+               console.log("build slider");
+               break;
+
+            case "Color":
+               console.log("build color");
+               break;
+         }
+      }
+   }
+
+   async ReadCode(container)
+   {
+      console.log("Example code --------------\n" + container.code.rich_text[0].plain_text);
    }
 }
