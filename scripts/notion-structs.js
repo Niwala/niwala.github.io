@@ -295,9 +295,9 @@ class NotionExample
          switch (row.cells[0]?.[0]?.plain_text)
          {
             case "Toggle": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
-            case "Float": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
-            case "Slider": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text, row.cells[3]?.[0]?.plain_text, row.cells[4]?.[0]?.plain_text)); break;
-            case "Color": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
+            case "Float": this.fields.push(new FloatField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
+            case "Slider": this.fields.push(new SliderField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text, row.cells[3]?.[0]?.plain_text, row.cells[4]?.[0]?.plain_text)); break;
+            case "Color": this.fields.push(new ColorField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
          }
       }
 
