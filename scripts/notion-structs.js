@@ -219,7 +219,7 @@ class NotionBlock
          case "heading_3": this.prefix = "<div class='heading_3'>" + this.HtmlFromRichText(this.json.heading_3); this.postfix = "</div>"; break;
          case "paragraph": this.prefix = "<p>" + this.HtmlFromRichText(this.json.paragraph); this.postfix = "</p>"; break;
          case "code": this.prefix = "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code); this.postfix = "</code></pre></div>"; break;
-         case "callout": this.prefix = "<div class='callout " + this.json.callout.color + "'><div class='callout-icon'></div><div class='callout-content'>" + this.HtmlFromRichText(this.json.callout) + "<br>"; this.postfix = "</div></div>"; break;
+         case "callout": this.prefix = "<div class='callout " + this.json.callout.color + "'><div class='callout-icon'>" + this.GetIcon(this.json.callout.icon) + "</div><div class='callout-content'>" + this.HtmlFromRichText(this.json.callout); this.postfix = "</div></div>"; break;
          case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item); this.postfix = "</li></ul>"; break;
          case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item); this.postfix = "</li></ol>"; break;
          case "divider": this.prefix = "<div class='divider'>"; this.postfix = "</div>"; break;
@@ -238,6 +238,15 @@ class NotionBlock
 
          default: this.prefix = "<p>Unknown type : " + this.json.type; this.postfix = "</p>"
       }
+   }
+
+   GetIcon(icon)
+   {
+      if (icon.type == "external")
+      {
+         return "<img class='notion-icon' src='" + icon.external.url + "'>"
+      }
+      return "";
    }
 
    HtmlFromRichText(property)
@@ -264,7 +273,7 @@ class NotionBlock
          }
 
          //Code
-         if (element.annotations.bold)
+         if (element.annotations.code)
          {
             pre = "<span class=\"inline-code\">" + pre;
             post += "</span>";
