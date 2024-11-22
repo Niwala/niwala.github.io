@@ -1,0 +1,10 @@
+
+class FunctionSlider
+{
+
+	constructor(json)
+	{
+
+	}
+
+}

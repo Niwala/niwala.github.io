@@ -77,15 +77,7 @@ class PageContent
     {
       switch(type)
       {
-         case "Examples":
-            {
-               console.log("Examples : " + container.children.length);
-               for (let i = 0; i < container.children.length; i++) 
-               {
-                  console.log(container.children[i].json);
-               }
-            }
-            break;
+         case "Examples": this.LoadExamples(container); break;
 
          case "Links":
             {
@@ -96,6 +88,18 @@ class PageContent
                }
             }
             break;
+      }
+   }
+
+   async LoadExamples(container)
+   {
+      for (let i = 0; i < container.children.length; i++) 
+      {
+         if (container.children[i].json.type != "child_page")
+            continue;
+
+         const exampleJson = await FetchNotionBlock(container.children[i].json.id);
+         this.examples.push(new NotionExample(exampleJson));
       }
    }
 }
@@ -249,5 +253,13 @@ class NotionBlock
       }
 
       return html;
+   }
+}
+
+class NotionExample
+{
+   constructor(json)
+   {
+      console.log(json);
    }
 }
