@@ -81,10 +81,10 @@ class PageContent
 
          case "Links":
             {
-               console.log("Links : " + container.children.length);
+               //console.log("Links : " + container.children.length);
                for (let i = 0; i < container.children.length; i++) 
                {
-                  console.log(container.children[i].json);
+                  //console.log(container.children[i].json);
                }
             }
             break;
@@ -118,6 +118,9 @@ class NotionBlock
       this.postfix = "";
       this.html = "";
       this.hide = false;
+
+      console.log(this.json.type + "  ---------");
+      console.log(this.json);
 
       // Generate prefix and postfix
       this.GeneratePrePost();
@@ -198,7 +201,8 @@ class NotionBlock
       if (specialContainerType != null)
       {
          this.hide = true;
-         this.specialCallback(specialContainerType, this)
+         this.specialCallback(specialContainerType, this);
+         this.UpdateHtml();
       }
       else if (htmlChanged)
       {
@@ -215,7 +219,7 @@ class NotionBlock
          case "heading_3": this.prefix = "<div class='heading_3'>" + this.HtmlFromRichText(this.json.heading_3); this.postfix = "</div>"; break;
          case "paragraph": this.prefix = "<p>" + this.HtmlFromRichText(this.json.paragraph); this.postfix = "</p>"; break;
          case "code": this.prefix = "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code); this.postfix = "</code></pre></div>"; break;
-         case "callout": this.prefix = "<div class='callout'><div class='callout-icon'></div><div class='callout-content'>"; this.postfix = "</div></div>"; break;
+         case "callout": this.prefix = "<div class='callout " + this.json.callout.color + "'><div class='callout-icon'></div><div class='callout-content'>" + this.HtmlFromRichText(this.json.callout) + "<br>"; this.postfix = "</div></div>"; break;
          case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item); this.postfix = "</li></ul>"; break;
          case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item); this.postfix = "</li></ol>"; break;
          case "divider": this.prefix = "<div class='divider'>"; this.postfix = "</div>"; break;
@@ -242,14 +246,59 @@ class NotionBlock
       for (let i = 0; i < property.rich_text.length; i++) 
       {
          const element = property.rich_text[i];
+         let pre = "";
+         let post = "";
+
+         //Add style
          if (element.href == null)
          {
-            html += element.plain_text;
+            pre = "<span class=\"" + element.annotations.color + "\">";
+            post = "</span>";
          }
-         else
+
+         //Bold
+         if (element.annotations.bold)
          {
-            html += "<a href='" + element.href + "'>" + element.plain_text + "</a>";
+            pre = "<b>" + pre;
+            post += "</b>";
          }
+
+         //Code
+         if (element.annotations.bold)
+         {
+            pre = "<span class=\"inline-code\">" + pre;
+            post += "</span>";
+         }
+
+         //Italic
+         if (element.annotations.italic)
+         {
+            pre = "<i>" + pre;
+            post += "</i>";
+         }
+
+         //Strikethrough
+         if (element.annotations.strikethrough)
+         {
+            pre = "<del>" + pre;
+            post += "</del>";
+         }
+
+         //Underline
+         if (element.annotations.underline)
+         {
+            pre = "<u>" + pre;
+            post += "</u>";
+         }
+
+         //Add link
+         if (element.href != null)
+         {
+            pre = "<a href='" + element.href + "'>" + pre;
+            post += "</a>";
+         }
+
+         html += pre + element.plain_text + post;
       }
 
       return html;
@@ -258,11 +307,8 @@ class NotionBlock
 
 class NotionExample
 {
-
    constructor(json)
    {
-      console.log("Example-----------");
-      console.log(json);
       this.json = json;
       this.code = "";
       this.hasTable = false;
@@ -299,11 +345,6 @@ class NotionExample
             case "Slider": this.fields.push(new SliderField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text, row.cells[3]?.[0]?.plain_text, row.cells[4]?.[0]?.plain_text)); break;
             case "Color": this.fields.push(new ColorField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
          }
-      }
-
-      for (var i = 0; i < this.fields.length; i++) 
-      {
-         console.log(this.fields[i]);
       }
    }
 
