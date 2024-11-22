@@ -251,7 +251,7 @@ class NotionBlock
             return "<img class='notion-icon' src='" + icon.custom_emoji.url + "'>"
 
          case "emoji":
-            return "<div class='notion-icon>" + icon.emoji + "</div>"
+            return "<div class='notion-icon'>" + icon.emoji + "</div>"
       }
 
       return "";

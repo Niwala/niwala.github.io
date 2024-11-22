@@ -260,6 +260,5 @@
 
 .notion-image
 {
-	width: 254px;
-	height: 254px;
+	max-width: 100%;
 }
