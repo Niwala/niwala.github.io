@@ -244,7 +244,7 @@ class NotionBlock
    {
       if (icon.type == "external")
       {
-         return "<img class='notion-icon' src='" + icon.external.url + "'>"
+         return "<img class='notion-icon' src='" + icon.external.url + "' Access-Control-Allow-Origin: '*'>"
       }
       return "";
    }
