@@ -40,7 +40,7 @@
   
 	<!-- Banner -->
 	<div id="banner">
-		<div class="centred" style="justify-content: space-between; align-items: center;">
+		<div class="centred" style="justify-content: space-between; align-items: center; flex-direction: row;">
 		
 			<!-- Left part -->
 			<div class="vertical">
@@ -73,30 +73,27 @@
 	
 		<!-- Main content -->
 		<div class="centred">
-			<div class="vertical">
+			<p id="introduction">Ce site a pour but de répertorier des fonctions basiques utilisables dans les shaders.</br>Vous n'y trouverez pas de descriptions techniques exhaustives, mais plutôt des démonstrations visuelles conçues à des fins pédagogiques.</p>
 
-				<p id="introduction">Ce site a pour but de répertorier des fonctions basiques utilisables dans les shaders.</br>Vous n'y trouverez pas de descriptions techniques exhaustives, mais plutôt des démonstrations visuelles conçues à des fins pédagogiques.</p>
+			<div class="horizontal" id="function-list">
 
-				<div class="horizontal" id="function-list">
-
-				<button class="function-box">
-					<div class="horizontal">
-						<div class="vertical" style="margin-right:10px;">
-							<h3>Sin</h3>
-							<p>Lorem ipsum</p>
-						</div>
-						<canvas id="example-canvas-id" width="150" height="150" class="shader-index-preview"></canvas>
+			<button class="function-box">
+				<div class="horizontal">
+					<div class="vertical" style="margin-right:10px;">
+						<h3>Sin</h3>
+						<p>Lorem ipsum</p>
 					</div>
-				</button>
-
+					<canvas id="example-canvas-id" width="150" height="150" class="shader-index-preview"></canvas>
 				</div>
+			</button>
+
+			</div>
 
 
 
 
-		
-				<div id="content-container">
-				</div>
+	
+			<div id="content-container">
 			</div>
 		</div>
 	</article>

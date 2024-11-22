@@ -73,29 +73,31 @@ class PageContent
          this.onPageUpdate(this.html);
     }
 
-    ManageSpecialCase(type, containers)
+    ManageSpecialCase(type, container)
     {
-         switch(type)
-         {
-            case "Examples":
+      switch(type)
+      {
+         case "Examples":
+            {
+               console.log("Examples : " + container.children.length);
+               for (let i = 0; i < container.children.length; i++) 
                {
-                  console.log("Examples : " + containers[0].children.length);
-                  for (let i = 0; i < containers[0].children.length; i++) 
-                  {
-                     
-                  }
+                  console.log(container.children[i].json);
                }
-               break;
+            }
+            break;
 
-            case "Links":
+         case "Links":
+            {
+               console.log("Links : " + container.children.length);
+               for (let i = 0; i < container.children.length; i++) 
                {
-                  console.log("Links : " + containers[0].children.length);
+                  console.log(container.children[i].json);
                }
-               break;
-         }
-
-      console.log("Special " + type + " " + containers.length);
-    }
+            }
+            break;
+      }
+   }
 }
 
 class NotionBlock
@@ -117,14 +119,13 @@ class NotionBlock
       this.GeneratePrePost();
       this.UpdateHtml();
 
-      // Fetch children recursively unless specific conditions are met
-      if (this.ShouldIgnoreChildren())
+      if (!this.ShouldIgnoreChildren())
       {
-         specialCallback(this.GetSpecialCaseType(), []);
-      }
-      else
-      {
-         if (this.json.has_children)
+         if (this.IsSpecialCase())
+         {
+            specialCallback(this.GetSpecialCaseType(), null);
+         }
+         else if (this.json.has_children)
          {
             this.FetchChildren();
          }
@@ -143,17 +144,21 @@ class NotionBlock
       }
 
       if (this.notifyHtmlUpdate != null)
+      {
          this.notifyHtmlUpdate();
+      }
    }
 
-    // Determines if this block should skip fetching children
    ShouldIgnoreChildren() 
    {
-      if (this.json.type == "heading_3" &&
-         this.json.heading_3.color == "default")
+      return (this.json.type == "child_page" || this.json.type == "child_database" || this.json.type == "unsupported");
+   }
+
+   IsSpecialCase()
+   {
+      if (this.json.type == "heading_3" && this.json.heading_3.color == "default")
       {
          let text = this.GetSpecialCaseType();
-         console.log(text);
          if (text == "Examples" || text == "Links")
          {
             return true;
@@ -168,27 +173,17 @@ class NotionBlock
       return this.json.heading_3.rich_text?.[0]?.plain_text;
    }
 
-   MarkHasSpecialCase(type, containers)
-   {
-      this.hide = true;
-      containers.push(this);
-      this.specialCallback(type, containers);
-   }
-
    // Fetches children for the current block recursively
    async FetchChildren() 
    {
       const childList = await this.fetchChildrenCallback(this.json.id); // Get children from API
       let htmlChanged = false;
+      let specialContainerType = null;
 
       for (let i = 0; i < childList.results.length; i++) 
       {
          const element = childList.results[i];
-
-         if (element.type == "child_page" || element.type == "child_database" || element.type == "unsupported")
-            continue;
-
-         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, null, this.MarkHasSpecialCase.bind(this));
+         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, null, (type) => {specialContainerType = type});
          this.children.push(childNotionBlock);
          htmlChanged |= (childNotionBlock.html != "");
          childNotionBlock.notifyHtmlUpdate = this.UpdateHtml.bind(this);
@@ -196,7 +191,12 @@ class NotionBlock
          this.childrenHtml += childNotionBlock.html;
       }
 
-      if (htmlChanged)
+      if (specialContainerType != null)
+      {
+         this.hide = true;
+         this.specialCallback(specialContainerType, this)
+      }
+      else if (htmlChanged)
       {
          this.UpdateHtml();
       }
