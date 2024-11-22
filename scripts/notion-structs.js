@@ -119,6 +119,7 @@ class NotionBlock
       this.postfix = "";
       this.html = "";
       this.hide = false;
+      this.refreshCount = -1;
 
       console.log(this.json.type + "  ---------");
       console.log(this.json);
@@ -142,6 +143,8 @@ class NotionBlock
 
    UpdateHtml()
    {
+      this.refreshCount = this.refreshCount +1;
+
       if (this.hide)
       {
          this.html = "";
@@ -153,9 +156,10 @@ class NotionBlock
             let size = 100.0 / this.parent.children.length;
             this.prefix = "<div class='notion-column' style='width:" + size + "%'>"
          }
-         else if (this.json.type == "callout" && this.children?.length == 0)
+         else if (this.json.type == "callout")
          {
-            return "";
+            console.log(this.children?.length + " | " + this.refreshCount);
+            //return "";
          }
 
          this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
@@ -216,7 +220,13 @@ class NotionBlock
          this.specialCallback(specialContainerType, this);
          this.UpdateHtml();
       }
-      else if (htmlChanged)
+
+      if (this.json.type == "callout")
+      {
+         console.log("Childs added " + this.children.length + "  " + htmlChanged);
+      }
+
+      if (htmlChanged)
       {
          this.UpdateHtml();
       }
