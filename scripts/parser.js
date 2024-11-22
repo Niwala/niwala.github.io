@@ -38,7 +38,6 @@ var functionNameToData;
 
 function Parse()
 {
-	LoadCanvas();
 	LoadTemplates();
 	LoadLoadingShader();
 
@@ -58,8 +57,10 @@ function Parse()
 	});
 }
 
-function LoadCanvas()
+function LoadTemplates()
 {
+	searchItems = new Map();
+
 	introduction = document.getElementById("introduction");
 	functionList = document.getElementById("function-list");
 	functionListCanvas = document.getElementById("function-list-canvas");
@@ -67,11 +68,6 @@ function LoadCanvas()
 
 	introduction.style.display = "none";
 	functionList.innerHTML = "";
-}
-
-function LoadTemplates()
-{
-	searchItems = new Map();
 
 	//Template container
 	container = document.getElementById("template")
@@ -88,9 +84,6 @@ function LoadTemplates()
 	page = document.getElementById("page")
 	pageContent = document.getElementById("page-content")
 	exampleButtonsContainer = document.getElementById("example-buttons-container");
-
-	//Hide template
-	container.style.display = 'none';
 }
 
 function LoadLoadingShader()
