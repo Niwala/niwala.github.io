@@ -203,7 +203,8 @@ class NotionBlock
          const element = childList.results[i];
          let childNotionBlock = new NotionBlock(this, element, this.fetchChildrenCallback, null, (type) => {specialContainerType = type});
          this.children.push(childNotionBlock);
-         htmlChanged |= (childNotionBlock.html != "");
+         if (childNotionBlock.html != "")
+            htmlChanged = true;
          childNotionBlock.notifyHtmlUpdate = this.UpdateHtml.bind(this);
 
          this.childrenHtml += childNotionBlock.html;
