@@ -56,7 +56,7 @@ class PageContent
 
       for (let i = 0; i < json.results.length; i++) 
       {
-         let notionBlock = new NotionBlock(json.results[i], fetchChildrenCallback, this.UpdatePageHtml.bind(this), this.ManageSpecialCase.bind(this));
+         let notionBlock = new NotionBlock(null, json.results[i], fetchChildrenCallback, this.UpdatePageHtml.bind(this), this.ManageSpecialCase.bind(this));
          this.children.push(notionBlock);
          this.html += notionBlock.html;
       }
@@ -106,13 +106,14 @@ class PageContent
 
 class NotionBlock
 {
-   constructor(json, fetchChildrenCallback, notifyHtmlUpdate, specialCallback)
+   constructor(parent, json, fetchChildrenCallback, notifyHtmlUpdate, specialCallback)
    {
       this.json = json; // Original JSON from Notion API
       this.children = []; // Child blocks
       this.fetchChildrenCallback = fetchChildrenCallback; // Function to fetch child blocks
       this.notifyHtmlUpdate = notifyHtmlUpdate; // Callback to notify partial/full HTML updates
       this.specialCallback = specialCallback;
+      this.parent = parent;
 
       this.prefix = "";
       this.postfix = "";
@@ -147,6 +148,12 @@ class NotionBlock
       }
       else
       {
+         if (this.json.type == "column")
+         {
+            let size = 100.0 / this.parent.children.length;
+            this.prefix = "<div class='notion-column' style='width:" + size + "%'>"
+         }
+
          this.html = this.prefix + this.children.map(child => child.html).join("") + this.postfix;
       }
 
@@ -190,7 +197,7 @@ class NotionBlock
       for (let i = 0; i < childList.results.length; i++) 
       {
          const element = childList.results[i];
-         let childNotionBlock = new NotionBlock(element, this.fetchChildrenCallback, null, (type) => {specialContainerType = type});
+         let childNotionBlock = new NotionBlock(this, element, this.fetchChildrenCallback, null, (type) => {specialContainerType = type});
          this.children.push(childNotionBlock);
          htmlChanged |= (childNotionBlock.html != "");
          childNotionBlock.notifyHtmlUpdate = this.UpdateHtml.bind(this);
