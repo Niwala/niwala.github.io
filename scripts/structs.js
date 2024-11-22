@@ -264,8 +264,10 @@ class NotionExample
       console.log("Example-----------");
       console.log(json);
       this.json = json;
+      this.code = "";
       this.hasTable = false;
       this.hasCode = false;
+      this.fields = [];
 
       for (var i = 0; i < json.results.length; i++) 
       {
@@ -287,32 +289,26 @@ class NotionExample
       const tableJson = await FetchNotionBlock(tableID);
       console.log(tableJson); 
 
-      for (var i = 1; i < tableJson.results.length; i++) //Ignore the first row (labels)
+      for (var i = 0; i < tableJson.results.length; i++) //Ignore the first row (labels)
       {
          let row = tableJson.results[i].table_row;
          switch (row.cells[0]?.[0]?.plain_text)
          {
-            case "Toggle":
-               console.log("build toggle");
-               break;
-
-            case "Float":
-               console.log("build float");
-               break;
-
-            case "Slider":
-               console.log("build slider");
-               break;
-
-            case "Color":
-               console.log("build color");
-               break;
+            case "Toggle": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
+            case "Float": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
+            case "Slider": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text, row.cells[3]?.[0]?.plain_text, row.cells[4]?.[0]?.plain_text)); break;
+            case "Color": this.fields.push(new ToggleField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
          }
+      }
+
+      for (var i = 0; i < this.fields.length; i++) 
+      {
+         console.log(this.fields[i]);
       }
    }
 
    async ReadCode(container)
    {
-      console.log("Example code --------------\n" + container.code.rich_text[0].plain_text);
+      this.code = container.code.rich_text[0].plain_text;
    }
 }
