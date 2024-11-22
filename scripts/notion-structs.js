@@ -242,10 +242,18 @@ class NotionBlock
 
    GetIcon(icon)
    {
-      if (icon.type == "external")
+      switch(icon.type)
       {
-         return "<img class='notion-icon' src='" + icon.external.url + "' Access-Control-Allow-Origin: '*'>"
+         case "external":
+            return "<img class='notion-icon' src='" + icon.external.url + "'>"
+
+         case "custom_emoji":
+            return "<img class='notion-icon' src='" + icon.custom_emoji.url + "'>"
+
+         case "emoji":
+            return "<div class='notion-icon>" + icon.emoji + "</div>"
       }
+
       return "";
    }
 
