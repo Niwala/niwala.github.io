@@ -56,7 +56,17 @@ pre
 	border-radius: 5px;
 	padding: 8px;
 	margin-bottom: 0 !important;
-	
+}
+
+.error-message
+{
+	background-color: #4c1616;
+	font-size: 16px;
+	font-style: bold;
+	border-radius: 4px;
+	padding: 6px 16px 4px 16px;
+	flex-direction: column;
+	align-items: center
 }
 
 .main-logo
@@ -373,27 +383,102 @@ button.function-box:hover
 	width: 170px;
 	margin: 0;
 	margin-bottom: 6px;
-	height: 25px;
+	height: 23px;
 }
 
-.color-picker
+/*Remove spin arrows on float fields*/
+/* Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button 
 {
-	border-radius: 5px;
-	background-color: #0d1117;
-	border-width: 0px;
-	padding:3px;
+	-webkit-appearance: none; 
+	margin: 0;
 }
+
+/* Firefox */
+input[type="number"] 
+{
+	-moz-appearance: textfield;
+}
+
+.coloris
+{
+	border-style: none;
+	outline: none;
+	flex-grow: 1;
+	padding: 0;
+	margin: 0;
+	border-radius: 4px;	
+	color:transparent;
+	cursor: pointer;
+	user-select: none;
+	text-align: center;
+}
+
+.color-field
+{
+	border-width: 0 !important;
+	flex-grow: 1;
+	max-width: 358px;
+	font-family:Verdana, Geneva, Tahoma, sans-serif;
+	overflow: hidden;
+
+	height: 15px;
+	max-height: 15px;
+	padding: 5px;
+
+	text-align: end;
+	outline: none;
+	border-radius: 5px;
+	font-size: 15px;
+	color: rgb(255, 255, 255, 0.8);
+	background: rgb(13, 17, 23);
+	user-select: none;
+}
+
+.float-field
+{
+	border-width: 0 !important;
+	flex-grow: 1;
+	max-width: 360px;
+	font-family:Verdana, Geneva, Tahoma, sans-serif;
+
+	height:22px;
+	
+	padding-right: 6px;
+	padding-top: 2px;
+	
+
+	text-align: end;
+	outline: none;
+	border-radius: 5px;
+	font-size: 15px;
+	color: rgb(255, 255, 255, 0.8);
+	background: rgb(13, 17, 23);
+}
+
+
+.float-field:focus
+{
+	border-width: 0 !important;
+}
+
 
 .slider-value
 {
 	width: 50px !important;
-	height:22px;
-	background: #010409;
 	
-	padding-left: 4px;
-	padding-top: 2px;
+	padding-right: 6px;
+	padding-top: 0px;
+	padding-bottom: 2px;
+	margin: 0;
 	
+	text-align: end;
+	outline: none;
 	border-radius: 5px;
+	font-size: 15px;
+	color: rgb(255, 255, 255, 0.8);
+	background: rgb(13, 17, 23);
 }
 
 .slider-value p
@@ -420,6 +505,7 @@ button.function-box:hover
 	opacity: 0.7;
 	-webkit-transition: .2s;
 	transition: opacity .2s;
+	cursor: pointer;
 }
 
 .slider::-webkit-slider-thumb 
@@ -484,13 +570,13 @@ button.function-box:hover
 /* On mouse-over, add a grey background color */
 .toggle-container:hover input ~ .checkmark 
 {
-  background-color: #222d3d;
+  background-color: #0d1117;
 }
 
 /* When the checkbox is checked, add a blue background */
 .toggle-container input:checked ~ .checkmark 
 {
-  background-color: #36445c;
+  background-color: #0d1117;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */

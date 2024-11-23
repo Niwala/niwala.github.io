@@ -6,41 +6,18 @@ function RendererFromExample(canvas, data, example)
 
 class ShaderData
 {
-	constructor(element, shaderGuid, shaderFragment, shaderProperties)
+	constructor(element, shaderGuid, shaderInclude, shaderProperties)
 	{
 		this.element = element;
 		this.width = element.getAttribute("width");
 		this.height = element.getAttribute("height");
 		this.shaderGuid = shaderGuid;
-		this.shaderFragContent = shaderFragment;
+		this.shaderFragContent = shaderInclude;
 		this.shaderProperties = shaderProperties;
 
 		this.locations = new Map();
 		this.floatValues = new Map();
 		this.colorValues = new Map();
-
-
-		//Build uniforms
-		let uniforms = "";
-		this.propertyCount = shaderProperties == null ? 0 : shaderProperties.length;
-		for (let j = 0; j < this.propertyCount; j++)
-		{
-			let property = shaderProperties[j];
-			
-			switch (property.type)
-			{
-				case "float":
-				case "range":
-				case "toggle":
-				uniforms += "\nuniform highp float " + property.id + ";";
-				break;
-				
-				case "color":
-				uniforms += "\nuniform highp vec3 " + property.id + ";";
-				break;
-			}
-		}
-		
 		
 		//Build shaders > Vertex
 		this.vertexShader = 
@@ -99,17 +76,12 @@ class ShaderData
 				return rotate(angle) * space;
 			}
 
-			//Custom properties` + uniforms + ` 
+			//Custom shader 
+			` + shaderInclude + ` 
 
 			void main(void) 
 			{
-				vec2 uv = vTextureCoord;
-				vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
-					
-				//Custom frag
-				` + shaderFragment + `
-					
-				gl_FragColor = color;
+				gl_FragColor = Execute(vTextureCoord);
 			}
 			`;
 	}
@@ -134,14 +106,20 @@ class ShaderData
 		//Example properties
 		this.floatValues.forEach((value, key) => 
 		{
+			if (!this.locations.has(key))
+				this.locations.set(key, gl.getUniformLocation(this.shaderProgram, key));
+
 			let loc = this.locations.get(key);
 			gl.uniform1f(loc, value);
 		});
 		
 		this.colorValues.forEach((value, key) => 
 		{
+			if (!this.locations.has(key))
+				this.locations.set(key, gl.getUniformLocation(this.shaderProgram, key));
+
 			let loc = this.locations.get(key);
-			gl.uniform3f(loc, value[0], value[1], value[2]);
+			gl.uniform4f(loc, value[0], value[1], value[2], value[3]);
 		});
 	}
 
@@ -159,28 +137,7 @@ class ShaderData
 
 		//Get properties locations > Built-in properties
 		this.timeLocation = gl.getUniformLocation(this.shaderProgram, "time");
-		
-		//Get properties locations > Example properties
-		for	(let i = 0; i < this.propertyCount; i++)
-		{
-			let property = this.shaderProperties[i];
-			let propHtmlName = this.shaderGuid + "-" + property.name
-			let loc = gl.getUniformLocation(this.shaderProgram, property.id);
-			this.locations.set(propHtmlName, loc);
-			
-			switch(property.type)
-			{
-				case "float":
-				case "range":
-				case "toggle":
-				this.floatValues.set(propHtmlName, 0.0);
-				break;
-				
-				case "color":
-				this.colorValues.set(propHtmlName, [0.0, 0.0, 0.0]);
-				break;
-			}
-		}
+		this.mousePosLocation = gl.getUniformLocation(this.shaderProgram, "mousePos");
 
 		// Collect all the info needed to use the shader program.
 		// Look up which attributes our shader program is using

@@ -47,5 +47,5 @@ async function FetchNotionBlock(blockID)
 
  async function BuildHtmlFromPage(pageData, onPageUpdate) 
  {
-	let notionPage = new PageContent(pageData, FetchNotionBlock, onPageUpdate);
+	let notionPage = new NotionPage(pageData, onPageUpdate);
 }

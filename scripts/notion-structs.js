@@ -43,10 +43,11 @@ class FunctionPreview
    }
 }
 
-class PageContent 
+class NotionPage 
 {
-    constructor(json, fetchChildrenCallback, onPageUpdate)
+    constructor(json, onPageUpdate)
     {
+      this.level = "";     // Function or Example
       this.json = json; // Original JSON from Notion API      
       this.html = ""; // Full HTML of the page
       this.examples = []; // List of example blocks
@@ -56,7 +57,7 @@ class PageContent
 
       for (let i = 0; i < json.results.length; i++) 
       {
-         let notionBlock = new NotionBlock(null, json.results[i], fetchChildrenCallback, this.UpdatePageHtml.bind(this), this.ManageSpecialCase.bind(this));
+         let notionBlock = new NotionBlock(null, json.results[i], this.UpdatePageHtml.bind(this), this.ManageSpecialCase.bind(this));
          this.children.push(notionBlock);
          this.html += notionBlock.html;
       }
@@ -106,11 +107,10 @@ class PageContent
 
 class NotionBlock
 {
-   constructor(parent, json, fetchChildrenCallback, notifyHtmlUpdate, specialCallback)
+   constructor(parent, json, notifyHtmlUpdate, specialCallback)
    {
       this.json = json; // Original JSON from Notion API
       this.children = []; // Child blocks
-      this.fetchChildrenCallback = fetchChildrenCallback; // Function to fetch child blocks
       this.notifyHtmlUpdate = notifyHtmlUpdate; // Callback to notify partial/full HTML updates
       this.specialCallback = specialCallback;
       this.parent = parent;
@@ -121,8 +121,8 @@ class NotionBlock
       this.hide = false;
       this.refreshCount = -1;
 
-      console.log(this.json.type + "  ---------");
-      console.log(this.json);
+      // console.log(this.json.type + "  ---------");
+      // console.log(this.json);
 
       // Generate prefix and postfix
       this.GeneratePrePost();
@@ -198,14 +198,14 @@ class NotionBlock
    // Fetches children for the current block recursively
    async FetchChildren() 
    {
-      const childList = await this.fetchChildrenCallback(this.json.id); // Get children from API
+      const childList = await FetchNotionBlock(this.json.id); // Get children from API
       let htmlChanged = false;
       let specialContainerType = null;
 
       for (let i = 0; i < childList.results.length; i++) 
       {
          const element = childList.results[i];
-         let childNotionBlock = new NotionBlock(this, element, this.fetchChildrenCallback, null, (type) => {specialContainerType = type});
+         let childNotionBlock = new NotionBlock(this, element, null, (type) => {specialContainerType = type});
          this.children.push(childNotionBlock);
          if (childNotionBlock.html != "")
             htmlChanged = true;
@@ -346,13 +346,18 @@ class NotionBlock
 
 class NotionExample
 {
-   constructor(json)
+   constructor(json, onContentUpdate, onPropertiesUpdate)
    {
       this.json = json;
       this.code = "";
       this.hasTable = false;
       this.hasCode = false;
       this.fields = [];
+
+      this.html = ""; // Full HTML of the page
+      this.children = []; // Child blocks
+      this.onContentUpdate = onContentUpdate;
+      this.onPropertiesUpdate = onPropertiesUpdate;
 
       for (var i = 0; i < json.results.length; i++) 
       {
@@ -366,8 +371,25 @@ class NotionExample
             this.hasCode = true;
             this.ReadCode(json.results[i]);
          }
+         else
+         {
+            let notionBlock = new NotionBlock(null, json.results[i], this.UpdatePageHtml.bind(this), () => {});
+            this.children.push(notionBlock);
+            this.html += notionBlock.html;
+         }
       }
    }
+
+      // Updates the HTML of the page
+    UpdatePageHtml() 
+    {
+         this.html = "";
+         for (let i = 0; i < this.children.length; i++) 
+         {
+            this.html += this.children[i].html;
+         }
+         this.onContentUpdate(this);
+    }
 
    async ReadPropertiesTable(tableID)
    {
@@ -385,6 +407,8 @@ class NotionExample
             case "Color": this.fields.push(new ColorField(row.cells[1]?.[0]?.plain_text, row.cells[2]?.[0]?.plain_text)); break;
          }
       }
+
+      this.onPropertiesUpdate(this);
    }
 
    async ReadCode(container)

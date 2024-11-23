@@ -2,7 +2,7 @@ Parse();
 SetupSearchHooks();
 
 //URL params
-var pageID;							//id
+var exampleID;						//id
 var pageName;						//name (before '.')
 var exampleName;					//name (after '.')
 var hideBanner;					//hide-banner
@@ -18,7 +18,28 @@ var homePageLoaded;
 //Html elements
 var bannerElement;
 
-//Templates
+
+//Data
+var functionsMap;		//Map : key = notionID, value = NotionPage
+var nameToPageID;		//Map : key = pageName, value = notionID
+var examplesMap;		//Map : key = notionID, value = NotionExample
+
+
+//Error message
+var errorBoxElement;
+var errorTitleElement;
+var errorMessageElement;
+
+//Examples
+var exampleElement;
+var exampleContentElement;
+var exampleProperties;
+var exampleCanvas;
+
+//Loading throbber
+var loading;
+var loadingShader;
+
 var templateContainer;
 var templateExample;
 
@@ -36,7 +57,7 @@ var searchBar;
 var searchBarList;
 var searchItems;
 
-var loading;
+
 
 var introduction;
 var functionListCanvas;
@@ -59,7 +80,11 @@ function Parse()
 	LoadHtmlElements();
 	LoadLoadingShader();
 
-	LoadNotionHome();
+	ApplyStateFromUrlParams();
+	LoadAndShowCurrentPage();
+
+
+	//LoadNotionHome();
 
 	//ReadFunctionsIndex();
 	
@@ -77,10 +102,10 @@ function Parse()
 
 function LoadUrlParams()
 {
-	let params = GetURLParams();	
-	pageID = params.get("id");
+	let params = new URLSearchParams(window.location.search);	
+	exampleID = params.get("id");
 
-	if (pageID == null)
+	if (exampleID == null)
 	{
 		let fullName = params.get("name");
 		if (fullName != null && fullName.includes("."))
@@ -95,19 +120,32 @@ function LoadUrlParams()
 		exampleName = null;
 	}
 
-	console.log(params.has("hide-banner"));
-
 	hideBanner = params.has("hide-banner");
 	hideContent = params.has("hide-content");
 	largeLayout = params.has("large-layout");
-	properties = params.has("properties");
+	properties = params.get("properties");
 }
 
 function LoadHtmlElements()
 {
+	functionsMap = new Map();
+	nameToPageID = new Map();
+	examplesMap = new Map();
 	searchItems = new Map();
 
+	//Banner
 	bannerElement = document.getElementById("banner");
+
+	//Error
+	errorBoxElement = document.getElementById("error-box");
+	errorTitleElement = document.getElementById("error-title");
+	errorMessageElement = document.getElementById("error-message");
+
+	//Example
+	exampleElement = document.getElementById("example");
+	exampleContentElement = document.getElementById("example-content");
+	exampleProperties = document.getElementById("example-properties");
+	exampleCanvas =  document.getElementById("example-canvas");
 
 
 	introduction = document.getElementById("introduction");
@@ -118,27 +156,106 @@ function LoadHtmlElements()
 	introduction.style.display = "none";
 	functionList.innerHTML = "";
 
-	//Template container
-	container = document.getElementById("template")
-	templateContainer = container.innerHTML;
+
 	
 	//Template example
-	let example = document.getElementById("template-example")
+	let example = document.getElementById("template-example");
 	templateExample = example.innerHTML;
 
 	//Homepage
-	homepage = document.getElementById("homepage")
+	homepage = document.getElementById("homepage");
 
 	//Page
-	page = document.getElementById("page")
-	pageContent = document.getElementById("page-content")
+	page = document.getElementById("page");
+	pageContent = document.getElementById("page-content");
 	exampleButtonsContainer = document.getElementById("example-buttons-container");
 }
 
 //Changes the visibility of html elements based on variables in the URL Params group.
 function ApplyStateFromUrlParams()
 {
-	bannerElement.style.display = showBanner ? "flex" : "none";
+	bannerElement.style.display = hideBanner ? "none" : "flex";
+}
+
+//Loads a page according to the variables in the URL params group.
+function LoadAndShowCurrentPage()
+{
+	StartLoadingAction();
+
+	//Direct load
+	if (exampleID != null)
+	{
+		LoadAndShowExampleWithDirectID(exampleID);
+	}
+
+	//Load from name
+	else if (pageName != null)
+	{
+
+	}
+
+	//Load home page
+	else
+	{
+		LoadHomePage();
+		ShowHomePage();
+	}
+}
+
+function LoadAndShowExampleWithDirectID(id)
+{
+	//ID is missing -> Just go to the home page
+	if (id == null || id == "")
+	{
+		LoadHomePage();
+		return;
+	}
+
+	//ID exist
+	else
+	{
+		//Check if pageData already contains this page
+		if (examplesMap != null && examplesMap.has(id))
+		{
+			HideHomePage();
+			HideFunction();
+			ShowExample(examplesMap[id]);
+			return;
+		}
+
+		//Check ID through notion
+		FetchNotionPage(id, (result) => 
+		{
+			console.log(result);
+
+			//Bad ID error
+			if (result.status == 400)
+			{
+				ShowError('Content missing', `The requested ID does not exist in the database:\n(${id})`);	
+			}
+
+			//Other errors
+			else if (result.name == "APIResponseError")
+			{
+				ShowError('API response error', JSON.parse(result.body).message);	
+			}
+
+			//Create notion example & add it to Data
+			else
+			{
+				let example = new NotionExample(result, OnExampleContentUpdated, OnExamplePropertiesUpdated);
+				examplesMap.set(id, example);
+				HideHomePage();
+				HideFunction();
+				ShowExample(example);
+			}
+		});
+	}
+}
+
+function LoadHomePage()
+{
+
 }
 
 function LoadLoadingShader()
@@ -149,7 +266,7 @@ function LoadLoadingShader()
 	.then(response => response.text())
 	.then(shader => 
 		{
-
+			loadingShader = shader;
 			let shaderData = new ShaderData(loading, "loading", shader,  null);
 			functionListRenderer.AddRenderer(shaderData);
 		}
@@ -179,7 +296,6 @@ function LoadNotionHome()
 
 		homepage.style.display = "flex";
 		introduction.style.display = "flex";
-		loading.style.display = "none";
 	});
 }
 
@@ -321,7 +437,6 @@ function ReadFunctionFile(filename, exampleID = 0)
 {	
 
 	homepage.style.display = "none";
-	loading.style.display = "flex"
 
 
 	//Record new current filename
@@ -338,7 +453,6 @@ function ReadFunctionFile(filename, exampleID = 0)
 	{
 		BuildHtmlFromPage(pageData, (updatedHtml) => {pageContent.innerHTML = updatedHtml;});
 		page.style.display = "flex";
-		loading.style.display = "none";
 	});
 }
 
@@ -591,56 +705,6 @@ function GoHome()
 function BuildExampleButton(example, group, id, selectedID = 0)
 {
 	return "<input type=\"radio\" id=\"button-" + id + "\" name=\"button-" + group + "\" " + (id == selectedID ? "checked" : "") + " onclick=\"OpenExample(" + id + ")\"><label for=\"button-" + id + "\">" + example.name + "</label></input>";
-}
-
-function BuildSlider(htmlID, dataExampleName, property)
-{
-	return "<div class=\"slider-container\">" + 
-	"<p>" + property.name + "</p>" + 
-	"<input type=\"range\" data-example-name=\"" + dataExampleName + "\" min=\"" + property.min + "\" max=\"" + property.max + "\" value=\"" + property.value + "\" step=\"" + 0.01 + "\" class=\"slider\"/ id=\"" + htmlID +"\">" +
-	"<p class=\"slider-value\"><span id=\"field-" + htmlID + "\">50</span></p></div>";
-}
-
-function BuildToggle(htmlID, dataExampleName, property)
-{
-	return "<div class=\"slider-container\">" + 
-	"<p>" + property.name + "</p>" + 
-	"<label class=\"toggle-container\">" +
-	"<input type=\"checkbox\" data-example-name=\"" + dataExampleName + "\"" + (property.value ? "checked" : "") + " id=\"" + htmlID +"\">" +
-	"<span class=\"checkmark\"></span>" +
-	"</label></div>";
-}
-
-function BuildColorPicker(htmlID, dataExampleName, property)
-{
-	return "<div class=\"slider-container\">" + 
-	"<p>" + property.name + "</p>" +
-	"<input type=\"color\" data-example-name=\"" + dataExampleName + "\" value=\"" + property.value + "\" class=\"color-picker\" id=\"" + htmlID + "\"/>" +
-	"</div>";
-}
-
-function HexToRGB(h) 
-{
-  let r = 0, g = 0, b = 0;
-
-  if (h.length == 4) {
-    r = "0x" + h[1] + h[1];
-    g = "0x" + h[2] + h[2];
-    b = "0x" + h[3] + h[3];
-    
-  } else if (h.length == 7) {
-    r = "0x" + h[1] + h[2];
-    g = "0x" + h[3] + h[4];
-    b = "0x" + h[5] + h[6];
-  }
-    
-  {
-    r = +(r / 255).toFixed(3);
-    g = +(g / 255).toFixed(3);
-    b = +(b / 255).toFixed(3);
-  }
-  
-  return [r, g, b];
 }
 
 function SearchFunction(search)
