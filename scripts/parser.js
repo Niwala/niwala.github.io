@@ -1,6 +1,23 @@
 Parse();
 SetupSearchHooks();
 
+//URL params
+var pageID;							//id
+var pageName;						//name (before '.')
+var exampleName;					//name (after '.')
+var hideBanner;					//hide-banner
+var hideContent;					//hide-content
+var largeLayout;					//large-layout
+var shaderPropertiesLayout;	//properties
+
+
+//Home page
+var homePageLoaded;
+
+
+//Html elements
+var bannerElement;
+
 //Templates
 var templateContainer;
 var templateExample;
@@ -38,7 +55,8 @@ var functionNameToData;
 
 function Parse()
 {
-	LoadTemplates();
+	LoadUrlParams();
+	LoadHtmlElements();
 	LoadLoadingShader();
 
 	LoadNotionHome();
@@ -57,9 +75,40 @@ function Parse()
 	});
 }
 
-function LoadTemplates()
+function LoadUrlParams()
+{
+	let params = GetURLParams();	
+	pageID = params.get("id");
+
+	if (pageID == null)
+	{
+		let fullName = params.get("name");
+		if (fullName != null && fullName.includes("."))
+		{
+			pageName = fullName.split('.')[0];
+			exampleName = fullName.split('.')[1];
+		}
+	}
+	else
+	{
+		pageName = null;
+		exampleName = null;
+	}
+
+	console.log(params.has("hide-banner"));
+
+	hideBanner = params.has("hide-banner");
+	hideContent = params.has("hide-content");
+	largeLayout = params.has("large-layout");
+	properties = params.has("properties");
+}
+
+function LoadHtmlElements()
 {
 	searchItems = new Map();
+
+	bannerElement = document.getElementById("banner");
+
 
 	introduction = document.getElementById("introduction");
 	functionList = document.getElementById("function-list");
@@ -84,6 +133,12 @@ function LoadTemplates()
 	page = document.getElementById("page")
 	pageContent = document.getElementById("page-content")
 	exampleButtonsContainer = document.getElementById("example-buttons-container");
+}
+
+//Changes the visibility of html elements based on variables in the URL Params group.
+function ApplyStateFromUrlParams()
+{
+	bannerElement.style.display = showBanner ? "flex" : "none";
 }
 
 function LoadLoadingShader()
@@ -205,22 +260,6 @@ function GetCleanURL()
 {
 	let url = document.URL;
 	return url.substring(0, url.indexOf('?'));
-}
-
-function GetURLParams() 
-{
-	var idx = document.URL.indexOf('?');
-	var params = new Array();
-	if (idx != -1) 
-	{
-		var pairs = document.URL.substring(idx+1, document.URL.length).split('&');
-		for (var i = 0; i < pairs.length; i++) 
-		{
-			nameVal = pairs[i].split('=');
-			params[nameVal[0]] = nameVal[1];
-	   }
-	}
-	return params;
 }
 
 function OpenFunctionFromURL()
