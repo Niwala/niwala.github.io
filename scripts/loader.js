@@ -14,6 +14,12 @@ var shaderOnly;					//shader-only
 
 //Home page
 var homePageLoaded;
+var homepage;
+
+//Page
+var pageElement;
+var pageContent;
+var exampleButtons;
 
 
 //Html elements
@@ -24,6 +30,7 @@ var bannerElement;
 var functionsMap;		//Map : key = notionID, value = NotionPage
 var nameToPageID;		//Map : key = pageName, value = notionID
 var examplesMap;		//Map : key = notionID, value = NotionExample
+var functionPreviews;//Map : key = pageName, value = FunctionPreview
 
 
 //Error message
@@ -66,14 +73,9 @@ var functionListCanvas;
 var functionListRenderer;
 var functionList;
 
-var homepage;
-var page;
-var pageContent;
+
 
 var bypassUrlAdaptation;
-
-var functionNameToData;
-
 
 
 function Parse()
@@ -82,7 +84,6 @@ function Parse()
 	LoadHtmlElements();
 	LoadLoadingShader();
 
-	ApplyStateFromUrlParams();
 	LoadAndShowCurrentPage();
 
 
@@ -110,10 +111,17 @@ function LoadUrlParams()
 	if (exampleID == null)
 	{
 		let fullName = params.get("name");
-		if (fullName != null && fullName.includes("."))
+		if (fullName != null)
 		{
-			pageName = fullName.split('.')[0];
-			exampleName = fullName.split('.')[1];
+			if (fullName.includes("."))
+			{
+				pageName = fullName.split('.')[0];
+				exampleName = fullName.split('.')[1];
+			}
+			else
+			{
+				pageName = fullName;
+			}
 		}
 	}
 	else
@@ -151,8 +159,21 @@ function LoadHtmlElements()
 	exampleCanvas = document.getElementById("example-canvas");
 	shaderOnlyCanvas = document.getElementById("shader-only-canvas");
 
+	//Search
+	searchBar = document.getElementById("search-bar");
 
+	//Homepage
+	homepage = document.getElementById("homepage");
 	introduction = document.getElementById("introduction");
+
+	//Page
+	pageElement = document.getElementById("page");
+	pageContent = document.getElementById("page-content");
+	exampleButtons = document.getElementById("example-buttons");
+
+
+
+
 	functionList = document.getElementById("function-list");
 	functionListCanvas = document.getElementById("function-list-canvas");
 	functionListRenderer = new ShaderRenderer(functionListCanvas);
@@ -160,25 +181,13 @@ function LoadHtmlElements()
 	introduction.style.display = "none";
 	functionList.innerHTML = "";
 
-
 	
 	//Template example
 	let example = document.getElementById("template-example");
 	templateExample = example.innerHTML;
 
-	//Homepage
-	homepage = document.getElementById("homepage");
 
-	//Page
-	page = document.getElementById("page");
-	pageContent = document.getElementById("page-content");
 	exampleButtonsContainer = document.getElementById("example-buttons-container");
-}
-
-//Changes the visibility of html elements based on variables in the URL Params group.
-function ApplyStateFromUrlParams()
-{
-	bannerElement.style.display = hideBanner ? "none" : "flex";
 }
 
 //Loads a page according to the variables in the URL params group.
@@ -195,15 +204,78 @@ function LoadAndShowCurrentPage()
 	//Load from name
 	else if (pageName != null)
 	{
-
+		LoadHomePage(() => LoadAndShowFunction(pageName));
 	}
 
 	//Load home page
 	else
 	{
-		LoadHomePage();
-		ShowHomePage();
+		LoadHomePage(() => ShowHomePage());
 	}
+}
+
+function LoadHomePage(callback)
+{
+	//Already loaded
+	if (homePageLoaded)
+	{
+		callback();
+		return;
+	}
+
+	//Fetch
+	FetchNotionDatabase((data) => 
+	{
+		homePageLoaded = true;
+		functionPreviews = new Map();
+
+		//Foreach entry in database
+		for(let i = 0; i < data.results.length; i++)
+		{
+			let preview = new FunctionPreview(data.results[i]);
+			functionPreviews.set(preview.name.toLowerCase(), preview);
+
+			//Add function to the homepage list if public
+			if (preview.public)
+			{
+				AddFunctionPreview(preview);
+			}
+		}
+
+		BindHomepageCanvases();
+		callback();
+	});
+}
+
+function LoadAndShowFunction(name)
+{
+	name = name.toLowerCase();
+
+	//Function is already loaded
+	if (nameToPageID.has(name))
+	{
+		let id = nameToPageID.get(name);
+		let notionPage = functionsMap.get(id);
+		ShowFunction(notionPage);
+		return;
+	}
+
+	//Function not found error
+	if (!functionPreviews.has(name))
+	{
+		ShowError("Function not found", `The function \"${name}\" does not exist in the database.`);
+		return;
+	}
+
+	//Load function
+	let preview = functionPreviews.get(name);
+	FetchNotionPage(preview.id, (pageData) => 
+	{
+		let notionPage = new NotionPage(pageData, OnPageUpdated);
+		nameToPageID.set(name, preview.id);
+		functionsMap.set(preview.id, notionPage);
+		ShowFunction(notionPage);
+	});
 }
 
 function LoadAndShowExampleWithDirectID(id)
@@ -221,8 +293,6 @@ function LoadAndShowExampleWithDirectID(id)
 		//Check if pageData already contains this page
 		if (examplesMap != null && examplesMap.has(id))
 		{
-			HideHomePage();
-			HideFunction();
 			ShowExample(examplesMap[id]);
 			return;
 		}
@@ -247,19 +317,12 @@ function LoadAndShowExampleWithDirectID(id)
 			//Create notion example & add it to Data
 			else
 			{
-				let example = new NotionExample(result, OnExampleContentUpdated, OnExamplePropertiesUpdated);
+				let example = new NotionExample("direct-example", result, OnExampleContentUpdated, OnExamplePropertiesUpdated);
 				examplesMap.set(id, example);
-				HideHomePage();
-				HideFunction();
 				ShowExample(example);
 			}
 		});
 	}
-}
-
-function LoadHomePage()
-{
-
 }
 
 function LoadLoadingShader()
@@ -281,13 +344,13 @@ function LoadNotionHome()
 {
 	FetchNotionDatabase((data) => 
 	{
-		functionNameToData = new Map();
+		functionPreviews = new Map();
 
 		//Foreach entry in database
 		for(let i = 0; i < data.results.length; i++)
 		{
 			let functionPreview = new FunctionPreview(data.results[i]);
-			functionNameToData.set(functionPreview.name, functionPreview);
+			functionPreviews.set(functionPreview.name, functionPreview);
 
 			//Add function to the homepage list if public
 			if (functionPreview.public)
@@ -305,10 +368,8 @@ function LoadNotionHome()
 
 function AddFunctionPreview(functionPreview)
 {
-				console.log("Add function preview");
-
 	//Add buttons for functions
-	let functionBox = "<button class='function-box' onclick=\"ReadFunctionFile('" + functionPreview.name + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
+	let functionBox = "<button class='function-box' onclick=\"GoToFunction('" + functionPreview.name + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
 	functionPreview.niceName + 
 	"</h3><p>" + 
 	functionPreview.description + 
@@ -325,9 +386,30 @@ function AddFunctionPreview(functionPreview)
 	searchItems.set((functionPreview.name + " " + functionPreview.tags).toLowerCase(), document.getElementById("search-item-" + functionPreview.name));
 }
 
+
+//Go functions ------------------------------------------------------------------------------------------------
+//The go functions mark a change of state, the url is adapted and the current page is displayed.
+
+function GoToFunction(name)
+{
+	pageName = name;
+	exampleName = null;
+	LoadAndShowCurrentPage();
+}
+
+function GoHome()
+{
+	pageName = null;
+	exampleName = null;
+	LoadAndShowCurrentPage();
+}
+
+//-------------------
+
+
 function BindHomepageCanvases()
 {
-	functionNameToData.forEach((value, key) =>
+	functionPreviews.forEach((value, key) =>
 	{
 		if (!value.public)
 			return;
@@ -446,13 +528,13 @@ function ReadFunctionFile(filename, exampleID = 0)
 	//Record new current filename
 	currentFileName = filename;
 
-	if (!functionNameToData.has(filename))
+	if (!functionPreviews.has(filename))
 	{
 		console.error("Function not found : " + filename);
 		return;
 	}
 
-	let functionID = functionNameToData.get(filename).id;
+	let functionID = functionPreviews.get(filename).id;
 	FetchNotionPage(functionID, (pageData) => 
 	{
 		BuildHtmlFromPage(pageData, (updatedHtml) => {pageContent.innerHTML = updatedHtml;});
@@ -470,181 +552,181 @@ function OpenPage(filename)
 	console.log("Open " + filename);
 }
 
-function OpenFunction(data, exampleID = 0)
-{
-	//Hide introduction
-	introduction.style.display = "none";
+// function OpenFunction(data, exampleID = 0)
+// {
+// 	//Hide introduction
+// 	introduction.style.display = "none";
 
-	//Record new current function
-	currentFunction = data;
+// 	//Record new current function
+// 	currentFunction = data;
 	
-	exampleList = new Array();
-	sliderList = new Array();
-	toggleList =  new Array();
-	colorFieldList = new Array();
+// 	exampleList = new Array();
+// 	sliderList = new Array();
+// 	toggleList =  new Array();
+// 	colorFieldList = new Array();
 	
-	let content = templateContainer;
-	content = content.replace(/template-title/g, data.name);
-	content = content.replace(/template-description/g, data.description);
+// 	let content = templateContainer;
+// 	content = content.replace(/template-title/g, data.name);
+// 	content = content.replace(/template-description/g, data.description);
 	
-	//Example buttons
-	let exampleButtons = "";
-	let exampleCount = data.examples == null ? 0 : data.examples.length;
-	for	(let i = 0; i < exampleCount; i++)
-	{
-		exampleButtons += BuildExampleButton(data.examples[i], data.name, i, exampleID);
-	}
-	content = content.replace(/template-buttons/g, exampleButtons);
-	exampleButtonsContainer.innerHTML = exampleButtons;
+// 	//Example buttons
+// 	let exampleButtons = "";
+// 	let exampleCount = data.examples == null ? 0 : data.examples.length;
+// 	for	(let i = 0; i < exampleCount; i++)
+// 	{
+// 		exampleButtons += BuildExampleButton(data.examples[i], data.name, i, exampleID);
+// 	}
+// 	content = content.replace(/template-buttons/g, exampleButtons);
+// 	exampleButtonsContainer.innerHTML = exampleButtons;
 	
-	//Add all examples
-	let examples = "";
-	for	(let i = 0; i < exampleCount; i++)
-	{
-		//Start example
-		let exampleContent = templateExample;
-		let example = data.examples[i];
-		let exampleHtmlID = data.name + "-" + example.name;
-		examples += "<div id=\"" + exampleHtmlID + "\" style='flex-wrap:wrap'>";
-		exampleList.push(exampleHtmlID);
+// 	//Add all examples
+// 	let examples = "";
+// 	for	(let i = 0; i < exampleCount; i++)
+// 	{
+// 		//Start example
+// 		let exampleContent = templateExample;
+// 		let example = data.examples[i];
+// 		let exampleHtmlID = data.name + "-" + example.name;
+// 		examples += "<div id=\"" + exampleHtmlID + "\" style='flex-wrap:wrap'>";
+// 		exampleList.push(exampleHtmlID);
 		
-		//Example > content
-		exampleContent = exampleContent.replace(/example-name/g, example.name);
-		exampleContent = exampleContent.replace(/example-description/g, example.description);
+// 		//Example > content
+// 		exampleContent = exampleContent.replace(/example-name/g, example.name);
+// 		exampleContent = exampleContent.replace(/example-description/g, example.description);
 		
 		
-		//Example > Properties
-		let propertyCount = example.properties == null ? 0 : example.properties.length;
-		let properties = "";
-		for	(let j = 0; j < propertyCount; j++)
-		{
-			let property = example.properties[j];
-			let propertyHtmlID = sliderHtmlID = data.name + "-" + example.name + "-" + property.name;
+// 		//Example > Properties
+// 		let propertyCount = example.properties == null ? 0 : example.properties.length;
+// 		let properties = "";
+// 		for	(let j = 0; j < propertyCount; j++)
+// 		{
+// 			let property = example.properties[j];
+// 			let propertyHtmlID = sliderHtmlID = data.name + "-" + example.name + "-" + property.name;
 			
-			switch (property.type)
-			{
-				case "range":
-					sliderList.push(propertyHtmlID);
-					properties += BuildSlider(propertyHtmlID, data.name + "-" + example.name, property);
-				break;
+// 			switch (property.type)
+// 			{
+// 				case "range":
+// 					sliderList.push(propertyHtmlID);
+// 					properties += BuildSlider(propertyHtmlID, data.name + "-" + example.name, property);
+// 				break;
 				
-				case "toggle":
-					toggleList.push(propertyHtmlID);
-					properties += BuildToggle(propertyHtmlID, data.name + "-" + example.name, property);
-				break;
+// 				case "toggle":
+// 					toggleList.push(propertyHtmlID);
+// 					properties += BuildToggle(propertyHtmlID, data.name + "-" + example.name, property);
+// 				break;
 				
-				case "color":
-					colorFieldList.push(propertyHtmlID);
-					properties += BuildColorPicker(propertyHtmlID, data.name + "-" + example.name, property);
-				break;
-			}
-		}
-		exampleContent = exampleContent.replace(/example-properties/g, properties);
+// 				case "color":
+// 					colorFieldList.push(propertyHtmlID);
+// 					properties += BuildColorPicker(propertyHtmlID, data.name + "-" + example.name, property);
+// 				break;
+// 			}
+// 		}
+// 		exampleContent = exampleContent.replace(/example-properties/g, properties);
 
 
-		//Example > Code
-		exampleContent = exampleContent.replace(/example-code/g, example.code);
+// 		//Example > Code
+// 		exampleContent = exampleContent.replace(/example-code/g, example.code);
 		
-		//Example > Canvas
-		exampleContent = exampleContent.replace(/example-canvas-id/g, data.name + "-" + example.name + "-canvas");
+// 		//Example > Canvas
+// 		exampleContent = exampleContent.replace(/example-canvas-id/g, data.name + "-" + example.name + "-canvas");
 		
-		//Close example
-		examples += exampleContent + "</div>";
-	}
-	content = content.replace(/template-examples/g, examples);
+// 		//Close example
+// 		examples += exampleContent + "</div>";
+// 	}
+// 	content = content.replace(/template-examples/g, examples);
 	
 	
-	//Apply new html & show content container
-	let contentContainer = document.getElementById("content-container");
-	contentContainer.style.display = 'flex';
-	contentContainer.innerHTML = content;
+// 	//Apply new html & show content container
+// 	let contentContainer = document.getElementById("content-container");
+// 	contentContainer.style.display = 'flex';
+// 	contentContainer.innerHTML = content;
 	
-	//Hide function list
-	let functionBox = document.getElementById("function-list");
-	functionBox.style.display = 'none';
+// 	//Hide function list
+// 	let functionBox = document.getElementById("function-list");
+// 	functionBox.style.display = 'none';
 	
-	//Update Prism
-	Prism.highlightAll();
-	
-	
-	//Open example
-	OpenExample(exampleID);
+// 	//Update Prism
+// 	Prism.highlightAll();
 	
 	
-	//Bind canvas
-	const renderers = new Map();
-	for (let i = 0; i < exampleCount; i++)
-	{
-		let exampleID = data.name + "-" + data.examples[i].name;
-		let canvasID = exampleID + "-canvas"
-		let canvas = document.getElementById(canvasID);
+// 	//Open example
+// 	OpenExample(exampleID);
+	
+	
+// 	//Bind canvas
+// 	const renderers = new Map();
+// 	for (let i = 0; i < exampleCount; i++)
+// 	{
+// 		let exampleID = data.name + "-" + data.examples[i].name;
+// 		let canvasID = exampleID + "-canvas"
+// 		let canvas = document.getElementById(canvasID);
 		
-		let shaderData = new ShaderData(canvas, exampleID, data.examples[i].shader,  data.examples[i].properties);
-		functionListRenderer.AddRenderer(shaderData);
-		renderers.set(data.name + "-" + data.examples[i].name, shaderData);
-	}
+// 		let shaderData = new ShaderData(canvas, exampleID, data.examples[i].shader,  data.examples[i].properties);
+// 		functionListRenderer.AddRenderer(shaderData);
+// 		renderers.set(data.name + "-" + data.examples[i].name, shaderData);
+// 	}
 	
-	//Bind properties > Sliders
-	for (let i = 0; i < sliderList.length; i++)
-	{
-		let slider = document.getElementById(sliderList[i]);
-		let field = document.getElementById("field-" + sliderList[i]);
+// 	//Bind properties > Sliders
+// 	for (let i = 0; i < sliderList.length; i++)
+// 	{
+// 		let slider = document.getElementById(sliderList[i]);
+// 		let field = document.getElementById("field-" + sliderList[i]);
 
-		let exampleName = slider.getAttribute("data-example-name");
-		let renderer = renderers.get(exampleName);
+// 		let exampleName = slider.getAttribute("data-example-name");
+// 		let renderer = renderers.get(exampleName);
 
-        renderer.SetFloatValue(slider.id, slider.value);
-        field.innerText = slider.value;
+//         renderer.SetFloatValue(slider.id, slider.value);
+//         field.innerText = slider.value;
 		
-		slider.oninput = function() 
-		{
-			let dn = this.getAttribute("data-example-name");
-			let r = renderers.get(dn);
+// 		slider.oninput = function() 
+// 		{
+// 			let dn = this.getAttribute("data-example-name");
+// 			let r = renderers.get(dn);
 			
-			r.SetFloatValue(this.id, this.value);
-			field.innerText = this.value;
-		};
-	}
+// 			r.SetFloatValue(this.id, this.value);
+// 			field.innerText = this.value;
+// 		};
+// 	}
 	
-	//Bind properties > Toggles
-	for (let i = 0; i < toggleList.length; i++)
-	{
-		let toggle = document.getElementById(toggleList[i]);
-		let exampleName = toggle.getAttribute("data-example-name");
-		let renderer = renderers.get(exampleName);
+// 	//Bind properties > Toggles
+// 	for (let i = 0; i < toggleList.length; i++)
+// 	{
+// 		let toggle = document.getElementById(toggleList[i]);
+// 		let exampleName = toggle.getAttribute("data-example-name");
+// 		let renderer = renderers.get(exampleName);
 
-        renderer.SetFloatValue(toggle.id, toggle.value ? 1.0 : 0.0);
+//         renderer.SetFloatValue(toggle.id, toggle.value ? 1.0 : 0.0);
 		
-		toggle.oninput = function() 
-		{
-			let dn = this.getAttribute("data-example-name");
-			let r = renderers.get(dn);
+// 		toggle.oninput = function() 
+// 		{
+// 			let dn = this.getAttribute("data-example-name");
+// 			let r = renderers.get(dn);
 			
-			r.SetFloatValue(this.id, toggle.checked ? 1.0 : 0.0);
-		};
-	}
+// 			r.SetFloatValue(this.id, toggle.checked ? 1.0 : 0.0);
+// 		};
+// 	}
 	
-	//Bind properties > Colors
-	for (let i = 0; i < colorFieldList.length; i++)
-	{
-		let colorField = document.getElementById(colorFieldList[i]);
+// 	//Bind properties > Colors
+// 	for (let i = 0; i < colorFieldList.length; i++)
+// 	{
+// 		let colorField = document.getElementById(colorFieldList[i]);
 
-		let exampleName = colorField.getAttribute("data-example-name");
-		let renderer = renderers.get(exampleName);
+// 		let exampleName = colorField.getAttribute("data-example-name");
+// 		let renderer = renderers.get(exampleName);
 
-		let color = HexToRGB(colorField.value);
-        renderer.SetColorValue(colorField.id, color);
+// 		let color = HexToRGB(colorField.value);
+//         renderer.SetColorValue(colorField.id, color);
 		
-		colorField.oninput = function() 
-		{
-			let dn = this.getAttribute("data-example-name");
-			let r = renderers.get(dn);
+// 		colorField.oninput = function() 
+// 		{
+// 			let dn = this.getAttribute("data-example-name");
+// 			let r = renderers.get(dn);
 			
-			let c = HexToRGB(this.value);
-			r.SetColorValue(this.id, c);
-		};
-	}
-}
+// 			let c = HexToRGB(this.value);
+// 			r.SetColorValue(this.id, c);
+// 		};
+// 	}
+// }
 
 function OpenExample(id)
 {	
@@ -699,11 +781,6 @@ function CloseFunction()
 	//Show function list
 	let functionBox = document.getElementById("function-list");
 	functionBox.style.display = 'flex';
-}
-
-function GoHome()
-{
-	CloseFunction();
 }
 
 function BuildExampleButton(example, group, id, selectedID = 0)

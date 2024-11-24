@@ -1,6 +1,7 @@
 
 var currentExample;
 var currentshaderData;
+var currentPage;
 
 
 //Show stuff ------------------------------------------------
@@ -15,22 +16,43 @@ function ShowError(title, message)
 
 function ShowHomePage()
 {
+	//Shows and hides elements
 	HideLoadingThrobber();
+	homepage.style.display = "flex";
+	introduction.style.display = "flex";
+	bannerElement.style.display = hideBanner ? "none" : "flex";
+	searchBar.style.display = "flex";
 }
 
 
 function ShowFunction(notionPage)
 {
+	//Shows and hides elements
 	HideLoadingThrobber();
+	pageElement.style.display = "flex";
+	bannerElement.style.display = hideBanner ? "none" : "flex";
+	searchBar.style.display = "flex";
+
+	//Set new value
+	currentPage = notionPage;
+
+	//Refresh content
+	OnPageUpdated(currentPage);
+	OnExampleContentUpdated(currentPage);
 }
 
 
 function ShowExample(example)
 {
+	//Shows and hides elements
 	HideLoadingThrobber();
-	currentExample = example;
 	exampleElement.style.display = shaderOnly ? "none" : "flex";
 	shaderOnlyCanvas.style.display = shaderOnly ? "flex" : "none";
+	bannerElement.style.display = hideBanner ? "none" : "flex";
+	searchBar.style.display = homePageLoaded ? "flex" : "none";
+
+	//Set new value
+	currentExample = example;
 
 	//Example content
 	OnExampleContentUpdated(example);
@@ -56,19 +78,21 @@ function ShowExample(example)
 //Hide stuff ------------------------------------------------
 function HideHomePage()
 {
-
+	homepage.style.display = "none";
+	introduction.style.display = "none";
 }
 
 
 function HideFunction()
 {
-
+	pageElement.style.display = "none";
 }
 
 
 function HideExample()
 {
-
+	exampleElement.style.display = "none";
+	shaderOnlyCanvas.style.display = "none";
 }
 
 
@@ -85,15 +109,63 @@ function HideLoadingThrobber()
 //Displays the loading throbber. Will be automatically hidden when page content changes.
 function StartLoadingAction()
 {
+	HideHomePage();
+	HideFunction();
+	HideExample();
 	loading.style.display = "flex";
 }
 
 
 //Called when a page is updated. (usually by deferred callback / async)
 //This updates the page only if it is still displayed to the user.
-function OnPageUpdated(id)
+function OnPageUpdated(notionPage)
 {
+	if (currentPage == null || currentPage.json.id != notionPage.json.id)
+		return;
+	currentPage = notionPage;
 
+	//Update page html
+	pageContent.innerHTML = notionPage.html;
+}
+
+function OnPageExamplesUdpated(notionPage)
+{
+	if (currentPage == null || currentPage.json.id != notionPage.json.id)
+		return;
+	currentPage = notionPage;
+
+	//Update button list
+	let btns = "";
+	for (let i = 0; i < notionPage.examples.length; i++) 
+	{
+		let example = notionPage.examples[i];
+		let name = example.name;
+
+		if (i == 0 && exampleName == null)
+		{
+			exampleName = name;
+			ShowExample(example);
+		}
+
+		let checked = name == exampleName;
+
+		btns += "<input type='radio' onchange='SelectExample(\"" + name + "\")' id='example-" + name + "' name='button-group' " + (checked ? "checked" : "") + "><label for='example-" + name + "'>" + name + "</label></input>"
+	}
+	exampleButtons.innerHTML = btns;
+	exampleButtons.style.display = (notionPage.examples.length > 1) ? "flex" : "none";
+}
+
+function SelectExample(name)
+{
+	for (let i = 0; i < currentPage.examples.length; i++) 
+	{
+		let example = currentPage.examples[i];
+		if (example.name == name)
+		{
+			exampleName = name;
+			ShowExample(example);
+		}
+	}
 }
 
 
@@ -118,8 +190,6 @@ function OnExampleContentUpdated(example)
 		exampleContentElement.innerHTML = "";
 		exampleContentElement.style.display = "none";
 	}
-
-	console.log(example.hasTable + "  " + example.fields.length);
 }
 
 

@@ -71,7 +71,7 @@ class NotionPage
          {
             this.html += this.children[i].html;
          }
-         this.onPageUpdate(this.html);
+         this.onPageUpdate(this);
     }
 
     ManageSpecialCase(type, container)
@@ -99,9 +99,11 @@ class NotionPage
          if (container.children[i].json.type != "child_page")
             continue;
 
-         const exampleJson = await FetchNotionBlock(container.children[i].json.id);
-         this.examples.push(new NotionExample(exampleJson));
+         let exampleTitle = container.children[i].json.child_page.title;
+         let exampleJson = await FetchNotionBlock(container.children[i].json.id);
+         this.examples.push(new NotionExample(exampleTitle, exampleJson, OnExampleContentUpdated, OnExamplePropertiesUpdated));
       }
+      OnPageExamplesUdpated(this);
    }
 }
 
@@ -154,11 +156,16 @@ class NotionBlock
          if (this.json.type == "column")
          {
             let size = 100.0 / this.parent.children.length;
-            this.prefix = "<div class='notion-column' style='width:" + size + "%'>"
+            let subclass = "";
+            if (this.parent.children[0] == this)
+               subclass += " first";
+            if (this.parent.children[this.parent.children.length - 1] == this)
+               subclass += " last";
+            this.prefix = "<div class='notion-column" + subclass + "' style='width:" + size + "%'>";
+
          }
          else if (this.json.type == "callout" && this.children?.length == 0 && (this.HtmlFromRichText(this.json.callout) == ""))
          {
-            console.log(this.children?.length + " | " + this.refreshCount);
             return "";
          }
 
@@ -221,11 +228,6 @@ class NotionBlock
          this.UpdateHtml();
       }
 
-      if (this.json.type == "callout")
-      {
-         console.log("Childs added " + this.children.length + "  " + htmlChanged);
-      }
-
       if (htmlChanged)
       {
          this.UpdateHtml();
@@ -239,7 +241,7 @@ class NotionBlock
          case "heading_1": this.prefix = "<div class='heading_1'>" + this.HtmlFromRichText(this.json.heading_1); this.postfix = "</div>"; break;
          case "heading_2": this.prefix = "<div class='heading_2'>" + this.HtmlFromRichText(this.json.heading_2); this.postfix = "</div>"; break;
          case "heading_3": this.prefix = "<div class='heading_3'>" + this.HtmlFromRichText(this.json.heading_3); this.postfix = "</div>"; break;
-         case "paragraph": this.prefix = "<p>" + this.HtmlFromRichText(this.json.paragraph); this.postfix = "</p>"; break;
+         case "paragraph": this.prefix = "<p class='text'>" + this.HtmlFromRichText(this.json.paragraph); this.postfix = "</p>"; break;
          case "code": this.prefix = "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code); this.postfix = "</code></pre></div>"; break;
          case "callout": this.prefix = "<div class='callout " + this.json.callout.color + "'><div class='callout-icon'>" + this.GetIcon(this.json.callout.icon) + "</div><div class='callout-content'>" + this.HtmlFromRichText(this.json.callout); this.postfix = "</div></div>"; break;
          case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item); this.postfix = "</li></ul>"; break;
@@ -346,8 +348,9 @@ class NotionBlock
 
 class NotionExample
 {
-   constructor(json, onContentUpdate, onPropertiesUpdate)
+   constructor(name, json, onContentUpdate, onPropertiesUpdate)
    {
+      this.name = name;
       this.json = json;
       this.code = "";
       this.hasTable = false;
@@ -394,7 +397,6 @@ class NotionExample
    async ReadPropertiesTable(tableID)
    {
       const tableJson = await FetchNotionBlock(tableID);
-      console.log(tableJson); 
 
       for (var i = 0; i < tableJson.results.length; i++) //Ignore the first row (labels)
       {

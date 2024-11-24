@@ -104,24 +104,19 @@
 
 			</div>
 
-
-
-
 	
 			<div id="content-container">
 			</div>
 		</div>
 	</article>
 	
+
+	<!-- Function Page-->
 	<article id="page" style="display:none">
 		<div class="centred">
 
 			<!-- Page Content -->
 			<div class="vertical" id="page-content"></div>
-
-
-			<!-- Example function -->
-			<div id="example-buttons-container"></div>
 
 		</div>
 	</article>
@@ -132,37 +127,36 @@
 
 		<div class="centred">
 
+			<!--Example Buttons-->
+			<div class="switch-field" id="example-buttons">
+				<input type="radio" id="button-2" name="button-group"><label for="button-2">Button</label></input>
+				<input type="radio" id="button-3" name="button-group"><label for="button-3">Button</label></input>
+				<input type="radio" id="button-4" name="button-group"><label for="button-4">Button</label></input>
+			</div>
+
+			<!--Example-->
+			<div class="example-box">						
+				<div class="horizontal" id="template-example">
+					<div class="vertical">
+
+						<!-- Example Properties -->
+						<div class="shader-properties" id="example-properties"></div>
+
+						<!-- Example Code -->
+						<div class="code-container">
+							<pre class="line-numbers" id="template-code"><code class="language-hlsl">example-code</code></pre>
+						</div>
+
+					</div>
+
+					<!-- Example Canvas -->
+					<canvas id="example-canvas" width="200" height="200" class="shader-preview"></canvas>
+				</div>
+			</div>
+
 			<!-- Example Content -->
 			<div class="vertical" id="example-content"></div>
 
-			<div id="template">
-				<div class="function-box">
-		
-					<div class="vertical">
-						
-						<div class="switch-field" id="template-switch">
-							<!-- <input type="radio" id="button-id" name="button-group"><label for="button-id">Button</label></input> -->
-						</div>
-					
-						<div class="horizontal" id="template-example">
-							<div class="vertical">
-
-								<!-- Example Properties -->
-								<div class="shader-properties" id="example-properties"></div>
-
-								<!-- Example Code -->
-								<div class="code-container">
-									<pre class="line-numbers" id="template-code"><code class="language-hlsl">example-code</code></pre>
-								</div>
-
-							</div>
-
-							<!-- Example Canvas -->
-							<canvas id="example-canvas" width="200" height="200" class="shader-preview"></canvas>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</article>
 

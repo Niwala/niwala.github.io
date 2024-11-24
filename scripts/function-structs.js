@@ -231,12 +231,11 @@ class ColorField
 	{
 		this.guid = exampleID + "-" + this.name;
 		currentExampleFields.set(this.guid, this);
-		console.log(this.defaultValue);
 
 		return "<div class='shader-property'>" + 
 			"<p style='user-select: none; cursor: default;'>" + this.name + "</p>" +
 				"<div class=color-field>" +
-					"<input type='text' style='background-color:" + this.hexColor + ";' value='" + this.defaultValue + "' class='coloris test' data-coloris onmousedown='ConfigureColorPicker(this)' oninput=\"SetColorValue(this)\" id=\"" + this.guid + "\">" +
+					"<input type='text' style='background-color:" + this.hexColor + ";' value='" + this.hexColor + "' class='coloris test' data-coloris onmousedown='ConfigureColorPicker(this)' oninput=\"SetColorValue(this)\" id=\"" + this.guid + "\">" +
 				"</div>" +
 			"</div>";
 	}
