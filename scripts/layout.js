@@ -29,7 +29,8 @@ function ShowExample(example)
 {
 	HideLoadingThrobber();
 	currentExample = example;
-	exampleElement.style.display = "flex";
+	exampleElement.style.display = shaderOnly ? "none" : "flex";
+	shaderOnlyCanvas.style.display = shaderOnly ? "flex" : "none";
 
 	//Example content
 	OnExampleContentUpdated(example);
@@ -45,7 +46,8 @@ function ShowExample(example)
 	else
 	{
 		//Apply shader
-		currentshaderData = new ShaderData(exampleCanvas, example.json.request_id, example.code, null);
+		let canvas = shaderOnly ? shaderOnlyCanvas : exampleCanvas;
+		currentshaderData = new ShaderData(canvas, example.json.request_id, example.code, null);
 		functionListRenderer.AddRenderer(currentshaderData);
 	}
 }

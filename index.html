@@ -23,6 +23,7 @@
 
 		<link rel="stylesheet" href="./styles/webgl.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/styles.css" type="text/css"/>
+		<link rel="stylesheet" href="./styles/field-styles.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/prism.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/switch-buttons.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/notion-styles.css" type="text/css"/>
@@ -140,7 +141,6 @@
 					<div class="vertical">
 						
 						<div class="switch-field" id="template-switch">
-							template-buttons
 							<!-- <input type="radio" id="button-id" name="button-group"><label for="button-id">Button</label></input> -->
 						</div>
 					
@@ -154,8 +154,7 @@
 								<div class="code-container">
 									<pre class="line-numbers" id="template-code"><code class="language-hlsl">example-code</code></pre>
 								</div>
-								
-								<div id="variant-content"></div>
+
 							</div>
 
 							<!-- Example Canvas -->
@@ -166,6 +165,10 @@
 			</div>
 		</div>
 	</article>
+
+
+	<!-- Shader only canvas -->
+	<canvas id="shader-only-canvas" width="512" height="512" class="shader-preview"></canvas>
 
 
   </body>

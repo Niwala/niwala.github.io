@@ -9,6 +9,7 @@ var hideBanner;					//hide-banner
 var hideContent;					//hide-content
 var largeLayout;					//large-layout
 var shaderPropertiesLayout;	//properties
+var shaderOnly;					//shader-only
 
 
 //Home page
@@ -35,6 +36,7 @@ var exampleElement;
 var exampleContentElement;
 var exampleProperties;
 var exampleCanvas;
+var shaderOnlyCanvas;
 
 //Loading throbber
 var loading;
@@ -120,10 +122,11 @@ function LoadUrlParams()
 		exampleName = null;
 	}
 
-	hideBanner = params.has("hide-banner");
-	hideContent = params.has("hide-content");
-	largeLayout = params.has("large-layout");
-	properties = params.get("properties");
+	shaderOnly = params.has("shader-only");
+	hideBanner = params.has("hide-banner") || shaderOnly;
+	hideContent = params.has("hide-content") || shaderOnly;
+	largeLayout = params.has("large-layout") || shaderOnly;
+	properties = shaderOnly ? "none" : params.get("properties");
 }
 
 function LoadHtmlElements()
@@ -145,7 +148,8 @@ function LoadHtmlElements()
 	exampleElement = document.getElementById("example");
 	exampleContentElement = document.getElementById("example-content");
 	exampleProperties = document.getElementById("example-properties");
-	exampleCanvas =  document.getElementById("example-canvas");
+	exampleCanvas = document.getElementById("example-canvas");
+	shaderOnlyCanvas = document.getElementById("shader-only-canvas");
 
 
 	introduction = document.getElementById("introduction");
