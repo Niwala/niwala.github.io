@@ -55,7 +55,7 @@ class ToggleField
 		this.guid = exampleID + "-" + this.name;
 		currentExampleFields.set(this.guid, this);
 
-		return "<div class=\"slider-container\" id='" + this.guid + "'>" + 
+		return "<div class='shader-property' id='" + this.guid + "'>" + 
 			"<p style='user-select: none; cursor: pointer;' onmousedown='SwitchSetToggle(this)'>" + this.name + "</p>" + 
 			"<label class=\"toggle-container\">" +
 			"<input type=\"checkbox\" onchange=\"SetToggleValue(this)\"" + (this.value ? "checked" : "") + " id='field-" + this.guid + "'>" +
@@ -111,7 +111,7 @@ class FloatField
 		this.guid = exampleID + "-" + this.name;
 		currentExampleFields.set(this.guid, this);
 
-		return "<div class='slider-container' id='" + this.guid + "'>" + 
+		return "<div class='shader-property' id='" + this.guid + "'>" + 
 			"<p name='" + this.guid + "' style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'FloatField')\">" + this.name + "</p>" + 
 			"<input type='number' class='float-field' oninput='SetFloatValue(this)' value='" + this.value + "' id='field-" + this.guid + "'/>" +
 			"</div>";
@@ -165,7 +165,7 @@ class SliderField
 		this.guid = exampleID + "-" + this.name;
 		currentExampleFields.set(this.guid, this);
 
-		return "<div class='slider-container' id='" + this.guid +"'>" + 
+		return "<div class='shader-property' id='" + this.guid +"'>" + 
 			"<p style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'SliderField')\">" + this.name + "</p>" + 
 			"<input type=\"range\" oninput=\"SetSliderValue(this)\" min=\"" + this.min + "\" max=\"" + this.max + "\" value=\"" + this.value + "\" step=\"" + 0.01 + "\" class='slider' id='slider-" + this.guid +"'>" +
 			"<p class=\"slider-value\"><span id='field-" + exampleID + "-" + this.name + "'>" + this.value + "</span></p></div>";
@@ -233,7 +233,7 @@ class ColorField
 		currentExampleFields.set(this.guid, this);
 		console.log(this.defaultValue);
 
-		return "<div class=\"slider-container\">" + 
+		return "<div class='shader-property'>" + 
 			"<p style='user-select: none; cursor: default;'>" + this.name + "</p>" +
 				"<div class=color-field>" +
 					"<input type='text' style='background-color:" + this.hexColor + ";' value='" + this.defaultValue + "' class='coloris test' data-coloris onmousedown='ConfigureColorPicker(this)' oninput=\"SetColorValue(this)\" id=\"" + this.guid + "\">" +

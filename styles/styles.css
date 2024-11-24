@@ -175,6 +175,12 @@ pre
 	display: none;
 }
 
+.shader-properties
+{
+	flex-direction: column;
+	margin-right: 8px;
+}
+
 .function-box
 {
 	display: flex;
