@@ -44,6 +44,7 @@ var exampleContentElement;
 var exampleProperties;
 var exampleCanvas;
 var shaderOnlyCanvas;
+var exampleBox;
 
 //Loading throbber
 var loading;
@@ -159,6 +160,7 @@ function LoadHtmlElements()
 	exampleProperties = document.getElementById("example-properties");
 	exampleCanvas = document.getElementById("example-canvas");
 	shaderOnlyCanvas = document.getElementById("shader-only-canvas");
+	exampleBox = document.getElementById("example-box");
 
 	//Search
 	searchBar = document.getElementById("search-bar");

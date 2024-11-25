@@ -211,6 +211,30 @@ img
 	background-color: #1b2330;
 }
 
+.example-box-large
+{
+	display: flex;
+	flex-direction: row;
+	padding: 10px 10px 10px 15px;
+	margin: 0;
+	position: absolute;
+	left : 0;
+	right : 0;
+	top : 0;
+	bottom : 0;
+	flex-grow: 1;
+
+	border-style: none;
+
+	border-top-left-radius: 0px;
+	border-top-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	
+	color: white;
+	background-color: #962144;
+}
+
 .function-box
 {
 	display: flex;

@@ -14,6 +14,18 @@ function ApplyUrlParams()
 
 	let multipleExample = currentPage != null && currentPage.examples?.length > 0;
 	exampleButtons.style.display = (!hideContent && multipleExample) ? "flex" : "none";
+
+	//Example box
+	if (largeLayout && exampleBox.classList.contains('example-box'))
+	{
+		exampleBox.classList.remove('example-box');
+		exampleBox.classList.add('example-box-large');
+	}
+	else if (!largeLayout && exampleBox.classList.contains('example-box-large'))
+	{
+		exampleBox.classList.remove('example-box-large');
+		exampleBox.classList.add('example-box');
+	}
 }
 
 function ShowError(title, message)
