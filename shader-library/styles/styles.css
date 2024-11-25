@@ -232,7 +232,7 @@ img
 	border-bottom-right-radius: 5px;
 	
 	color: white;
-	background-color: #962144;
+	background-color: transparent;
 }
 
 .function-box
@@ -257,7 +257,6 @@ img
 	width: 200px;
 	height: 200px;
 	border-radius: 5px;
-	align-self: end;
 }
 
 .shader-editor-preview
