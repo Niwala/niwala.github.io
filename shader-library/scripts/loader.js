@@ -235,7 +235,7 @@ function LoadHomePage(callback)
 			let preview = new FunctionPreview(data.results[i]);
 			functionPreviews.set(preview.name.toLowerCase(), preview);
 
-			//Add function to the homepage list if public
+			//Add function to the homepage and search list if public
 			if (preview.public)
 			{
 				AddFunctionPreview(preview);
@@ -329,7 +329,7 @@ function LoadLoadingShader()
 {
 	loading = document.getElementById("loading");
 
-	fetch('https://niwala.github.io/shaders/loading.glsl')
+	fetch('https://niwala.github.io/shader-library/shaders/loading.glsl')
 	.then(response => response.text())
 	.then(shader => 
 		{
@@ -375,7 +375,7 @@ function AddFunctionPreview(functionPreview)
 	functionPreview.description + 
 	"</p></div><canvas id='shader-preview-" + functionPreview.name + "' width='150' height='150' class='shader-index-preview'></canvas></div></button>";
 	
-	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functionPreview.name + "\" onclick=\"SelectSearchItem('" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
+	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functionPreview.name + "\" onclick=\"GoToFunction('" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
 
 
 	functionList.innerHTML += functionBox;
@@ -392,6 +392,7 @@ function AddFunctionPreview(functionPreview)
 
 function GoToFunction(name)
 {
+	name = name.toLowerCase();
 	pageName = name;
 	exampleName = null;
 	LoadAndShowCurrentPage();
@@ -509,8 +510,9 @@ function SelectFirstSearchItem()
 
 function SelectSearchItem(filename)
 {
+	filename = filename.toLowerCase();
 	StopSearch();
-	ReadFunctionFile(filename);
+	GoToFunction(filename);
 }
 
 function StopSearch()

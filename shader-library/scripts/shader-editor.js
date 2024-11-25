@@ -7,6 +7,7 @@ var shaderCanvas;
 var renderer;
 
 Main();
+FormatTextArea();
 
 function Main()
 {
@@ -32,4 +33,26 @@ function CompileShader()
 	
 
 	//Prism.highlightAll();
+}
+
+function FormatTextArea()
+{
+    shaderTextArea.addEventListener('keydown', function (e) 
+	{
+        if (e.key === 'Tab') 
+		{
+            e.preventDefault(); // Empêche le changement de focus
+
+            // Insère une tabulation à l'endroit du curseur
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+
+            // Ajoute une tabulation
+            const tab = "    ";
+            this.value = this.value.substring(0, start) + tab + this.value.substring(end);
+
+            // Replace le curseur après la tabulation
+            this.selectionStart = this.selectionEnd = start + tab.length;
+        }
+    });
 }
