@@ -11,6 +11,9 @@ function ApplyUrlParams()
 	shaderOnlyCanvas.style.display = shaderOnly ? "flex" : "none";
 	bannerElement.style.display = hideBanner ? "none" : "flex";
 	searchBar.style.display = homePageLoaded ? "flex" : "none";
+
+	let multipleExample = currentPage != null && currentPage.examples?.length > 0;
+	exampleButtons.style.display = (!hideContent && multipleExample) ? "flex" : "none";
 }
 
 function ShowError(title, message)
