@@ -5,6 +5,14 @@ var currentPage;
 
 
 //Show stuff ------------------------------------------------
+function ApplyUrlParams()
+{
+	exampleElement.style.display = shaderOnly ? "none" : "flex";
+	shaderOnlyCanvas.style.display = shaderOnly ? "flex" : "none";
+	bannerElement.style.display = hideBanner ? "none" : "flex";
+	searchBar.style.display = homePageLoaded ? "flex" : "none";
+}
+
 function ShowError(title, message)
 {
 	HideLoadingThrobber();

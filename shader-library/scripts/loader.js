@@ -82,6 +82,7 @@ function Parse()
 {
 	LoadUrlParams();
 	LoadHtmlElements();
+	ApplyUrlParams();
 	LoadLoadingShader();
 
 	LoadAndShowCurrentPage();
