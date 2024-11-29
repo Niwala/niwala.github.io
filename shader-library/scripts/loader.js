@@ -232,6 +232,13 @@ function LoadHomePage(callback)
 		homePageLoaded = true;
 		functionPreviews = new Map();
 
+		if (data.result == null)
+		{
+			console.log(data);
+			ShowError("Unable to find the database", "The function page cannot be found or accessed.");
+			return;
+		}
+
 		//Foreach entry in database
 		for(let i = 0; i < data.results.length; i++)
 		{

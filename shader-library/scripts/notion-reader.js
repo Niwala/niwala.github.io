@@ -8,7 +8,7 @@ function FetchNotion(command, callback)
 
 function FetchNotionDatabase(callback) 
 {
-	FetchNotion("database/get-data/12b5d96b946d8060b5e9d08b0167fce1", (error, data) => 
+	FetchNotion("database/get-data/d30b9ef052be4d92b0fb8b8c183a0be8", (error, data) => 
 	{
 		if (error)
 			console.error(error);

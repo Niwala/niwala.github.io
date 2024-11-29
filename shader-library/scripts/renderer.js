@@ -162,6 +162,20 @@ class ShaderData
 				gl_FragColor = Execute(vTextureCoord);
 			}
 			`;
+
+		this.errorFragmentShader = 
+			`
+			precision highp float;
+			varying vec2 vTextureCoord;
+
+			uniform sampler2D uSampler;
+			uniform float time;
+
+			void main(void) 
+			{
+				gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+			}
+			`;
 	}
 
 	SetFloatValue(name, value)
@@ -204,7 +218,7 @@ class ShaderData
 
 	Load(gl)
 	{
-		this.shaderProgram = this.initShaderProgram(gl, this.vertexShader, this.fragmentShader);
+		this.shaderProgram = this.initShaderProgram(gl, this.vertexShader, this.fragmentShader, this.errorFragmentShader);
 
 		if (!this.compiled)
 			return;
@@ -238,7 +252,7 @@ class ShaderData
 	//
 	// Initialize a shader program, so WebGL knows how to draw our data
 	//
-	initShaderProgram(gl, vsSource, fsSource) 
+	initShaderProgram(gl, vsSource, fsSource, fsErrorSource) 
 	{
 		this.vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
 		this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
@@ -246,23 +260,41 @@ class ShaderData
 		// Create the shader program
 		this.shaderProgram = gl.createProgram();
 
-		try
+		//try
 		{
 			gl.attachShader(this.shaderProgram, this.vertexShader);
-			gl.attachShader(this.shaderProgram, this.fragmentShader);
+
+			try
+			{
+				gl.attachShader(this.shaderProgram, this.fragmentShader);
+			}
+			catch
+			{
+				this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
+				gl.attachShader(this.shaderProgram, this.fragmentShader);
+			}
 			gl.linkProgram(this.shaderProgram);
 
 			// If creating the shader program failed, alert
-			if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
+			if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) 
+			{
 				console.error('Error on shader ' + this.shaderGuid + "\n" + gl.getProgramInfoLog(this.shaderProgram) + "\n\n" + this.shaderFragContent);
-				return null;
+
+				this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
+				gl.attachShader(this.shaderProgram, this.fragmentShader);
+				gl.linkProgram(this.shaderProgram);
+				return this.shaderProgram;
 			}
 		}
-		catch (e)
-		{
-			console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
-			return null;
-		}
+		// catch (e)
+		// {
+		// 	console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
+
+		// 	this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
+		// 	gl.attachShader(this.shaderProgram, this.fragmentShader);
+		// 	gl.linkProgram(this.shaderProgram);
+		// 	return this.shaderProgram;
+		// }
 
 		this.compiled = true;
 		return this.shaderProgram;
