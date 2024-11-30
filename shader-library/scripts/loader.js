@@ -232,7 +232,7 @@ function LoadHomePage(callback)
 		homePageLoaded = true;
 		functionPreviews = new Map();
 
-		if (data.result == null)
+		if (data.results == null)
 		{
 			console.log(data);
 			ShowError("Unable to find the database", "The function page cannot be found or accessed.");
