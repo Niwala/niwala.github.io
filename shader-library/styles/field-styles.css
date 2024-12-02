@@ -50,7 +50,7 @@
 	
 	-webkit-appearance: none;
 	border-radius: 5px;  
-	background: #010409;
+	background: #090909;
 	outline: none;
 	opacity: 0.7;
 	-webkit-transition: .2s;
@@ -72,14 +72,14 @@
 	border-radius: 5px;
 	font-size: 15px;
 	color: rgb(255, 255, 255, 0.8);
-	background: rgb(13, 17, 23);
+	background: #090909;
 }
 
 .slider-value p
 {	
 	width: 50px;
 	height: 15px;
-	background: #010409;
+	background: #090909;
 }
 
 .slider::-webkit-slider-thumb 
@@ -89,7 +89,7 @@
 	width: 25px;
 	height: 25px;
 	border-radius: 50%; 
-	background: #475a7b;
+	background: #727272;
 	cursor: pointer;
 }
 
@@ -98,7 +98,7 @@
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
-	background: #475a7b;
+	background: #727272;
 	cursor: pointer;
 }
 
@@ -166,7 +166,7 @@ input[type="number"]
 	border-radius: 5px;
 	font-size: 15px;
 	color: rgb(255, 255, 255, 0.8);
-	background: rgb(13, 17, 23);
+	background: #090909;
 	user-select: none;
 }
 
@@ -188,7 +188,7 @@ input[type="number"]
 	border-radius: 5px;
 	font-size: 15px;
 	color: rgb(255, 255, 255, 0.8);
-	background: rgb(13, 17, 23);
+	background: #090909;
 }
 
 
@@ -234,20 +234,20 @@ input[type="number"]
   left: 0;
   height: 25px;
   width: 25px;
-  background-color: #0d1117;
+  background-color: #171717;
   border-radius: 5px;
 }
 
 /* On mouse-over, add a grey background color */
 .toggle-container:hover input ~ .checkmark 
 {
-  background-color: #0d1117;
+  background-color: #171717;
 }
 
 /* When the checkbox is checked, add a blue background */
 .toggle-container input:checked ~ .checkmark 
 {
-  background-color: #0d1117;
+  background-color: #171717;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */

@@ -23,7 +23,7 @@
 
 .switch-field label 
 {
-	background-color: #36445c;
+	background-color: #161616;
 	color: rgba(255, 255, 255, 1.0);
 	font-size: 14px;
 	line-height: 1;
@@ -42,7 +42,7 @@
 
 .switch-field input:checked + label 
 {
-	background-color: #1b2330;
+	background-color: #1f1f1f;
 	color: rgba(255, 255, 255, 1.0);
 	box-shadow: none;
 }

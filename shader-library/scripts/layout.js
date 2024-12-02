@@ -20,6 +20,11 @@ function ApplyUrlParams()
 		exampleBox.style.borderTopLeftRadius = "5px";
 	}
 
+	if (hideBanner)
+	{
+		loading.style.marginTop = 0;
+	}
+
 	let multipleExample = currentPage != null && currentPage.examples?.length > 0;
 	exampleButtons.style.display = (!hideContent && multipleExample) ? "flex" : "none";
 

@@ -1,7 +1,7 @@
 body
 {
 	margin: 0;
-	background-color: #0d1117;
+	background-color: #191919;
 	font-family: verdana;
 	color: white;
 	
@@ -133,9 +133,9 @@ img
 	align-items: center;
 	
 	min-height: 120px;
-	background-color: #010409;
+	background-color: #151515;
 	
-	border-bottom-color: #3d444d;
+	border-bottom-color: #494949;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 }
@@ -208,7 +208,7 @@ img
 	border-bottom-right-radius: 5px;
 	
 	color: white;
-	background-color: #1b2330;
+	background-color: #1f1f1f;
 }
 
 .example-box-large
@@ -249,7 +249,7 @@ img
 	border-radius: 5px;
 	
 	color: white;
-	background-color: #1b2330;
+	background-color: #313131;
 }
 
 .shader-preview
@@ -271,14 +271,14 @@ img
 	
 	height: 300px;
 	width: 100%;
-	background-color: #0d1117;
+	background-color: #2a2a2a;
 	font-size: 0.8rem;
 	padding: 10px;
 	
 	border-width: 1px;
 	border-style: solid;
 	border-radius: 5px;
-	border-color: #3d444d;
+	border-color: #0a0a0a;
 }
 
 #search-form
@@ -302,18 +302,18 @@ img
 	margin-top: 0px;
 	height: 25px;
 	width: 300px;
-	background-color: #0d1117;
+	background-color: #2a2a2a;
 	font-size: 0.8rem;
 	
 	border-width: 1px;
 	border-style: solid;
 	border-radius: 5px;
-	border-color: #3d444d;
+	border-color: #0a0a0a;
 }
 
 .search-bar:checked
 {
-		border-color: #3d444d;
+	border-color: #464646;
 }
 
 .search-bar-list
@@ -350,7 +350,7 @@ img
 	flex-grow: 1;
 	width: 100%;
 	
-	background-color: #222d3d;
+	background-color: #414141;
 	padding: 6px;
 	padding-left: 12px;
 	
@@ -390,7 +390,7 @@ button.function-box
 button.function-box:hover
 {
 	cursor: pointer;
-	background-color: #2e3e56;
+	background-color: #5a5a5a;
 }
 
 #function-list

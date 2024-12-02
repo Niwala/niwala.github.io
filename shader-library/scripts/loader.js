@@ -82,9 +82,9 @@ var bypassUrlAdaptation;
 function Parse()
 {
 	LoadUrlParams();
+	LoadLoadingShader();
 	LoadHtmlElements();
 	ApplyUrlParams();
-	LoadLoadingShader();
 
 	LoadAndShowCurrentPage();
 
