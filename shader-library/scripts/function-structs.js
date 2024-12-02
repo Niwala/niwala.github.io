@@ -185,7 +185,7 @@ function SetSliderValue(slider)
 {
 	let guid = slider.parentElement.id;
 	let sliderData = currentExampleFields.get(guid);
-	let value = (slider.value - sliderData.min) * (sliderData.max - sliderData.min);
+	let value = parseFloat(slider.value);
 
 	//Update text
 	let label = document.getElementById("field-" + guid);
