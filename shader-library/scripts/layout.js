@@ -12,6 +12,11 @@ function ApplyUrlParams()
 	bannerElement.style.display = hideBanner ? "none" : "flex";
 	searchBar.style.display = homePageLoaded ? "flex" : "none";
 
+	if (hideContent)
+	{
+		document.body.style.backgroundColor = "transparent";
+	}
+
 	let multipleExample = currentPage != null && currentPage.examples?.length > 0;
 	exampleButtons.style.display = (!hideContent && multipleExample) ? "flex" : "none";
 
