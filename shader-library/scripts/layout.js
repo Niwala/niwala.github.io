@@ -15,6 +15,9 @@ function ApplyUrlParams()
 	if (hideContent)
 	{
 		document.body.style.backgroundColor = "transparent";
+		exampleElement.style.padding = "0";
+		exampleBox.parentElement.style.padding = "0";
+		exampleBox.style.borderTopLeftRadius = "5px";
 	}
 
 	let multipleExample = currentPage != null && currentPage.examples?.length > 0;
