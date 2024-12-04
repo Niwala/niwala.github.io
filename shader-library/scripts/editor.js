@@ -52,8 +52,10 @@ function ConvertToUrl()
 	if (largeLayout)
 		params += "&large-layout";
 
+	let rootLastIndex = url.lastIndexOf('/');
+	url = url.substring(0, rootLastIndex);
 
-	url = url.replace("editor.html", "?embed=" + packedData.CompressToURL() + params);
+	url += "?embed=" + packedData.CompressToURL() + params;
 	SetClipboard(url);
 }
 
@@ -94,6 +96,13 @@ function CompileShader()
 async function AsyncHighlight()
 {
 	Prism.highlightElement(codeElement, false);
+}
+
+//PRoperties controls ---------------------
+
+function AddToggle()
+{
+
 }
 
 //URL params ------------------------------
