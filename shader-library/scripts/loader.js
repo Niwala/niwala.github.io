@@ -88,9 +88,6 @@ function Parse()
 
 	LoadAndShowCurrentPage();
 
-	const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-	console.log("Dark mode : " + isDarkMode);
-
 	//LoadNotionHome();
 
 	//ReadFunctionsIndex();

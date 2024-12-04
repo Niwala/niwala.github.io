@@ -5,31 +5,32 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-		<meta property="og:title" content="Shader functions" />
+		<meta property="og:title" content="Shader Editor" />
 		<meta property="og:description" content="Ce site a pour objectif de référencer des fonctions basiques utilisables dans les shaders" />
 		<meta property="og:image" content="https://niwala.github.io/media/banner.jpg" />
 		<meta property="og:url" content="https://niwala.github.io/" />
 		
 		<meta name="twitter:card" content="summary_large_image">
-		<meta name="twitter:title" content="Shader functions">
+		<meta name="twitter:title" content="Shader Editor">
 		<meta name="twitter:description" content="Ce site a pour objectif de référencer des fonctions basiques utilisables dans les shaders">
 		<meta name="twitter:image" content="https://niwala.github.io/media/banner.jpg">
 		
-		<title>Shader Functions</title>
+		<title>Shader Editor</title>
 		<link rel="icon" href="./favicon.ico" type="image/x-icon">
 		
-		<link rel="stylesheet" href="./styles/webgl.css" type="text/css"/>
+		<link rel="stylesheet" href="./styles/editor.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/styles.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/prism.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/switch-buttons.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/notion-styles.css" type="text/css"/>
 		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+		
+		<script src="./scripts/prism.js" defer></script>
 		<script src="./scripts/notion-reader.js"></script>
-
 		<script src="./scripts/gl-matrix-min.js" defer></script>
 		<script src="./scripts/renderer.js" defer></script>
-		<script src="./scripts/shader-editor.js" defer></script>
-		<script src="./scripts/prism.js" defer></script>
+		<script src="./scripts/editor.js" defer></script>
 	
 	</head>
 
@@ -62,15 +63,30 @@
 		<div class="centred">
 			<div class="vertical">
 			
-				<textarea type="text" class="fragment-field" id="shader-text-area" style="font-size:large;" onkeyup="CompileShader()">
+			<div id="scroll-content">
+				<div id="scroll-area">
+					
+					<textarea id="code-editor-area" class="format-code" type="text" spellcheck="false" onkeyup="CompileShader()">
 //Fonction de code GLSL simple
 //Keywords : time, PI, TAU
 
 vec4 Execute(vec2 uv)
 {
-    return vec4(uv, sin(time) * 0.5 + 0.5, 1.0);
+	return vec4(uv, sin(time) * 0.5 + 0.5, 1.0);
 }</textArea>
-				<canvas id="shader-canvas" width="400" height="400" class="shader-editor-preview" style="align-self: start;"></canvas>
+
+					<pre class="line-numbers" id="code-editor-overlay format-code"><code class="language-hlsl" id="code">example-code</code></pre>
+					
+				</div>
+			</div>
+
+			<button onclick="ConvertToUrl()">Convert to URL</button>
+
+			<!-- Properties -->
+			<div class="shader-properties" id="example-properties"></div>
+
+			<!-- Preview -->
+			<canvas id="shader-canvas" width="400" height="400" class="shader-editor-preview" style="align-self: start;"></canvas>
 		
 			</div>
 		</div>
