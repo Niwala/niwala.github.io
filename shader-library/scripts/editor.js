@@ -6,6 +6,10 @@ var overlayCanvas;
 var shaderCanvas;
 var renderer;
 
+//URL params
+var shaderOnly = false;
+var largeLayout = false;
+
 window.Prism = window.Prism || {};
 Prism.manual = true;
 
@@ -36,16 +40,21 @@ function Main()
 
 function ConvertToUrl()
 {
+	let packedData = new PackedData();
+	packedData.shader = codeEditorArea.value;
+
 	let url = window.location.href;
 	let params = "&hide-banner";
-	url = url.replace("editor.html", "?shader=" + CompressToUrlParam(codeEditorArea.value) + params);
-	SetClipboard(url);
-}
 
-function CompressToUrlParam(input) 
-{
-    const compressed = pako.deflate(input, { to: 'string' }); // Compresse le texte
-    return btoa(compressed); // Encode en Base64
+	if (shaderOnly)
+		params += "&shader-only";
+
+	if (largeLayout)
+		params += "&large-layout";
+
+
+	url = url.replace("editor.html", "?embed=" + packedData.CompressToURL() + params);
+	SetClipboard(url);
 }
 
 function SetClipboard(value)
@@ -86,6 +95,25 @@ async function AsyncHighlight()
 {
 	Prism.highlightElement(codeElement, false);
 }
+
+//URL params ------------------------------
+function SwitchToggle(toggleID)
+{
+	let toggleElement = document.getElementById(toggleID);
+	toggleElement.checked = !toggleElement.checked;
+	toggleElement.onchange();
+}
+
+function SetShaderOnly(toggleElement)
+{
+	shaderOnly = toggleElement.checked;
+}
+
+function SEtLargeLayout(toggleElement)
+{
+	largeLayout = toggleElement.checked;
+}
+//-----------------------------------------
 
 function FormatTextArea()
 {

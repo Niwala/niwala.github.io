@@ -2,14 +2,15 @@ Parse();
 SetupSearchHooks();
 
 //URL params
-var exampleID;						//id
-var pageName;						//name (before '.')
-var exampleName;					//name (after '.')
+var exampleID;					//id
+var pageName;					//name (before '.')
+var exampleName;				//name (after '.')
 var hideBanner;					//hide-banner
-var hideContent;					//hide-content
-var largeLayout;					//large-layout
-var shaderPropertiesLayout;	//properties
+var hideContent;				//hide-content
+var largeLayout;				//large-layout
+var shaderPropertiesLayout;		//properties
 var shaderOnly;					//shader-only
+var packedData;					//embed
 
 
 //Home page
@@ -108,6 +109,16 @@ function LoadUrlParams()
 {
 	let params = new URLSearchParams(window.location.search);	
 	exampleID = params.get("id");
+	let embed = params.get("embed");
+	let hasEmbed = false;
+
+	if (embed != null)
+	{
+		packedData = new PackedData();
+		packedData.DecompressURL(embed);
+		console.log(packedData.shader);
+		hasEmbed = true;
+	}
 
 	if (exampleID == null)
 	{
@@ -132,8 +143,8 @@ function LoadUrlParams()
 	}
 
 	shaderOnly = params.has("shader-only");
-	hideBanner = params.has("hide-banner") || shaderOnly;
-	hideContent = params.has("hide-content") || shaderOnly;
+	hideBanner = params.has("hide-banner") || shaderOnly || hasEmbed;
+	hideContent = params.has("hide-content") || shaderOnly || hasEmbed;
 	largeLayout = params.has("large-layout") || shaderOnly;
 	properties = shaderOnly ? "none" : params.get("properties");
 }
@@ -197,8 +208,14 @@ function LoadAndShowCurrentPage()
 {
 	StartLoadingAction();
 
+	//Embed load
+	if (packedData != null)
+	{
+		LoadAndShowEmbed();
+	}
+
 	//Direct load
-	if (exampleID != null)
+	else if (exampleID != null)
 	{
 		LoadAndShowExampleWithDirectID(exampleID);
 	}
@@ -333,6 +350,20 @@ function LoadAndShowExampleWithDirectID(id)
 		});
 	}
 }
+
+function LoadAndShowEmbed()
+{
+	let example = new NotionExample("embed-example", '{"request_id": "embed"}');
+
+	//Set code
+	example.code = packedData.shader;
+	example.hasCode = true;
+
+	//Set properties
+
+	ShowExample(example);
+}
+
 
 function LoadLoadingShader()
 {

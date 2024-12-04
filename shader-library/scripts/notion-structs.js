@@ -362,23 +362,26 @@ class NotionExample
       this.onContentUpdate = onContentUpdate;
       this.onPropertiesUpdate = onPropertiesUpdate;
 
-      for (var i = 0; i < json.results.length; i++) 
+      if (json != null && json.results != null)
       {
-         if (!this.hasTable && json.results[i].type == "table")
+         for (var i = 0; i < json.results.length; i++) 
          {
-            this.hasTable = true;
-            this.ReadPropertiesTable(json.results[i].id);
-         }
-         else if (!this.hasCode && json.results[i].type == "code")
-         {
-            this.hasCode = true;
-            this.ReadCode(json.results[i]);
-         }
-         else
-         {
-            let notionBlock = new NotionBlock(null, json.results[i], this.UpdatePageHtml.bind(this), () => {});
-            this.children.push(notionBlock);
-            this.html += notionBlock.html;
+            if (!this.hasTable && json.results[i].type == "table")
+            {
+               this.hasTable = true;
+               this.ReadPropertiesTable(json.results[i].id);
+            }
+            else if (!this.hasCode && json.results[i].type == "code")
+            {
+               this.hasCode = true;
+               this.ReadCode(json.results[i]);
+            }
+            else
+            {
+               let notionBlock = new NotionBlock(null, json.results[i], this.UpdatePageHtml.bind(this), () => {});
+               this.children.push(notionBlock);
+               this.html += notionBlock.html;
+            }
          }
       }
    }
