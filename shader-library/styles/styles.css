@@ -259,11 +259,6 @@ img
 	border-radius: 5px;
 }
 
-.shader-editor-preview
-{
-	margin-top : 15px;
-}
-
 .fragment-field
 {
 	font-family: consolas;
