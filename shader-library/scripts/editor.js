@@ -19,7 +19,6 @@ Prism.hooks.add('wrap', function (env)
 	{
 		return;
 	}
-	console.log(env.content);
 	env.classes.push('keyword-' + env.content);
 });
 
@@ -79,12 +78,14 @@ function SetClipboard(value)
 
 function CompileShader()
 {
-	let hlsl = codeEditorArea.value.replace("\t", "    ");
+	let hlsl = codeEditorArea.value.replace(/\t/g, "    ");
 	codeEditorArea.value = hlsl;
 	codeElement.innerHTML = hlsl;
+	SetHeights();
 	AsyncHighlight();
 
-	let data = new ShaderData(shaderCanvas, "shader-editor", codeEditorArea.value, null);
+	let shader = ConvertIntegersToFloats(codeEditorArea.value);
+	let data = new ShaderData(shaderCanvas, "shader-editor", shader, null);
 
 	renderer.ClearRenderers();
 	renderer.AddRenderer(data);
@@ -98,7 +99,13 @@ async function AsyncHighlight()
 	Prism.highlightElement(codeElement, false);
 }
 
-//PRoperties controls ---------------------
+function SetHeights()
+{
+	codeEditorArea.style.height = "auto"; // Réinitialise la hauteur pour calculer correctement
+	codeEditorArea.style.height = `${codeEditorArea.scrollHeight}px`;
+}
+
+//Properties controls ---------------------
 
 function AddToggle()
 {
@@ -237,7 +244,35 @@ function FormatTextArea()
 			this.selectionStart = this.selectionEnd = cursorPos + offset;
 		}
 
+		else if (e.key == 'Backspace')	//Can remove a tab
+		{
+			let text = this.value;
+			let cursorPos = this.selectionStart;
+			let lineStart = GetLineStartIndicesInSelection(text, cursorPos, cursorPos)[0];
+
+			let pre = text.substring(lineStart, cursorPos);
+			let preLength = pre.length;
+
+			if (preLength >= 4 && IsOnlySpaces(pre, 0, pre.length))
+			{
+				let targetSpaceCount = Math.floor(preLength / 4.0) * 4;
+				let offset = preLength - targetSpaceCount;
+				if (offset == 0)
+					offset = 4;
+
+				e.preventDefault();
+				this.value = text.substring(0, cursorPos - offset) + text.substring(cursorPos);
+				this.selectionStart = this.selectionEnd = cursorPos - offset;
+			}
+		}
+
     });
+}
+
+function ConvertIntegersToFloats(shaderCode) 
+{
+    const regex = /(?<=\bfloat\s+\w+\s*=\s*)(-?\d+)(?=;)/g;
+    return shaderCode.replace(regex, (match) => `${match}.0`);
 }
 
 //Return [new line, applied offset]
@@ -330,4 +365,16 @@ function GetSpaceCount(text, cursorPos)
 		cursorPos++;
 	}
 	return i;
+}
+
+function IsOnlySpaces(text, start, end)
+{
+	let i = start;
+	while(i < end)
+	{
+		if (text[i] != ' ')
+			return false;
+		i++;
+	}
+	return true;
 }
