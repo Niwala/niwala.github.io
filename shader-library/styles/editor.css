@@ -19,24 +19,28 @@
 
 #code-editor-area
 {
-	color: rgba(255, 255, 255, 0.18);
+	color: rgba(255, 255, 255, 0.0);
 	caret-color: white;
-
 	background-color: transparent;
-   resize: none;
+   outline-style: none;
+   border-style: none;
 
    pointer-events: all;
    z-index: 20;
    outline-style: none;
 
-   margin-left: 45px;
-   margin-top: 24px;
+   padding-left: 45px;
+   padding-top: 24px;
 
-   width: calc(100% - 22px - 45px);
+   flex-shrink: 0;
+   flex-grow: 1;
+   display: flex;
 
+   position: absolute;
+
+   white-space: nowrap;
    overflow: hidden;
    resize: none; 
-   box-sizing: border-box;
 }
 
 #code
@@ -48,8 +52,12 @@
 
 .code-toolbar
 {
-   position: absolute !important;
+   /* position: absolute !important; */
 
+   /* min-width: none !important; */
+   /* max-width: none !important; */
+
+   overflow: hidden !important;
    pointer-events: none;
    user-select: none !important;
    border-style: none !important;
@@ -57,18 +65,30 @@
    padding: 0 !important;
 }
 
-#code-editor-overlay
+#overlay
 {
-   z-index: -5;
+   z-index: 15;
    pointer-events: none !important;
    user-select: none !important;
    margin: 0;
    padding: 0;
 
-   top: 0; left: 0;
    position: absolute;
+}
 
-   height: 700px;
+#text-size
+{
+   display: block;
+   flex-grow: 0;
+   max-inline-size: fit-content;
+
+   position: absolute;
+   visibility: hidden;
+}
+
+#code-editor-overlay
+{
+
 }
 
 .format-code
@@ -77,12 +97,12 @@
    font-size: 1em !important;
    line-height: 1.2em !important;
 
-   padding: 0;
+   /* padding: 0;
    margin: 0;
    border-radius: 5px;
-   border-style: none;
+   border-style: none; */
 
-	width: calc(100% - 22px);
+	/* width: calc(100% - 22px); */
 }
 
 code[class*="language-"], pre[class*="language-"] 

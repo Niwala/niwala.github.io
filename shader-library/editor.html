@@ -61,13 +61,18 @@
 		</div>
 	</div>
 	
+	<div id="text-size" class="format-code"></div>
+
 	<article>
 		<div class="centred">
 			<div class="vertical">
 			
+				<div class="controls-area">
+					<button onclick="ConvertToUrl()">Export iFrame</button>
+				</div>
+				
 				<div id="scroll-content">
 					<div id="scroll-area">
-						
 						<textarea id="code-editor-area" class="format-code" type="text" spellcheck="false" onkeyup="CompileShader()">
 //Fonction de code GLSL simple
 //Keywords : time, PI, TAU
@@ -75,10 +80,12 @@
 vec4 Execute(vec2 uv)
 {
 	return vec4(uv, sin(time) * 0.5 + 0.5, 1.0);
-}</textArea>
+}</textArea>						
 
-						<pre class="line-numbers" id="code-editor-overlay format-code"><code class="language-hlsl" id="code">example-code</code></pre>
-						
+					<div id="overlay">
+						<pre class="line-numbers" id="code-editor-overlay"><code class="language-hlsl format-code" id="code">example-code</code></pre>
+					</div>
+
 					</div>
 				</div>
 
@@ -120,9 +127,5 @@ vec4 Execute(vec2 uv)
 			</div>
 		</div>
 	</article>
-	
-	
-  
-
   </body>
 </html>

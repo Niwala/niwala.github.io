@@ -2,8 +2,10 @@
 var codeElement;
 var codeEditorArea;
 var codeEditorOverlay;
+var overlayElement;
 var overlayCanvas;
 var shaderCanvas;
+var scrollArea;
 var renderer;
 
 //URL params
@@ -13,9 +15,9 @@ var largeLayout = false;
 window.Prism = window.Prism || {};
 Prism.manual = true;
 
-Prism.hooks.add('wrap', function (env) 
+Prism.hooks.add('wrap', function (env)
 {
-	if (env.type !== 'keyword') 
+	if (env.type !== 'keyword')
 	{
 		return;
 	}
@@ -27,13 +29,18 @@ FormatTextArea();
 
 function Main()
 {
+	textSizeElement = document.getElementById("text-size");
 	codeElement = document.getElementById("code");
+	overlayElement = document.getElementById("overlay");
 	overlayCanvas = document.getElementById("overlay-canvas");
 	codeEditorArea = document.getElementById("code-editor-area");
 	codeEditorOverlay = document.getElementById("code-editor-overlay");
 	shaderCanvas = document.getElementById("shader-canvas");
+	scrollArea = document.getElementById("scroll-area");
 	renderer = new ShaderRenderer(overlayCanvas);
-	
+
+	codeEditorArea.addEventListener('scroll', SyncScroll);
+
 	CompileShader();
 }
 
@@ -60,17 +67,17 @@ function ConvertToUrl()
 
 function SetClipboard(value)
 {
-	try 
+	try
 	{
-		navigator.clipboard.writeText(value).then(function() 
+		navigator.clipboard.writeText(value).then(function ()
 		{
 			console.log('Url to clipboard');
-		}).catch(function(error) 
+		}).catch(function (error)
 		{
 			console.error('Error copying text: ', error);
 		});
-	} 
-	catch (err) 
+	}
+	catch (err)
 	{
 		console.error('Clipboard API not supported:', err);
 	}
@@ -80,7 +87,8 @@ function CompileShader()
 {
 	let hlsl = codeEditorArea.value.replace(/\t/g, "    ");
 	codeEditorArea.value = hlsl;
-	codeElement.innerHTML = hlsl;
+	codeElement.innerHTML = hlsl + "\n";
+	textSizeElement.innerText = hlsl + "\n";
 	SetHeights();
 	AsyncHighlight();
 
@@ -89,9 +97,9 @@ function CompileShader()
 
 	renderer.ClearRenderers();
 	renderer.AddRenderer(data);
-	
+
 	renderer.Render(Date.now());
-	
+
 }
 
 async function AsyncHighlight()
@@ -99,10 +107,68 @@ async function AsyncHighlight()
 	Prism.highlightElement(codeElement, false);
 }
 
+function SyncScroll()
+{
+	overlayElement.scrollTop = codeEditorArea.scrollTop;
+   overlayElement.scrollLeft = codeEditorArea.scrollLeft;
+}
+
 function SetHeights()
 {
-	codeEditorArea.style.height = "auto"; // Réinitialise la hauteur pour calculer correctement
-	codeEditorArea.style.height = `${codeEditorArea.scrollHeight}px`;
+	const offsetX = 0;
+	const offsetY = 0;
+
+	const codePaddingLeft = 45 + 22;
+	const codePaddingTop = 24 + 4;
+
+	const containerRect = scrollArea.getBoundingClientRect();
+	const referenceRect = textSizeElement.getBoundingClientRect();
+
+	let targetWidth = Math.max(containerRect.width  - codePaddingLeft, referenceRect.width);
+	let targetHeight = Math.max(containerRect.height - codePaddingTop, referenceRect.height);
+
+	//Extend horizontal when text is near to the right edge
+	let horizontalSup = 0;
+	if (referenceRect.width > (containerRect.width - 120))
+	{
+		horizontalSup += 120;
+	}
+
+	codeEditorArea.style.width = `${targetWidth + horizontalSup}px`;
+	codeEditorArea.style.height = `${targetHeight}px`;
+
+	codeEditorArea.scrollLeft = 0;
+	codeEditorArea.scrollTop = 0;
+
+
+
+	const relativeRect = codeEditorArea.getBoundingClientRect();
+	const top = relativeRect.top + scrollArea.scrollTop;
+	const left = relativeRect.left + scrollArea.scrollLeft;
+
+	overlayElement.style.left = `${window.scrollX - containerRect.left + left + offsetX}px`;
+	overlayElement.style.top = `${window.scrollY - containerRect.top + top + offsetY}px`;
+	overlayElement.style.width = `${relativeRect.width + horizontalSup}px`;
+	overlayElement.style.height = `${relativeRect.height}px`;
+
+	overlayElement.style.right = 0;
+}
+
+
+function adjustTextareaWidth(textarea)
+{
+	const tempSpan = document.createElement("span");
+	tempSpan.style.visibility = "hidden";
+	tempSpan.style.position = "absolute";
+	tempSpan.style.whiteSpace = "pre"; // Préserve les espaces
+	tempSpan.style.font = getComputedStyle(textarea).font; // Récupère les styles de la textarea
+
+	tempSpan.textContent = textarea.value || textarea.placeholder; // Texte ou placeholder
+	document.body.appendChild(tempSpan);
+
+	// Ajuste la largeur en fonction de la largeur du texte
+	textarea.style.width = `${tempSpan.offsetWidth + 10}px`; // Ajout d'une marge (10px)
+	document.body.removeChild(tempSpan); // Nettoyage
 }
 
 //Properties controls ---------------------
@@ -133,15 +199,15 @@ function SEtLargeLayout(toggleElement)
 
 function FormatTextArea()
 {
-	codeEditorArea.addEventListener('scroll', () => 
+	codeEditorArea.addEventListener('scroll', () =>
 	{
 		codeEditorOverlay.scrollTop = codeEditorArea.scrollTop;
 		codeEditorOverlay.scrollLeft = codeEditorArea.scrollLeft;
 	});
 
-	codeEditorArea.addEventListener('keydown', function (e) 
+	codeEditorArea.addEventListener('keydown', function (e)
 	{
-		if (e.key === 'Tab') 
+		if (e.key === 'Tab')
 		{
 			//Prevent the focus change
 			e.preventDefault();
@@ -157,7 +223,7 @@ function FormatTextArea()
 					let lineIndices = GetLineStartIndicesInSelection(this.value, this.selectionStart, this.selectionEnd);
 					let value = this.value;
 					let globalOffset = 0;
-					for (let i = lineIndices.length - 1; i >= 0; i--) 
+					for (let i = lineIndices.length - 1; i >= 0; i--)
 					{
 						const index = lineIndices[i];
 						let [newValue, offset] = OutdentLineAt(value, index);
@@ -195,7 +261,7 @@ function FormatTextArea()
 					let lineIndices = GetLineStartIndicesInSelection(this.value, this.selectionStart, this.selectionEnd);
 					let value = this.value;
 					let globalOffset = 0;
-					for (let i = lineIndices.length - 1; i >= 0; i--) 
+					for (let i = lineIndices.length - 1; i >= 0; i--)
 					{
 						const index = lineIndices[i];
 						let [newValue, offset] = IndentLineAt(value, index);
@@ -233,7 +299,7 @@ function FormatTextArea()
 
 			// // Replace le curseur après la tabulation
 			// this.selectionStart = this.selectionEnd = start + tab.length;
-        }
+		}
 
 		else if (e.key == 'Enter')
 		{
@@ -266,13 +332,13 @@ function FormatTextArea()
 			}
 		}
 
-    });
+	});
 }
 
-function ConvertIntegersToFloats(shaderCode) 
+function ConvertIntegersToFloats(shaderCode)
 {
-    const regex = /(?<=\bfloat\s+\w+\s*=\s*)(-?\d+)(?=;)/g;
-    return shaderCode.replace(regex, (match) => `${match}.0`);
+	const regex = /(?<=\bfloat\s+\w+\s*=\s*)(-?\d+)(?=;)/g;
+	return shaderCode.replace(regex, (match) => `${match}.0`);
 }
 
 //Return [new line, applied offset]
@@ -309,57 +375,59 @@ function CreateNewLine(text, cursorPos)
 }
 
 //Return [line start index, space count]
-function FindIndexBeforeIndentation(text, cursorPos) 
+function FindIndexBeforeIndentation(text, cursorPos)
 {
 	let lineStartIndex;
 
 	// Trouver la position de début de la ligne
 	if (text[cursorPos] != "\n")
 	{
-   	const textBeforeCursor = text.slice(0, cursorPos);
-    	lineStartIndex = textBeforeCursor.lastIndexOf('\n') + 1;
+		const textBeforeCursor = text.slice(0, cursorPos);
+		lineStartIndex = textBeforeCursor.lastIndexOf('\n') + 1;
 	}
 	else
 	{
 		return [lineStartIndex, lineStartIndex];
 	}
 
-    // Trouver la fin des espaces en début de ligne
-    const lineText = text.slice(lineStartIndex);
-    const indentationEnd = lineText.search(/\S|$/); // Index du premier caractère non-espace
+	// Trouver la fin des espaces en début de ligne
+	const lineText = text.slice(lineStartIndex);
+	const indentationEnd = lineText.search(/\S|$/); // Index du premier caractère non-espace
 
-    // Retourner l'index avant les espaces
-    return [lineStartIndex, indentationEnd];
+	// Retourner l'index avant les espaces
+	return [lineStartIndex, indentationEnd];
 }
 
-function GetLineStartIndicesInSelection(text, selectionStart, selectionEnd) 
+function GetLineStartIndicesInSelection(text, selectionStart, selectionEnd)
 {
-    const indices = [];
-    const lines = text.split('\n'); // Diviser le texte en lignes
-    let currentIndex = 0;
+	const indices = [];
+	const lines = text.split('\n'); // Diviser le texte en lignes
+	let currentIndex = 0;
 
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const lineStart = currentIndex; // Début de la ligne
-        const lineEnd = currentIndex + line.length; // Fin de la ligne
+	for (let i = 0; i < lines.length; i++)
+	{
+		const line = lines[i];
+		const lineStart = currentIndex; // Début de la ligne
+		const lineEnd = currentIndex + line.length; // Fin de la ligne
 
-        // Vérifie si la ligne chevauche la sélection
-        if (lineEnd >= selectionStart && lineStart <= selectionEnd) {
-            indices.push(lineStart);
-        }
+		// Vérifie si la ligne chevauche la sélection
+		if (lineEnd >= selectionStart && lineStart <= selectionEnd)
+		{
+			indices.push(lineStart);
+		}
 
-        // Met à jour l'index pour la prochaine ligne (+1 pour le '\n')
-        currentIndex += line.length + 1;
-    }
+		// Met à jour l'index pour la prochaine ligne (+1 pour le '\n')
+		currentIndex += line.length + 1;
+	}
 
-    return indices;
+	return indices;
 }
 
 function GetSpaceCount(text, cursorPos)
 {
 	let i = 0;
 	let maxLength = text.length;
-	while(cursorPos < maxLength && text[cursorPos] == ' ')
+	while (cursorPos < maxLength && text[cursorPos] == ' ')
 	{
 		i++;
 		cursorPos++;
@@ -370,7 +438,7 @@ function GetSpaceCount(text, cursorPos)
 function IsOnlySpaces(text, start, end)
 {
 	let i = start;
-	while(i < end)
+	while (i < end)
 	{
 		if (text[i] != ' ')
 			return false;
