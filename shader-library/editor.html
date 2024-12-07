@@ -63,14 +63,68 @@
 	
 	<div id="text-size" class="format-code"></div>
 
-	<article>
+	<!-- Popup panel-->
+	<div id="popup-panel">
+		
+		<div class="popup-panel-header" id="popup-title">Export settings</div>
+
+		<!-- Info -->
+		<div id="info-section" class="vertical" style="line-height: 0; display: none;">
+			<p><b>Uniforms :</b> time, screenSize, mousePosition</p>
+			<p><b>Constants :</b> PI, TAU</p>
+			<p><b>Functions :</b> hash, noise, smin, hash, rot2D</p>
+		</div>
+
+		<!-- Examples -->
+		<div id="examples-section" class="vertical" style="line-height: 0; display: none;">
+			<button onclick="OpenExample('default')">Default</button>
+			<button onclick="OpenExample('mask')">Mask</button>
+			<button onclick="OpenExample('raymarching')">Raymarching</button>
+		</div>
+
+		<!-- Export Properties -->
+		<div class="export-properties vertical" id="export-section"  style="flex-grow: 1;">
+
+			<!-- Shader Only -->
+			<div class='shader-property' style="flex-grow: 0;">
+				<p style='user-select: none; cursor: pointer;' onmousedown='SwitchToggle("shader-only-toggle")'>Shader Only</p>
+				<label class="toggle-container">
+					<input type="checkbox" onchange="SetShaderOnly(this)" id='shader-only-toggle'>
+					<span class="checkmark"></span>
+				</label>
+			</div>
+
+			<!-- Large layout -->
+			<div class='shader-property' style="flex-grow: 0;">
+				<p style='user-select: none; cursor: pointer;' onmousedown='SwitchToggle("large-layout-toggle")'>Large Layout</p>
+				<label class="toggle-container">
+					<input type="checkbox" onchange="SetLargeLayout(this)" id='large-layout-toggle'>
+					<span class="checkmark"></span>
+				</label>
+			</div>
+
+			<button onclick="ConvertToUrl()" class="controls-full">Export iFrame</button>
+		</div>
+
+
+
+	</div>
+
+	<article id="back">
 		<div class="centred">
 			<div class="vertical">
 			
+				<!-- Controls -->
 				<div class="controls-area">
-					<button onclick="ConvertToUrl()">Export iFrame</button>
+					<button onclick="SetLayout(0)" class="img-button controls-first"><img src="./media/layout-code-horizontal-right.png"></button>
+
+					<div class="spacer" style="flex-grow: 1;"></div>
+
+					<button onclick="ToggleInfoPanel(this)">Info</button>
+					<button onclick="ToggleExamplesPanel(this)">Examples</button>
+					<button onclick="ToggleExportPanel(this)" class="controls-last">Export iFrame</button>
 				</div>
-				
+
 				<div id="scroll-content">
 					<div id="scroll-area">
 						<textarea id="code-editor-area" class="format-code" type="text" spellcheck="false" onkeyup="CompileShader()">
@@ -96,29 +150,6 @@ vec4 Execute(vec2 uv)
 						<!-- Shader Properties -->
 						<div class="shader-properties" id="example-properties"></div>
 
-						<!-- Export Properties -->
-						<div class="export-properties vertical" id="export-properties"  style="flex-grow: 1;">
-
-							<!-- Shader Only -->
-							<div class='shader-property' style="flex-grow: 0;">
-								<p style='user-select: none; cursor: pointer;' onmousedown='SwitchToggle("shader-only-toggle")'>Shader Only</p>
-								<label class="toggle-container">
-									<input type="checkbox" onchange="SetShaderOnly(this)" id='shader-only-toggle'>
-									<span class="checkmark"></span>
-								</label>
-							</div>
-
-							<!-- Large layout -->
-							<div class='shader-property' style="flex-grow: 0;">
-								<p style='user-select: none; cursor: pointer;' onmousedown='SwitchToggle("large-layout-toggle")'>Large Layout</p>
-								<label class="toggle-container">
-									<input type="checkbox" onchange="SetLargeLayout(this)" id='large-layout-toggle'>
-									<span class="checkmark"></span>
-								</label>
-							</div>
-
-							<button onclick="ConvertToUrl()">Export iFrame</button>
-						</div>
 					</div>
 
 					<!-- Preview -->

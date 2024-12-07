@@ -8,6 +8,14 @@ var shaderCanvas;
 var scrollArea;
 var renderer;
 
+//Popup panel
+var popupPanel;
+var popupPanelTitle;
+var popupPanelOwner;
+var infoSection;
+var examplesSection;
+var exportSection;
+
 //URL params
 var shaderOnly = false;
 var largeLayout = false;
@@ -37,9 +45,17 @@ function Main()
 	codeEditorOverlay = document.getElementById("code-editor-overlay");
 	shaderCanvas = document.getElementById("shader-canvas");
 	scrollArea = document.getElementById("scroll-area");
+
+	popupPanelTitle = document.getElementById("popup-title");
+	exportSection = document.getElementById("export-section");
+	examplesSection = document.getElementById("examples-section");
+	infoSection = document.getElementById("info-section");
 	renderer = new ShaderRenderer(overlayCanvas);
 
-	codeEditorArea.addEventListener('scroll', SyncScroll);
+	popupPanel = document.getElementById("popup-panel");
+	popupPanel.addEventListener('click', (event) => event.stopPropagation());
+	document.getElementById("banner").addEventListener('click', ClosePopup);
+	document.getElementById("back").addEventListener('click', ClosePopup);
 
 	CompileShader();
 }
@@ -154,26 +170,103 @@ function SetHeights()
 	overlayElement.style.right = 0;
 }
 
-
-function adjustTextareaWidth(textarea)
+function UpdateContentWithUndoRedo(textarea, newValue) 
 {
-	const tempSpan = document.createElement("span");
-	tempSpan.style.visibility = "hidden";
-	tempSpan.style.position = "absolute";
-	tempSpan.style.whiteSpace = "pre"; // Préserve les espaces
-	tempSpan.style.font = getComputedStyle(textarea).font; // Récupère les styles de la textarea
+    const event = new InputEvent('input', {
+        inputType: 'insertText',
+        data: newValue,
+        bubbles: true,
+        cancelable: true
+    });
 
-	tempSpan.textContent = textarea.value || textarea.placeholder; // Texte ou placeholder
-	document.body.appendChild(tempSpan);
+   //  textarea.value = newValue;
+    textarea.dispatchEvent(event);
+}
 
-	// Ajuste la largeur en fonction de la largeur du texte
-	textarea.style.width = `${tempSpan.offsetWidth + 10}px`; // Ajout d'une marge (10px)
-	document.body.removeChild(tempSpan); // Nettoyage
+
+//Page controls----------------------------
+function SetLayout(id)
+{
+	console.log("Set layout " + id);
+}
+
+function ToggleInfoPanel(element)
+{
+	popupPanelTitle.innerText = "Shader info";
+	infoSection.style.display = "flex";
+	examplesSection.style.display = "none";
+	exportSection.style.display = "none";
+
+	TogglePanelForElement(element);
+}
+
+function ToggleExamplesPanel(element)
+{
+	popupPanelTitle.innerText = "Examples";
+	infoSection.style.display = "none";
+	examplesSection.style.display = "flex";
+	exportSection.style.display = "none";
+
+	TogglePanelForElement(element);
+}
+
+function ToggleExportPanel(element)
+{
+	popupPanelTitle.innerText = "Export settings";
+	infoSection.style.display = "none";
+	examplesSection.style.display = "none";
+	exportSection.style.display = "flex";
+	
+	TogglePanelForElement(element);
+}
+
+function TogglePanelForElement(element)
+{
+	//Disable current owner
+	if (popupPanelOwner != null)
+	{
+		popupPanelOwner.classList.remove('active');
+	}
+
+	//Check state
+	const isVisible = (popupPanel.style.display === 'block' && popupPanelOwner == element);
+	popupPanelOwner = element;
+
+	//Apply change
+	if (isVisible) 
+	{
+		popupPanel.style.display = 'none';
+		element.classList.remove('active');
+	} else 
+	{
+		popupPanel.style.display = 'block';
+		element.classList.add('active');
+
+		let rect = element.getBoundingClientRect();
+		popupPanel.style.top = (rect.top + rect.height) + "px";
+		popupPanel.style.left = (rect.left - 520 + rect.width) + "px";
+	}
+	return isVisible;
+}
+
+function ClosePopup(event) 
+{
+	//Check source - avoid close on buttons (redondant)
+	const source = event.target || event.srcElement;
+	if (source.nodeName === "BUTTON")
+		return;
+
+	//Disable current owner
+	if (popupPanelOwner != null)
+	{
+		popupPanelOwner.classList.remove('active');
+	}
+	popupPanel.style.display = 'none';
 }
 
 //Properties controls ---------------------
 
-function AddToggle()
+function AddToggle(event)
 {
 
 }
@@ -191,7 +284,7 @@ function SetShaderOnly(toggleElement)
 	shaderOnly = toggleElement.checked;
 }
 
-function SEtLargeLayout(toggleElement)
+function SetLargeLayout(toggleElement)
 {
 	largeLayout = toggleElement.checked;
 }
@@ -199,12 +292,6 @@ function SEtLargeLayout(toggleElement)
 
 function FormatTextArea()
 {
-	codeEditorArea.addEventListener('scroll', () =>
-	{
-		codeEditorOverlay.scrollTop = codeEditorArea.scrollTop;
-		codeEditorOverlay.scrollLeft = codeEditorArea.scrollLeft;
-	});
-
 	codeEditorArea.addEventListener('keydown', function (e)
 	{
 		if (e.key === 'Tab')

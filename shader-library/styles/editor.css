@@ -1,3 +1,106 @@
+
+button
+{
+   background-color: #313131;
+   color: rgb(192, 192, 192);
+
+   border-style: none;
+   border-radius: 5px;
+
+   font-size: 14px;
+   font-style: bold;
+   padding: 10px 20px 10px 20px;
+   outline-style: none;
+   cursor: pointer;
+
+   margin-bottom: 10px;
+   margin-left: 5px;
+   margin-right: 5px;
+}
+
+button.controls-full
+{
+   margin-left: 0 !important;
+   margin-right: 0 !important;
+}
+
+button.controls-first
+{
+   margin-left: 0 !important;
+}
+
+button.controls-last
+{
+   margin-right: 0 !important;
+}
+
+/* Popup panel --------------------------------------------- */
+
+#popup-panel
+{
+   width: 500px; 
+   background-color: #1f1f1f; 
+   border-radius: 5px;
+   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.677);
+
+   position: absolute;
+   margin-right: 50px;
+
+   z-index: 2000;
+   padding: 10px 10px 3px 10px;
+   display: none;
+   flex-direction: column;
+}
+
+.popup-panel-header
+{
+   background-color: #313131; 
+   border-radius: 5px 5px 0px 0px;
+
+   margin: -10px -10px 10px -10px;
+   padding-top: 5px;;
+   padding-bottom: 5px;;
+   text-anchor: middle;
+   justify-content: center;
+
+   user-select: none;
+}
+
+/* -------------------------------------------------------- */
+
+.img-button
+{
+   width: 80px;
+   height: 40px;
+   display: flex; 
+   align-items: center; 
+   justify-content: center;
+}
+
+img
+{
+   object-fit: contain;
+   width: 64px;
+   height: 32px;
+}
+
+button:hover
+{
+   background-color: #404040;
+   color: rgb(255, 255, 255);
+}
+
+button:active
+{
+   background-color: #222222;
+}
+
+button.active 
+{
+    background-color: #234774;
+    color: white;
+}
+
 #scroll-area
 {
    position: relative; 
@@ -5,6 +108,8 @@
    height: 400px; 
    overflow: auto; 
    border-radius: 5px;
+
+   margin-left: 20px;
 
    pointer-events: all;
    z-index: 20;
