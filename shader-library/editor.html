@@ -67,7 +67,7 @@
 	<div id="popup-panel">
 	
 		<!-- Layout -->
-		<div id="layout-section" class="vertical" style="line-height: 0; display: none;">
+		<div id="layout-section" class="vertical" style="display: none;">
 			<div class="popup-panel-header">Editor layout</div>
 			<div class="horizontal"><button class="img-button"><img class="icon" src="./media/layout-code-vertical.png"></button><span class="button-side-label">Vertical</span></div>
 			<div class="horizontal"><button class="img-button"><img class="icon" src="./media/layout-code-horizontal.png"></button><span class="button-side-label">Horizontal</span></div>
@@ -75,15 +75,17 @@
 		</div>
 
 		<!-- Info -->
-		<div id="info-section" class="vertical" style="line-height: 0; display: none;">
+		<div id="info-section" class="vertical" style="display: none;">
 			<div class="popup-panel-header">Shader info</div>
-			<p><b>Uniforms :</b> time, screenSize, mousePosition</p>
-			<p><b>Constants :</b> PI, TAU</p>
-			<p><b>Functions :</b> hash, noise, smin, hash, rot2D</p>
+			<span>The code executed is GLSL, but for the sake of comfort and educational demonstrations, the editor is compatible with most HLSL keywords.</span>
+			<div class="separator"></div>
+			<span><b>Uniforms :</b> time, screenSize, mousePosition</span>
+			<span><b>Constants :</b> PI, TAU</span>
+			<span><b>Functions :</b> hash, noise, smin, hash, rot2D</span>
 		</div>
 
 		<!-- Examples -->
-		<div id="examples-section" class="vertical" style="line-height: 0; display: none;">
+		<div id="examples-section" class="vertical" style="display: none;">
 			<div class="popup-panel-header">Examples</div>
 			<button onclick="OpenExample('default')">Default</button>
 			<button onclick="OpenExample('mask')">Mask</button>
@@ -142,10 +144,7 @@
 				<div id="scroll-content">
 					<div id="scroll-area">
 						<textarea id="code-editor-area" class="format-code" type="text" spellcheck="false" onkeyup="CompileShader()">
-//Fonction de code GLSL simple
-//Keywords : time, PI, TAU
-
-vec4 Execute(vec2 uv)
+float4 Execute(float2 uv)
 {
 	return vec4(uv, sin(time) * 0.5 + 0.5, 1.0);
 }</textArea>						

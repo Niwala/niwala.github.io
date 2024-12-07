@@ -120,6 +120,17 @@ button.active
     color: white;
 }
 
+.separator
+{
+   display: flex;
+   flex-grow: 1;
+   margin: 10px 3px 10px 3px;
+   border-color: #ffffff2c;
+   border-bottom-width: 1px;
+   border-top-width: 0px;
+   border-style: solid;
+}
+
 #scroll-area
 {
    position: relative; 
