@@ -1,4 +1,17 @@
 
+#font-size-control
+{
+   margin-top: 4px !important;
+   margin-left: 10px;
+   min-width: 300px;
+}
+
+#font-size-slider
+{
+   margin-top: 9px !important;
+   margin-right: 5px;
+}
+
 button
 {
    background-color: #313131;
@@ -32,6 +45,11 @@ button.controls-first
 button.controls-last
 {
    margin-right: 0 !important;
+}
+
+.button-side-label
+{
+   margin: 8px 0px 0px 5px;
 }
 
 /* Popup panel --------------------------------------------- */
@@ -70,18 +88,19 @@ button.controls-last
 
 .img-button
 {
-   width: 80px;
+   width: 40px;
    height: 40px;
    display: flex; 
    align-items: center; 
    justify-content: center;
 }
 
-img
+.icon
 {
    object-fit: contain;
-   width: 64px;
+   width: 32px;
    height: 32px;
+   pointer-events: none;
 }
 
 button:hover
@@ -109,8 +128,6 @@ button.active
    overflow: auto; 
    border-radius: 5px;
 
-   margin-left: 20px;
-
    pointer-events: all;
    z-index: 20;
 }
@@ -134,7 +151,7 @@ button.active
    z-index: 20;
    outline-style: none;
 
-   padding-left: 45px;
+   padding-left: 60px; /* Sync with line-numbers & SetFontSize function */
    padding-top: 24px;
 
    flex-shrink: 0;
@@ -146,6 +163,11 @@ button.active
    white-space: nowrap;
    overflow: hidden;
    resize: none; 
+}
+
+.line-numbers
+{
+   padding-left : 60px !important; /* Sync with code-editor-area & SetFontSize function */
 }
 
 #code
@@ -199,22 +221,16 @@ button.active
 .format-code
 {
 	font-family: consolas !important;
-   font-size: 1em !important;
-   line-height: 1.2em !important;
+   font-size: 16px !important;
+   line-height: 24px !important;
 
-   /* padding: 0;
-   margin: 0;
-   border-radius: 5px;
-   border-style: none; */
+   word-spacing: normal !important;
+   word-break: normal !important;
+   word-wrap: normal !important;
 
-	/* width: calc(100% - 22px); */
-}
+   text-rendering: optimizeLegibility !important;
+   font-smooth: always !important;
 
-code[class*="language-"], pre[class*="language-"] 
-{
-	font-family: consolas !important;
-   font-size: 1em !important;
-   line-height: 1.2em !important;
 }
 
 .token.keyword.keyword-float, .token.keyword.keyword-vec2, .token.keyword.keyword-vec3, .token.keyword.keyword-vec4

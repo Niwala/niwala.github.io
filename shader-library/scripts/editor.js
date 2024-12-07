@@ -10,11 +10,15 @@ var renderer;
 
 //Popup panel
 var popupPanel;
-var popupPanelTitle;
 var popupPanelOwner;
+var layoutSection;
 var infoSection;
 var examplesSection;
 var exportSection;
+
+//
+var fontSizeRule;
+var lineNumbersRule;
 
 //URL params
 var shaderOnly = false;
@@ -46,7 +50,7 @@ function Main()
 	shaderCanvas = document.getElementById("shader-canvas");
 	scrollArea = document.getElementById("scroll-area");
 
-	popupPanelTitle = document.getElementById("popup-title");
+	layoutSection = document.getElementById("layout-section");
 	exportSection = document.getElementById("export-section");
 	examplesSection = document.getElementById("examples-section");
 	infoSection = document.getElementById("info-section");
@@ -57,13 +61,36 @@ function Main()
 	document.getElementById("banner").addEventListener('click', ClosePopup);
 	document.getElementById("back").addEventListener('click', ClosePopup);
 
+	//Find style for code font size
+	const styleSheets = document.styleSheets;
+	for (let sheet of styleSheets) 
+	{
+		try {
+			for (let rule of sheet.cssRules) 
+			{
+					if (rule.selectorText === '.format-code') 
+					{
+						fontSizeRule = rule;
+					}
+
+					else if (rule.selectorText === '.line-numbers') 
+					{
+						lineNumbersRule = rule;
+					}
+			}
+		} catch (e) 
+		{
+			console.error('Cannot access stylesheet rules (dynamic font-size) :', e);
+		}
+	}
+
 	CompileShader();
 }
 
 function ConvertToUrl()
 {
 	let packedData = new PackedData();
-	packedData.shader = codeEditorArea.value;
+	packedData.shader = ConvertIntegersToFloats(codeEditorArea.value);
 
 	let url = window.location.href;
 	let params = "&hide-banner";
@@ -131,9 +158,6 @@ function SyncScroll()
 
 function SetHeights()
 {
-	const offsetX = 0;
-	const offsetY = 0;
-
 	const codePaddingLeft = 45 + 22;
 	const codePaddingTop = 24 + 4;
 
@@ -156,14 +180,12 @@ function SetHeights()
 	codeEditorArea.scrollLeft = 0;
 	codeEditorArea.scrollTop = 0;
 
-
-
 	const relativeRect = codeEditorArea.getBoundingClientRect();
 	const top = relativeRect.top + scrollArea.scrollTop;
 	const left = relativeRect.left + scrollArea.scrollLeft;
 
-	overlayElement.style.left = `${window.scrollX - containerRect.left + left + offsetX}px`;
-	overlayElement.style.top = `${window.scrollY - containerRect.top + top + offsetY}px`;
+	overlayElement.style.left = `${window.scrollX - containerRect.left + left}px`;
+	overlayElement.style.top = `${window.scrollY - containerRect.top + top}px`;
 	overlayElement.style.width = `${relativeRect.width + horizontalSup}px`;
 	overlayElement.style.height = `${relativeRect.height}px`;
 
@@ -190,38 +212,45 @@ function SetLayout(id)
 	console.log("Set layout " + id);
 }
 
-function ToggleInfoPanel(element)
+function ClearPopupPanel()
 {
-	popupPanelTitle.innerText = "Shader info";
-	infoSection.style.display = "flex";
+	layoutSection.style.display = "none";
+	infoSection.style.display = "none";
 	examplesSection.style.display = "none";
 	exportSection.style.display = "none";
+}
 
-	TogglePanelForElement(element);
+function ToggleLayoutPanel(element)
+{
+	TogglePanelForElement(element, layoutSection);
+}
+
+function ToggleInfoPanel(element)
+{
+	TogglePanelForElement(element, infoSection);
 }
 
 function ToggleExamplesPanel(element)
 {
-	popupPanelTitle.innerText = "Examples";
-	infoSection.style.display = "none";
-	examplesSection.style.display = "flex";
-	exportSection.style.display = "none";
-
-	TogglePanelForElement(element);
+	TogglePanelForElement(element, examplesSection);
 }
 
 function ToggleExportPanel(element)
 {
-	popupPanelTitle.innerText = "Export settings";
-	infoSection.style.display = "none";
-	examplesSection.style.display = "none";
-	exportSection.style.display = "flex";
-	
-	TogglePanelForElement(element);
+	TogglePanelForElement(element, exportSection);
 }
 
-function TogglePanelForElement(element)
+function TogglePanelForElement(element, section)
 {
+	let rect = element.getBoundingClientRect();
+	let leftSide = (rect.x + rect.width * 0.5) < innerWidth * 0.5;
+
+	//Enable - disables sections
+	layoutSection.style.display = (layoutSection == section ? "flex" : "none");
+	infoSection.style.display = (infoSection == section ? "flex" : "none");
+	examplesSection.style.display = (examplesSection == section ? "flex" : "none");
+	exportSection.style.display = (exportSection == section ? "flex" : "none");
+
 	//Disable current owner
 	if (popupPanelOwner != null)
 	{
@@ -244,7 +273,12 @@ function TogglePanelForElement(element)
 
 		let rect = element.getBoundingClientRect();
 		popupPanel.style.top = (rect.top + rect.height) + "px";
-		popupPanel.style.left = (rect.left - 520 + rect.width) + "px";
+
+		if (leftSide)
+			popupPanel.style.left = rect.left + "px";
+		else
+			popupPanel.style.left = (rect.left - 520 + rect.width) + "px";
+
 	}
 	return isVisible;
 }
@@ -269,6 +303,19 @@ function ClosePopup(event)
 function AddToggle(event)
 {
 
+}
+
+function SetFontSize(slider)
+{
+	fontSizeRule.style.setProperty('font-size', slider.value + 'px', 'important');
+	fontSizeRule.style.setProperty('line-height', (slider.value * 1.5) + 'px', 'important');
+
+	let margin = (slider.value - 16) * 3 + 60; /* Sync with code-editor-area & line-numbers styles */
+
+	lineNumbersRule.style.setProperty('padding-left', margin + 'px', 'important');
+	codeEditorArea.style.paddingLeft = margin + 'px';
+
+	SetHeights();
 }
 
 //URL params ------------------------------

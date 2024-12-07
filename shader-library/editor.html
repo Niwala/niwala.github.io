@@ -65,11 +65,18 @@
 
 	<!-- Popup panel-->
 	<div id="popup-panel">
-		
-		<div class="popup-panel-header" id="popup-title">Export settings</div>
+	
+		<!-- Layout -->
+		<div id="layout-section" class="vertical" style="line-height: 0; display: none;">
+			<div class="popup-panel-header">Editor layout</div>
+			<div class="horizontal"><button class="img-button"><img class="icon" src="./media/layout-code-vertical.png"></button><span class="button-side-label">Vertical</span></div>
+			<div class="horizontal"><button class="img-button"><img class="icon" src="./media/layout-code-horizontal.png"></button><span class="button-side-label">Horizontal</span></div>
+			<div class="horizontal"><button class="img-button"><img class="icon" src="./media/layout-code-stack.png"></button><span class="button-side-label">Stack</span></div>
+		</div>
 
 		<!-- Info -->
 		<div id="info-section" class="vertical" style="line-height: 0; display: none;">
+			<div class="popup-panel-header">Shader info</div>
 			<p><b>Uniforms :</b> time, screenSize, mousePosition</p>
 			<p><b>Constants :</b> PI, TAU</p>
 			<p><b>Functions :</b> hash, noise, smin, hash, rot2D</p>
@@ -77,6 +84,7 @@
 
 		<!-- Examples -->
 		<div id="examples-section" class="vertical" style="line-height: 0; display: none;">
+			<div class="popup-panel-header">Examples</div>
 			<button onclick="OpenExample('default')">Default</button>
 			<button onclick="OpenExample('mask')">Mask</button>
 			<button onclick="OpenExample('raymarching')">Raymarching</button>
@@ -84,6 +92,7 @@
 
 		<!-- Export Properties -->
 		<div class="export-properties vertical" id="export-section"  style="flex-grow: 1;">
+			<div class="popup-panel-header">Export settings</div>
 
 			<!-- Shader Only -->
 			<div class='shader-property' style="flex-grow: 0;">
@@ -103,6 +112,10 @@
 				</label>
 			</div>
 
+			<p>Properties position (Left, Right, Top, Bottom)</p>
+			<p>Shader uv alignement (Left, Right, Top, Bottom)</p>
+			<p>Clamp to square</p>
+
 			<button onclick="ConvertToUrl()" class="controls-full">Export iFrame</button>
 		</div>
 
@@ -116,7 +129,8 @@
 			
 				<!-- Controls -->
 				<div class="controls-area">
-					<button onclick="SetLayout(0)" class="img-button controls-first"><img src="./media/layout-code-horizontal-right.png"></button>
+					<button onclick="ToggleLayoutPanel(this)" class="img-button controls-first"><img class="icon" src="./media/layout-code-vertical.png"></button>
+					<div id="font-size-control"> <input type="range" oninput="SetFontSize(this)" min="16" max="30" value="16" step="0.01" class="slider" id="font-size-slider"><img class="icon" src="./media/font-size-icon.png"></div>
 
 					<div class="spacer" style="flex-grow: 1;"></div>
 
