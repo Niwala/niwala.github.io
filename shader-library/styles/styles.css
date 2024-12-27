@@ -58,7 +58,6 @@ h4
 pre
 {
 	background: #141414;
-	margin-right: 10px;
 	border-radius: 5px;
 	padding: 8px;
 	margin-bottom: 0 !important;
@@ -190,13 +189,7 @@ img
 {
 	flex-direction: column;
 	margin-right: 8px;
-	margin-left: 20px;
 	margin-top: 15px;
-}
-
-#example-content
-{
-	margin-left: 20px;
 }
 
 .example-box

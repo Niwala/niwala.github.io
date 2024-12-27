@@ -251,7 +251,6 @@ class NotionBlock
          case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item); this.postfix = "</li></ul>"; break;
          case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item); this.postfix = "</li></ol>"; break;
          case "divider": this.prefix = "<div class='divider'>"; this.postfix = "</div>"; break;
-         case "toggle": this.prefix = "<div>toggle"; this.postfix = "</div>"; break;
          case "quote": this.prefix = "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote); this.postfix = "</blockquote>"; break;
          case "link_to_page": this.prefix = "<a href='" + ValueFromPageID(this.json.link_to_page); this.postfix = "'>link_to_page</a>"; break;
          case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
@@ -259,7 +258,17 @@ class NotionBlock
          case "column_list": this.prefix = "<div class='notion-columns'>"; this.postfix = "</div>"; break;
          case "block": this.prefix = "<div class='notion-bloc'>"; this.postfix = "</div>"; break;
          case "column": this.prefix = "<div class='notion-column'>"; this.postfix = "</div>"; break;
-
+         
+         case "toggle": 
+         {
+            let hash = window.crypto.randomUUID();
+            this.prefix = "<button class='toggle' onclick='ToggleFold(\"" + hash + "\")' id='" + hash + "-fold'>" + 
+               "<img class='toggle-icon' id='" + hash + "-icon' src=\"./media/fold.png\">" +
+               this.HtmlFromRichText(this.json.toggle) + "</button>" + 
+               "<div class='toggle-content' id='" + hash + "-content' style='display:none;'>"; 
+            this.postfix = "</div>"; 
+         }
+         break;
 
          //Unsupported
          case "unsupported": break;

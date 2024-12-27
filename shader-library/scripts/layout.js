@@ -251,3 +251,23 @@ function OnExamplePropertiesUpdated(example)
 	}
 	exampleProperties.innerHTML = propertiesHtml;
 }
+
+function ToggleFold(id)
+{
+	let content = document.getElementById(id + "-content");
+	let fold = document.getElementById(id + "-fold");
+	let icon = document.getElementById(id + "-icon");
+
+	if (content.style.display == 'none')
+	{
+		content.style.display = 'flex';
+		fold.style.borderRadius = '5px 5px 0px 0px';
+		icon.style.transform = 'rotate(0deg)';
+	}
+	else
+	{
+		content.style.display = 'none';
+		fold.style.borderRadius = '5px';
+		icon.style.transform = 'rotate(-90deg)';
+	}
+}

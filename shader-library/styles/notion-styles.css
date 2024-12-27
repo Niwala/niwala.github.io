@@ -220,6 +220,36 @@
 	margin-bottom: 0 !important;
 }
 
+.toggle
+{
+	margin-top: 10px;
+	padding: 2px;
+	background: #111111;
+	border-radius: 5px;
+	flex-direction: row;
+	display: flex;
+	align-items: center;
+	border-width: 0;
+}
+
+.toggle-icon
+{
+	width: 16px;
+	height: 16px;
+	margin: 4px;
+	transform: rotate(-90deg);
+
+	transition: transform 0.3s;
+}
+
+.toggle-content
+{
+	border-radius: 0px 0px 5px 5px;
+	border-width: 1px;
+	border-color: #111111;
+	border-style: solid;
+}
+
 .divider
 {
   width: 100%;

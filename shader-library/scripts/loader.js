@@ -390,14 +390,14 @@ function LoadLoadingShader()
 function AddFunctionPreview(functionPreview)
 {
 	//Add buttons for functions
-	let functionBox = "<button class='function-box' onclick=\"GoToFunction('" + functionPreview.name + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
+	let functionBox = "<button class='function-box' onauxclick=\"GoToFunction(event, '" + functionPreview.name + "')\" onclick=\"GoToFunction(event, '" + functionPreview.name + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
 	functionPreview.niceName + 
 	"</h3><p style='margin-top:0; margin-bottom:0; opacity:0.8;'>" + 
 	functionPreview.description + 
 	"</p></div><canvas id='shader-preview-" + functionPreview.name + "' width='150' height='150' class='shader-index-preview'></canvas></div></button>";
 	
 	let elementID = "search-item-" + functionPreview.name;
-	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"" + elementID + "\" onclick=\"GoToFunction('" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
+	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"" + elementID + "\" onauxclick=\"GoToFunction(event, '" + functionPreview.name + "')\" onclick=\"GoToFunction(event, '" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
 
 
 	functionList.innerHTML += functionBox;
@@ -413,36 +413,55 @@ function AddFunctionPreview(functionPreview)
 //Go functions ------------------------------------------------------------------------------------------------
 //The go functions mark a change of state, the url is adapted and the current page is displayed.
 
-function GoToFunction(name)
+function GoToFunction(event, name)
 {
-	StopSearch();
+	//Build new url
+	let url = new URL(window.location.href);
+	if (name != null)
+		url.search = "name=" + name;
+	else
+	url.search = "";
 
-	name = name.toLowerCase();
-	pageName = name;
-	exampleName = null;
+	//Context clic : Nothing
+	if (event.button == 2)
+		return;
 
-	//Adapt URL
-	const currentUrl = new URL(window.location.href);
-    currentUrl.search = "name=" + name;
-    window.history.pushState({}, document.title, currentUrl);
+	//Shift key : Open in new tab
+	if (event != null && (event.ctrlKey || event.shiftKey || event.button == 1))
+	{
+		window.open(url, '_blank');
+	}
 
-	LoadAndShowCurrentPage();
+	//Open in current tab
+	else
+	{
+		StopSearch();
+
+		if (name != null)
+			name = name.toLowerCase();
+		pageName = name;
+		exampleName = null;
+
+		//Adapt URL
+		window.history.pushState({}, document.title, url);
+
+		LoadAndShowCurrentPage();
+	}
 }
 
-function GoHome()
+function GoHome(event)
 {
-	StopSearch();
-
-	pageName = null;
-	exampleName = null;
-
-	//Adapt URL
-	const currentUrl = new URL(window.location.href);
-    currentUrl.search = "";
-    window.history.pushState({}, document.title, currentUrl);
-
-	LoadAndShowCurrentPage();
+	GoToFunction(event, null);
 }
+
+function OpenInNewTab(href) 
+{
+	Object.assign(document.createElement('a'), {
+	  target: '_blank',
+	  rel: 'noopener noreferrer',
+	  href: href,
+	}).click();
+  }
 
 //-------------------
 
@@ -477,17 +496,25 @@ function SetupSearchHooks()
 		}
     });
 	
-	searchForm.addEventListener("submit", function() 
+	searchForm.addEventListener("submit", function(event) 
 	{
 		event.preventDefault(); 
-		SelectFirstSearchItem();
+		SelectFirstSearchItem(event);
     });
-	
+
 	//Add shortcut on search bar
 	document.addEventListener("keydown", function(event) 
 	{
+		if (event.key === 'Enter' && (event.shiftKey || event.ctrlKey))
+			{
+				SelectFirstSearchItem(event);
+				event.preventDefault(); 
+			}
+
 		if (document.activeElement === searchBar)
 			return;
+		
+
 				
 		if (event.key === "f" || event.key === "F") 
 		{
@@ -525,13 +552,13 @@ function OpenFunctionFromURL()
 	bypassUrlAdaptation = false;
 }
 
-function SelectFirstSearchItem()
+function SelectFirstSearchItem(event)
 {
 	let searchText = searchBar.value.toLowerCase();
 	
 	if (searchText == "home")
 	{
-		GoHome();
+		GoHome(event);
 		return;
 	}
 
@@ -540,14 +567,14 @@ function SelectFirstSearchItem()
 		window.location="editor.html"
 		return;
 	}
-	
+
 	searchItems.forEach((value, key) => 
 	{
 		let inSearch = key.includes(searchText);
 		if (inSearch)
 		{
 			let functionName = value[1];
-			GoToFunction(functionName);
+			GoToFunction(event, functionName);
 			return;
 		}
 	});

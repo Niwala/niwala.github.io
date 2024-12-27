@@ -59,7 +59,7 @@
 				</div>
 				
 				<!-- Home button -->
-				<button class="transparent-button" onclick="GoHome()">
+				<button class="transparent-button" onclick="GoHome(event)" onauxclick="GoHome(event)">
 					<h1 class="main-header">Shader Library</h1>
 				</button>
 
@@ -140,10 +140,18 @@
 			<div class="example-box" id="example-box">						
 				<div class="horizontal" id="template-example">
 					<div class="vertical">
+						
+						<div class="horizontal">
 
-						<!-- Example Properties -->
-						<div class='heading_2'>Propriétés</div>
-						<div class="shader-properties" id="example-properties"></div>
+							<div class="vertical">
+								<!-- Example Properties -->
+								<div class='heading_2'>Propriétés</div>
+								<div class="shader-properties" id="example-properties"></div>
+							</div>
+
+							<!-- Example Canvas -->
+							<canvas id="example-canvas" width="200" height="200" class="shader-preview"></canvas>
+						</div>
 
 						<!-- Example Content -->
 						<div class="divider" style="margin-top:15px; margin-bottom: 30px;"></div>
@@ -156,9 +164,6 @@
 						</div>
 
 					</div>
-
-					<!-- Example Canvas -->
-					<canvas id="example-canvas" width="200" height="200" class="shader-preview"></canvas>
 				</div>
 			</div>
 		</div>
