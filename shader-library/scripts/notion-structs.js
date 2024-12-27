@@ -1,7 +1,11 @@
 
 function UrlOfImage(property)
 {
-   return property.external.url;
+   if (property.type == "file")
+      return property.file.url;
+   else if (property.type == "external")
+      return property.external.url;
+   return "";
 }
 
 function ValueFromRichText(property)

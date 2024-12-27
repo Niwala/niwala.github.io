@@ -225,6 +225,8 @@
   width: 100%;
   height: 1px;
   background-color: #ffffff2a;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .notion-code-container
@@ -271,4 +273,10 @@
 .notion-image
 {
 	max-width: 100%;
+}
+
+ul
+{
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
