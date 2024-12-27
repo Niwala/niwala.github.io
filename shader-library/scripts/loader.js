@@ -534,6 +534,12 @@ function SelectFirstSearchItem()
 		GoHome();
 		return;
 	}
+
+	if (searchText == "editor")
+	{
+		window.location="editor.html"
+		return;
+	}
 	
 	searchItems.forEach((value, key) => 
 	{
