@@ -266,10 +266,15 @@ class NotionBlock
 
    GetIcon(icon)
    {
+      if (icon == null)
+         return "";
       switch(icon.type)
       {
          case "external":
             return "<img class='notion-icon' src='" + icon.external.url + "'>"
+
+         case "file":
+            return "<img class='notion-icon' src='" + icon.file.url + "'>"
 
          case "custom_emoji":
             return "<img class='notion-icon' src='" + icon.custom_emoji.url + "'>"

@@ -1,5 +1,5 @@
-Parse();
 SetupSearchHooks();
+Parse();
 
 //URL params
 var exampleID;					//id
@@ -89,18 +89,16 @@ function Parse()
 
 	LoadAndShowCurrentPage();
 
-	//LoadNotionHome();
-
 	//ReadFunctionsIndex();
 	
 	//Track and react to previous / next page of browser
 	window.addEventListener('popstate', (event) => 
 	{
-		if (event.state) 
+		// if (event.state) 
 		{
-			bypassUrlAdaptation = true;
-			OpenFunctionFromURL();
-			bypassUrlAdaptation = false;
+			LoadUrlParams();
+			ApplyUrlParams();
+			LoadAndShowCurrentPage();
 		}
 	});
 }
@@ -116,8 +114,12 @@ function LoadUrlParams()
 	{
 		packedData = new PackedData();
 		packedData.DecompressURL(embed);
-		console.log(packedData.shader);
 		hasEmbed = true;
+	}
+	else
+	{
+		packedData = null;
+		hasEmbed = false;
 	}
 
 	if (exampleID == null)
@@ -133,7 +135,13 @@ function LoadUrlParams()
 			else
 			{
 				pageName = fullName;
+				exampleName = null;
 			}
+		}
+		else
+		{
+			pageName = null;
+			exampleName = null;
 		}
 	}
 	else
@@ -364,7 +372,6 @@ function LoadAndShowEmbed()
 	ShowExample(example);
 }
 
-
 function LoadLoadingShader()
 {
 	loading = document.getElementById("loading");
@@ -380,42 +387,17 @@ function LoadLoadingShader()
 	);
 }
 
-function LoadNotionHome()
-{
-	FetchNotionDatabase((data) => 
-	{
-		functionPreviews = new Map();
-
-		//Foreach entry in database
-		for(let i = 0; i < data.results.length; i++)
-		{
-			let functionPreview = new FunctionPreview(data.results[i]);
-			functionPreviews.set(functionPreview.name, functionPreview);
-
-			//Add function to the homepage list if public
-			if (functionPreview.public)
-			{
-				AddFunctionPreview(functionPreview);
-			}
-		}
-
-		BindHomepageCanvases();
-
-		homepage.style.display = "flex";
-		introduction.style.display = "flex";
-	});
-}
-
 function AddFunctionPreview(functionPreview)
 {
 	//Add buttons for functions
 	let functionBox = "<button class='function-box' onclick=\"GoToFunction('" + functionPreview.name + "')\"><div class='horizontal'><div class='vertical' style='margin-right:8px;'><h3>" +
 	functionPreview.niceName + 
-	"</h3><p>" + 
+	"</h3><p style='margin-top:0; margin-bottom:0; opacity:0.8;'>" + 
 	functionPreview.description + 
 	"</p></div><canvas id='shader-preview-" + functionPreview.name + "' width='150' height='150' class='shader-index-preview'></canvas></div></button>";
 	
-	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"search-item-" + functionPreview.name + "\" onclick=\"GoToFunction('" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
+	let elementID = "search-item-" + functionPreview.name;
+	let searchButton = "<button type=\"button\" class=\"search-bar-item\" id=\"" + elementID + "\" onclick=\"GoToFunction('" + functionPreview.name + "')\">" + functionPreview.niceName + "</button>";
 
 
 	functionList.innerHTML += functionBox;
@@ -423,7 +405,8 @@ function AddFunctionPreview(functionPreview)
 	
 
 	//Add search item
-	searchItems.set((functionPreview.name + " " + functionPreview.tags).toLowerCase(), document.getElementById("search-item-" + functionPreview.name));
+	let searchKeywords = (functionPreview.name + " " + functionPreview.niceName + " " + functionPreview.tags).toLowerCase();
+	searchItems.set(searchKeywords, [elementID, functionPreview.name, null]);
 }
 
 
@@ -432,16 +415,32 @@ function AddFunctionPreview(functionPreview)
 
 function GoToFunction(name)
 {
+	StopSearch();
+
 	name = name.toLowerCase();
 	pageName = name;
 	exampleName = null;
+
+	//Adapt URL
+	const currentUrl = new URL(window.location.href);
+    currentUrl.search = "name=" + name;
+    window.history.pushState({}, document.title, currentUrl);
+
 	LoadAndShowCurrentPage();
 }
 
 function GoHome()
 {
+	StopSearch();
+
 	pageName = null;
 	exampleName = null;
+
+	//Adapt URL
+	const currentUrl = new URL(window.location.href);
+    currentUrl.search = "";
+    window.history.pushState({}, document.title, currentUrl);
+
 	LoadAndShowCurrentPage();
 }
 
@@ -532,7 +531,6 @@ function SelectFirstSearchItem()
 	
 	if (searchText == "home")
 	{
-		StopSearch();
 		GoHome();
 		return;
 	}
@@ -542,17 +540,11 @@ function SelectFirstSearchItem()
 		let inSearch = key.includes(searchText);
 		if (inSearch)
 		{
-			value.click();
+			let functionName = value[1];
+			GoToFunction(functionName);
 			return;
 		}
 	});
-}
-
-function SelectSearchItem(filename)
-{
-	filename = filename.toLowerCase();
-	StopSearch();
-	GoToFunction(filename);
 }
 
 function StopSearch()
@@ -843,10 +835,21 @@ function SearchFunction(search)
 		searchBarList.style.display = 'flex';
 	}
 	
+	
 	searchItems.forEach((value, key) => 
 	{
+		let elementID = value[0];
+		let functionName = value[1];
+		let element = value[2];
+
+		if (element == null)
+		{
+			element = document.getElementById(elementID);
+			searchItems.set(key, [elementID, functionName, element]);
+		}
+
 		let inSearch = key.includes(searchText);
-		value.style.display = inSearch ? 'flex' : 'none';
+		element.style.display = inSearch ? 'flex' : 'none';
 	});
 	
 }
