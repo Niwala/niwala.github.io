@@ -32,6 +32,7 @@
 		<script src="./scripts/notion-reader.js"></script>
 		<script src="./scripts/gl-matrix-min.js" defer></script>
 		<script src="./scripts/renderer.js" defer></script>
+		<script src="./scripts/function-structs.js" defer></script>
 		<script src="./scripts/editor.js" defer></script>
 	
 	</head>
@@ -82,6 +83,16 @@
 			<span><b>Uniforms :</b> time, screenSize, mousePosition</span>
 			<span><b>Constants :</b> PI, TAU</span>
 			<span><b>Functions :</b> hash, noise, smin, hash, rot2D</span>
+			<div class="separator"></div>
+			<div><b>Attributes</b></div>
+			<span>You can specify attributes to create fields exposed to users. You must always specify a default value.
+				<lu>
+					<li>[Range(default, min, max)]</li>
+					<li>[Float(default)]</li>
+					<li>[Toggle(default)]</li>
+					<li>[Color(default)]</li>
+				</lu>
+			</span>
 		</div>
 
 		<!-- Examples -->
@@ -144,9 +155,12 @@
 				<div id="scroll-content">
 					<div id="scroll-area">
 						<textarea id="code-editor-area" class="format-code" type="text" spellcheck="false" onkeyup="CompileShader()">
+[Range(0.0, 0.0, 20.0)]
+uniform float speed;
+
 float4 Execute(float2 uv)
 {
-	return vec4(uv, sin(time) * 0.5 + 0.5, 1.0);
+    return vec4(uv, sin(time * speed) * 0.5 + 0.5, 1.0);
 }</textArea>						
 
 					<div id="overlay">
@@ -161,7 +175,7 @@ float4 Execute(float2 uv)
 					<div class="vertical example-box" style="border-radius: 5px; margin-right: 20px;">
 
 						<!-- Shader Properties -->
-						<div class="shader-properties" id="example-properties"></div>
+						<div class="shader-properties" id="shader-properties"></div>
 
 					</div>
 

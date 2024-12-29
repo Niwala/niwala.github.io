@@ -7,6 +7,7 @@ var overlayCanvas;
 var shaderCanvas;
 var scrollArea;
 var renderer;
+var shaderProperties;
 
 //Popup panel
 var popupPanel;
@@ -19,6 +20,7 @@ var exportSection;
 //
 var fontSizeRule;
 var lineNumbersRule;
+
 
 //URL params
 var shaderOnly = false;
@@ -49,6 +51,7 @@ function Main()
 	codeEditorOverlay = document.getElementById("code-editor-overlay");
 	shaderCanvas = document.getElementById("shader-canvas");
 	scrollArea = document.getElementById("scroll-area");
+	shaderProperties = document.getElementById("shader-properties");
 
 	layoutSection = document.getElementById("layout-section");
 	exportSection = document.getElementById("export-section");
@@ -136,13 +139,58 @@ function CompileShader()
 	AsyncHighlight();
 
 	let shader = ConvertIntegersToFloats(codeEditorArea.value);
-	let data = new ShaderData(shaderCanvas, "shader-editor", shader, null);
+	currentShaderData = new ShaderData(shaderCanvas, "shader-editor", shader, null);
 
 	renderer.ClearRenderers();
-	renderer.AddRenderer(data);
+	renderer.AddRenderer(currentShaderData);
 
 	renderer.Render(Date.now());
+	UpdateProperties(currentShaderData);
 
+}
+
+function UpdateProperties(shaderData)
+{
+	let html = "";
+	shaderData.attributes.forEach(element => 
+	{
+		switch (element.attribute)
+		{
+			case "Slider":
+			case "slider":
+			case "Range":
+			case "range":
+				let slider = new SliderField(element.uniform, element.arguments[0], element.arguments[1], element.arguments[2]);
+				html += slider.CreateHtml("shader-editor");
+			break;
+
+			case "Float":
+			case "float":
+			case "Field":
+			case "field":
+				let floatField = new FloatField(element.uniform, element.arguments[0]);
+				html += floatField.CreateHtml("shader-editor");
+			break;
+
+			case "Color":
+			case "color":
+				let colorField = new ColorField(element.uniform, element.arguments[0]);
+				html += colorField.CreateHtml("shader-editor");
+			break;
+
+			case "Toggle":
+			case "toggle":
+			case "Bool":
+			case "bool":
+			case "Checker":
+			case "checker":
+				let toggleField = new ToggleField(element.uniform, element.arguments[0]);
+				html += toggleField.CreateHtml("shader-editor");
+			break;
+		}
+	});
+
+    shaderProperties.innerHTML = html;
 }
 
 async function AsyncHighlight()
@@ -153,7 +201,7 @@ async function AsyncHighlight()
 function SyncScroll()
 {
 	overlayElement.scrollTop = codeEditorArea.scrollTop;
-   overlayElement.scrollLeft = codeEditorArea.scrollLeft;
+	overlayElement.scrollLeft = codeEditorArea.scrollLeft;
 }
 
 function SetHeights()
@@ -298,12 +346,27 @@ function ClosePopup(event)
 	popupPanel.style.display = 'none';
 }
 
-//Properties controls ---------------------
-
-function AddToggle(event)
+async function OpenExample(fileName)
 {
+    try 
+	{
+        const response = await fetch("./examples/" + fileName + ".shader");
 
+        if (!response.ok) 
+		{
+            throw new Error(`Error on loading example : (${fileName}) ${response.statusText}`);
+        }
+
+        const text = await response.text();
+        codeEditorArea.value = text;
+		CompileShader();
+    } 
+	catch (error) 
+	{
+        console.error('Unable to load exemple : ' + fileName);
+    }
 }
+//Properties controls ---------------------
 
 function SetFontSize(slider)
 {

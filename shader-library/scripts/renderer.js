@@ -12,8 +12,11 @@ class ShaderData
 		this.width = element.getAttribute("width");
 		this.height = element.getAttribute("height");
 		this.shaderGuid = shaderGuid;
-		this.shaderFragContent = shaderInclude;
 		this.shaderProperties = shaderProperties;
+
+		let parse = this.ParseAttributes(shaderInclude);
+		this.shaderFragContent = parse.cleanedShader;
+		this.attributes = parse.parsedUniforms;
 
 		this.locations = new Map();
 		this.floatValues = new Map();
@@ -155,7 +158,7 @@ class ShaderData
 			}
 
 			//Custom shader 
-			` + shaderInclude + ` 
+			` + this.shaderFragContent + ` 
 
 			void main(void) 
 			{
@@ -176,6 +179,38 @@ class ShaderData
 				gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 			}
 			`;
+	}
+
+	ParseAttributes(shaderCode)
+	{
+		const result = [];
+    
+		const regex = /\[([^\]]+)]\s*uniform\s+([^\s]+)\s+([^\s;]+);/g;
+		
+		let cleanedShader = shaderCode;
+		
+		let match;
+		while ((match = regex.exec(shaderCode)) !== null)
+		{
+			const annotation = match[1]; // "Range(5.0, 0.0, 20.0)"
+			const type = match[2]; // "float"
+			const name = match[3]; // "speed"
+			
+			const argsMatch = annotation.match(/([a-zA-Z]+)\(([^)]+)\)/);
+			const attributeName = argsMatch ? argsMatch[1] : null; // Example : "Range"
+			const argumentsList = argsMatch ? argsMatch[2].split(',').map(arg => arg.trim()) : []; // Example : ["5.0", "0.0", "20.0"]
+			
+			result.push({
+				uniform: name,
+				type: type,
+				attribute: attributeName,
+				arguments: argumentsList
+			});
+			
+			cleanedShader = cleanedShader.replace(match[0], `uniform ${type} ${name};`);
+		}
+		
+		return { cleanedShader, parsedUniforms: result };
 	}
 
 	SetFloatValue(name, value)

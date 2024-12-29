@@ -1,3 +1,41 @@
+#code-editor-area
+{
+	color: rgba(255, 255, 255, 1.0);/* SyntaxColoring disabled */
+	caret-color: white;
+	background-color: transparent;
+   outline-style: none;
+   border-style: none;
+
+   pointer-events: all;
+   z-index: 20;
+   outline-style: none;
+
+   padding-left: 60px; /* Sync with line-numbers & SetFontSize function */
+   padding-top: 24px;
+
+   flex-shrink: 0;
+   flex-grow: 1;
+   display: flex;
+
+   position: absolute;
+
+   white-space: nowrap;
+   overflow: hidden;
+   resize: none; 
+}
+
+#overlay
+{
+   display: none;/* SyntaxColoring disabled */
+
+   z-index: 15;
+   pointer-events: none !important;
+   user-select: none !important;
+   margin: 0;
+   padding: 0;
+
+   position: absolute;
+}
 
 #font-size-control
 {
@@ -150,32 +188,6 @@ button.active
    border-radius: 5px;
 }
 
-#code-editor-area
-{
-	color: rgba(255, 255, 255, 0.0);
-	caret-color: white;
-	background-color: transparent;
-   outline-style: none;
-   border-style: none;
-
-   pointer-events: all;
-   z-index: 20;
-   outline-style: none;
-
-   padding-left: 60px; /* Sync with line-numbers & SetFontSize function */
-   padding-top: 24px;
-
-   flex-shrink: 0;
-   flex-grow: 1;
-   display: flex;
-
-   position: absolute;
-
-   white-space: nowrap;
-   overflow: hidden;
-   resize: none; 
-}
-
 .line-numbers
 {
    padding-left : 60px !important; /* Sync with code-editor-area & SetFontSize function */
@@ -201,17 +213,6 @@ button.active
    border-style: none !important;
    margin: 0 !important;
    padding: 0 !important;
-}
-
-#overlay
-{
-   z-index: 15;
-   pointer-events: none !important;
-   user-select: none !important;
-   margin: 0;
-   padding: 0;
-
-   position: absolute;
 }
 
 #text-size

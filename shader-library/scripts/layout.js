@@ -1,6 +1,5 @@
 
 var currentExample;
-var currentshaderData;
 var currentPage;
 
 

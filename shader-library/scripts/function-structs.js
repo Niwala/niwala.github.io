@@ -2,6 +2,7 @@ var currentExampleFields = new Map();
 var isDragging;
 var dragGuid;
 var dragPosition;
+var currentShaderData;
 
 //Drag stuf -------------------------------------
 document.addEventListener('mouseup', () => 
@@ -66,9 +67,9 @@ class ToggleField
 	SetValue(value)
 	{
 		this.value = value;
-		if (currentshaderData != null)
+		if (currentShaderData != null)
 		{
-			currentshaderData.SetFloatValue(this.name, value ? 1.0 : 0.0);
+			currentShaderData.SetFloatValue(this.name, value ? 1.0 : 0.0);
 		}
 	}
 }
@@ -120,9 +121,9 @@ class FloatField
 	SetValue(value)
 	{
 		this.value = value;
-		if (currentshaderData != null)
+		if (currentShaderData != null)
 		{
-			currentshaderData.SetFloatValue(this.name, value);
+			currentShaderData.SetFloatValue(this.name, value);
 		}
 	}
 }
@@ -174,9 +175,10 @@ class SliderField
 	SetValue(value)
 	{
 		this.value = value;
-		if (currentshaderData != null)
+
+		if (currentShaderData != null)
 		{
-			currentshaderData.SetFloatValue(this.name, value);
+			currentShaderData.SetFloatValue(this.name, value);
 		}
 	}
 }
@@ -243,9 +245,9 @@ class ColorField
 	SetValue(value)
 	{
 		this.value = value;
-		if (currentshaderData != null)
+		if (currentShaderData != null)
 		{
-			currentshaderData.SetColorValue(this.name, value);
+			currentShaderData.SetColorValue(this.name, value);
 		}
 	}
 }

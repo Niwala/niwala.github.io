@@ -10,6 +10,7 @@ function FetchNotionDatabase(callback)
 {
 	FetchNotion("database/get-data/default-database", (error, data) => 
 	{
+		console.log(data);
 		if (error)
 			console.error(error);
 		else
