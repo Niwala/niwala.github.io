@@ -9,7 +9,8 @@ float4 Execute(float2 uv)
 {
     float box = sdBox(uv - 0.5, float2(0.4, 0.4));
     float shadows = saturate(abs((box - 0.06) * 25.0));
-    box = step(box, 0.07) * step(0.05, box);
+    shadows = pow(shadows, 0.3);
+    box = smoothstep(0.075, 0.07, box) * smoothstep(0.05, 0.055, box);
     float3 color = float3(uv, 0.0);
     color.xyz *= shadows * 0.7 + 0.3;
     color.xyz = max(color.xyz, box);

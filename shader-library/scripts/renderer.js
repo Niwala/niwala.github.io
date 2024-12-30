@@ -223,12 +223,15 @@ class ShaderData
 		this.colorValues.set(name, color);
 	}
 
-	UpdateProperties(gl, time)
+	UpdateProperties(gl, time, screenSize, mousePos, layout)
 	{
 		gl.useProgram(this.shaderProgram);
 		
 		//Built-in Properties
 		gl.uniform1f(this.timeLocation, time);
+		gl.uniform4f(this.screenSize, screenSize[0], screenSize[1], screenSize[2], screenSize[3]);
+		gl.uniform4f(this.mousePosLocation, mousePos[0], mousePos[1], mousePos[2], mousePos[3]);
+		gl.uniform1f(this.layout, layout);
 		
 		//Example properties
 		this.floatValues.forEach((value, key) => 
@@ -264,7 +267,9 @@ class ShaderData
 
 		//Get properties locations > Built-in properties
 		this.timeLocation = gl.getUniformLocation(this.shaderProgram, "time");
+		this.screenSize = gl.getUniformLocation(this.shaderProgram, "screenSize");
 		this.mousePosLocation = gl.getUniformLocation(this.shaderProgram, "mousePos");
+		this.layout = gl.getUniformLocation(this.shaderProgram, "layout");
 
 		// Collect all the info needed to use the shader program.
 		// Look up which attributes our shader program is using
@@ -417,10 +422,19 @@ class ShaderRenderer
 			this.gl.viewport.height = this.height;
 		}
 
+		//Screen size
+		let invWidth = 1.0 / currentWidth;
+		let invHeight = 1.0 / currentHeight;
+		let screenSize = {currentWidth, currentHeight, invWidth, invHeight};
+
+		//Mouse Position
+		let a = 0.0;
+		let mousePos = {a, a, a, a};
+
 		this.clearScene(this.gl);
 		for (var i = 0; i < this.shaderData.length; i++) 
 		{
-			this.shaderData[i].UpdateProperties(this.gl, this.time);
+			this.shaderData[i].UpdateProperties(this.gl, this.time, screenSize, mousePos, 0);
 			this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
 		}
 					
