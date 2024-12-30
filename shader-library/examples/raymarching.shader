@@ -1,6 +1,9 @@
 [Range(0.4, -10.0, 10.0)]
 uniform float speed;
 
+[Field(0.1)]
+uniform float size;
+
 float box(float3 p, float3 s)
 {
     p = abs(p) - s;
@@ -9,6 +12,7 @@ float box(float3 p, float3 s)
 
 float map(float3 p)
 {
+    float3 op = p;
     float s = 5.0;
     for(int i = 0; i < 4; ++i)
     {
@@ -19,7 +23,10 @@ float map(float3 p)
         p -= s;
         s *= 0.5;
     }
-    return box(p, float3(1.0, 1.0, 1.0));
+    
+    float d = smin(length(op) - 3.0, box(p, float3(0.4, size, 2.0)), 8.0);
+    
+    return d;
 }
 
 float4 Execute(float2 uv)

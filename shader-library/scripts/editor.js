@@ -90,6 +90,27 @@ function Main()
 	CompileShader();
 }
 
+function GoToLibrary(event)
+{
+	let url = "index.html";
+
+	//Context clic : Nothing
+	if (event.button == 2)
+		return;
+
+	//Shift key : Open in new tab
+	if (event != null && (event.ctrlKey || event.shiftKey || event.button == 1))
+	{
+		window.open(url, '_blank');
+	}
+	else
+	{
+		window.location="index.html"
+	}
+
+
+}
+
 function ConvertToUrl()
 {
 	let packedData = new PackedData();
@@ -136,7 +157,7 @@ function CompileShader()
 	codeElement.innerHTML = hlsl + "\n";
 	textSizeElement.innerText = hlsl + "\n";
 	SetHeights();
-	AsyncHighlight();
+	// AsyncHighlight();
 
 	let shader = ConvertIntegersToFloats(codeEditorArea.value);
 	currentShaderData = new ShaderData(shaderCanvas, "shader-editor", shader, null);
@@ -144,7 +165,7 @@ function CompileShader()
 	renderer.ClearRenderers();
 	renderer.AddRenderer(currentShaderData);
 
-	renderer.Render(Date.now());
+	// renderer.Render(Date.now());
 	UpdateProperties(currentShaderData);
 
 }

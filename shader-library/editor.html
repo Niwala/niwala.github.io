@@ -43,7 +43,7 @@
   
 	<!-- Banner -->
 	<div id="banner">
-		<div class="centred" style="justify-content: space-between; align-items: center;">
+		<div class="centred" style="justify-content: space-between; align-items: center; flex-direction: row;">
 		
 			<!-- Left part -->
 			<div class="vertical">
@@ -54,13 +54,14 @@
 				</div>
 				
 				<!-- Home button -->
-				<button class="transparent-button" onclick="GoHome()">
-					<h1 class="main-header">Shader editor</h1>
+				<button class="transparent-button" onclick="GoToLibrary(event)" onauxclick="GoToLibrary(event)">
+					<h1 class="main-header">Shader Editor</h1>
 				</button>
 
-			</div>
+			</div>	
 		</div>
 	</div>
+
 	
 	<div id="text-size" class="format-code"></div>
 
@@ -97,10 +98,11 @@
 
 		<!-- Examples -->
 		<div id="examples-section" class="vertical" style="display: none;">
-			<div class="popup-panel-header">Examples</div>
+			<div class="popup-panel-header" id="examples-btn-list">Examples</div>
 			<button onclick="OpenExample('default')">Default</button>
 			<button onclick="OpenExample('mask')">Mask</button>
 			<button onclick="OpenExample('raymarching')">Raymarching</button>
+			<button onclick="OpenExample('layout-check')">Layout Check</button>
 		</div>
 
 		<!-- Export Properties -->
