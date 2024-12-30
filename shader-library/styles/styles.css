@@ -68,6 +68,16 @@ img
 	border-radius: 5px;
 }
 
+.selected-btn
+{
+	background-color: #2f4d6e;
+}
+
+.selected-btn:hover
+{
+	background-color: #426488;
+}
+
 .error-message
 {
 	background-color: #4c1616;

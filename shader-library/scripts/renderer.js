@@ -1,18 +1,23 @@
 
+onmousemove = function(e){mouseX = e.clientX; mouseY = e.clientY}
+
+var mouseX;
+var mouseY;
+
 function RendererFromExample(canvas, data, example)
 {
-	return new ShaderData(canvas, data.name + "-" + example.name, example.shader, example.properties);
+	return new ShaderData(canvas, data.name + "-" + example.name, example.shader, 1);
 }
 
 class ShaderData
 {
-	constructor(element, shaderGuid, shaderInclude, shaderProperties)
+	constructor(element, shaderGuid, shaderInclude, layout)
 	{
 		this.element = element;
 		this.width = element.getAttribute("width");
 		this.height = element.getAttribute("height");
 		this.shaderGuid = shaderGuid;
-		this.shaderProperties = shaderProperties;
+		this.layout = layout;
 
 		let parse = this.ParseAttributes(shaderInclude);
 		this.shaderFragContent = parse.cleanedShader;
@@ -31,12 +36,14 @@ class ShaderData
 			uniform mat4 uModelViewMatrix;
 			uniform mat4 uProjectionMatrix;
 
-			varying highp vec2 vTextureCoord;
+			varying highp vec4 vTextureCoord;
+
+			uniform highp vec4 editor_uvScaleOffset;
 
 			void main(void) 
 			{
 				gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-				vTextureCoord = aTextureCoord;
+				vTextureCoord = vec4(aTextureCoord * editor_uvScaleOffset.xy + editor_uvScaleOffset.zw, aTextureCoord);
 			}
 			`;
 
@@ -44,10 +51,7 @@ class ShaderData
 		this.fragmentShader = 
 			`
 			precision highp float;
-			varying vec2 vTextureCoord;
-
-			uniform sampler2D uSampler;
-			uniform float time;
+			varying vec4 vTextureCoord;
 			
 			#define frac(x) fract(x)
 			#define lerp(a, b, c) mix(a, b, c)
@@ -57,6 +61,12 @@ class ShaderData
 			#define float2 vec2
 			#define float3 vec3
 			#define float4 vec4
+
+			uniform sampler2D uSampler;
+			uniform float time;
+			uniform float4 screenSize;
+			uniform float4 mousePos;
+			uniform float layout;
 
 			// Description : Array and textureless GLSL 2D simplex noise function. -----------------
 			//      Author : Ian McEwan, Ashima Arts.
@@ -169,7 +179,7 @@ class ShaderData
 		this.errorFragmentShader = 
 			`
 			precision highp float;
-			varying vec2 vTextureCoord;
+			varying vec4 vTextureCoord;
 
 			uniform sampler2D uSampler;
 			uniform float time;
@@ -223,16 +233,75 @@ class ShaderData
 		this.colorValues.set(name, color);
 	}
 
-	UpdateProperties(gl, time, screenSize, mousePos, layout)
+	UpdateProperties(gl, time)
 	{
 		gl.useProgram(this.shaderProgram);
 		
+		let bounds = this.element.getBoundingClientRect();
+
+		//Layout
+		let uvFactorX = 1.0;
+		let uvFactorY = 1.0;
+		let uvOffsetX = 0.0;
+		let uvOffsetY = 0.0;
+
+		if (this.layout != 0)
+		{
+			if (bounds.width > bounds.height)
+			{
+				//Default : Left
+				uvFactorX = bounds.width / bounds.height;
+
+				//Center
+				if ((this.layout & 2) == 2)
+				{
+					uvOffsetX = (1.0 - uvFactorX) * 0.5;
+				}
+
+				//Right
+				else if ((this.layout & 4) == 4)
+				{
+					uvOffsetX = 1.0 - uvFactorX;
+				}
+			}
+			else if (bounds.height > bounds.width)
+			{
+				//Default : Bottom
+				uvFactorY = bounds.height / bounds.width;
+
+				//Center
+				if ((this.layout & 8) == 8)
+				{
+					uvOffsetY = (1.0 - uvFactorY) * 0.5;
+				}
+
+				//Right
+				else if ((this.layout & 16) == 16)
+				{
+					uvOffsetY = 1.0 - uvFactorY;
+				}
+			}
+		}
+		gl.uniform4f(this.uvScaleOffsetLocation, uvFactorX, uvFactorY, uvOffsetX, uvOffsetY);
+
+		//Mouse Position
+		let mx = isNaN(mouseX) ? bounds.width * 0.5 : (mouseX - bounds.x);
+		let my = isNaN(mouseY) ? bounds.height * 0.5 : bounds.height - (mouseY - bounds.y);
+		let nmx = mx / bounds.width;
+		let nmy = my / bounds.height;
+
+		//Screen size
+		let ssX = bounds.width;
+		let ssY = bounds.height;
+		let ssZ = 1.0 / ssX;
+		let ssW = 1.0 / ssY;
+
 		//Built-in Properties
 		gl.uniform1f(this.timeLocation, time);
-		gl.uniform4f(this.screenSize, screenSize[0], screenSize[1], screenSize[2], screenSize[3]);
-		gl.uniform4f(this.mousePosLocation, mousePos[0], mousePos[1], mousePos[2], mousePos[3]);
-		gl.uniform1f(this.layout, layout);
+		gl.uniform4f(this.screenSizeLocation, ssX, ssY, ssZ, ssW);
+		gl.uniform4f(this.mousePosLocation, nmx, nmy, mx, my);
 		
+
 		//Example properties
 		this.floatValues.forEach((value, key) => 
 		{
@@ -267,9 +336,9 @@ class ShaderData
 
 		//Get properties locations > Built-in properties
 		this.timeLocation = gl.getUniformLocation(this.shaderProgram, "time");
-		this.screenSize = gl.getUniformLocation(this.shaderProgram, "screenSize");
+		this.screenSizeLocation = gl.getUniformLocation(this.shaderProgram, "screenSize");
 		this.mousePosLocation = gl.getUniformLocation(this.shaderProgram, "mousePos");
-		this.layout = gl.getUniformLocation(this.shaderProgram, "layout");
+		this.uvScaleOffsetLocation = gl.getUniformLocation(this.shaderProgram, "editor_uvScaleOffset");
 
 		// Collect all the info needed to use the shader program.
 		// Look up which attributes our shader program is using
@@ -422,19 +491,10 @@ class ShaderRenderer
 			this.gl.viewport.height = this.height;
 		}
 
-		//Screen size
-		let invWidth = 1.0 / currentWidth;
-		let invHeight = 1.0 / currentHeight;
-		let screenSize = {currentWidth, currentHeight, invWidth, invHeight};
-
-		//Mouse Position
-		let a = 0.0;
-		let mousePos = {a, a, a, a};
-
 		this.clearScene(this.gl);
 		for (var i = 0; i < this.shaderData.length; i++) 
 		{
-			this.shaderData[i].UpdateProperties(this.gl, this.time, screenSize, mousePos, 0);
+			this.shaderData[i].UpdateProperties(this.gl, this.time);
 			this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
 		}
 					

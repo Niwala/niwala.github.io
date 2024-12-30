@@ -29,12 +29,12 @@ float map(float3 p)
     return d;
 }
 
-float4 Execute(float2 uv)
+float4 Execute(float4 uv)
 {
-    uv -= 0.5;
+    uv.xy -= 0.5;
     
     float3 s = float3(0.0, 0.0, -40.0);
-    float3 r = normalize(float3(uv, 1.0));
+    float3 r = normalize(float3(uv.xy, 1.0));
     
     float3 p = s;
     for(int i = 0; i < 100; ++i)

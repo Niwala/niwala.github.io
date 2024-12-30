@@ -21,6 +21,9 @@ var exportSection;
 var fontSizeRule;
 var lineNumbersRule;
 
+var currentLayoutBtn;
+var currentLayoutValue = 10;
+
 
 //URL params
 var shaderOnly = false;
@@ -64,6 +67,10 @@ function Main()
 	document.getElementById("banner").addEventListener('click', ClosePopup);
 	document.getElementById("back").addEventListener('click', ClosePopup);
 
+	//Default layout
+	currentLayoutBtn = document.getElementById("layout-btn-" + currentLayoutValue);
+	currentLayoutBtn.classList.add("selected-btn");
+
 	//Find style for code font size
 	const styleSheets = document.styleSheets;
 	for (let sheet of styleSheets) 
@@ -87,6 +94,7 @@ function Main()
 		}
 	}
 
+	OpenExample("default");
 	CompileShader();
 }
 
@@ -160,7 +168,7 @@ function CompileShader()
 	// AsyncHighlight();
 
 	let shader = ConvertIntegersToFloats(codeEditorArea.value);
-	currentShaderData = new ShaderData(shaderCanvas, "shader-editor", shader, null);
+	currentShaderData = new ShaderData(shaderCanvas, "shader-editor", shader, currentLayoutValue);
 
 	renderer.ClearRenderers();
 	renderer.AddRenderer(currentShaderData);
@@ -276,9 +284,22 @@ function UpdateContentWithUndoRedo(textarea, newValue)
 
 
 //Page controls----------------------------
-function SetLayout(id)
+function SetLayout(element, id)
 {
-	console.log("Set layout " + id);
+	if (currentShaderData.layout == id)
+	{
+		currentLayoutBtn.classList.remove("selected-btn");
+		currentShaderData.layout = 0;
+		currentLayoutValue = 0;
+	}
+	else
+	{
+		currentLayoutBtn.classList.remove("selected-btn");
+		currentLayoutBtn = element;
+		element.classList.add("selected-btn");
+		currentShaderData.layout = id;
+		currentLayoutValue = id;
+	}
 }
 
 function ClearPopupPanel()
