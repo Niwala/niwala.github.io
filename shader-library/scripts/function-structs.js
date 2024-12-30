@@ -4,6 +4,41 @@ var dragGuid;
 var dragPosition;
 var currentShaderData;
 
+
+function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
+{
+	switch (attribute.attribute)
+	{
+		case "Slider":
+		case "slider":
+		case "Range":
+		case "range":
+			let slider = new SliderField(attribute.uniform, attribute.arguments[0], attribute.arguments[1], attribute.arguments[2]);
+			return slider.CreateHtml(shaderGuid);
+
+		case "Float":
+		case "float":
+		case "Field":
+		case "field":
+			let floatField = new FloatField(attribute.uniform, attribute.arguments[0]);
+			return floatField.CreateHtml(shaderGuid);
+
+		case "Color":
+		case "color":
+			let colorField = new ColorField(attribute.uniform, attribute.arguments[0]);
+			return colorField.CreateHtml(shaderGuid);
+
+		case "Toggle":
+		case "toggle":
+		case "Bool":
+		case "bool":
+		case "Checker":
+		case "checker":
+			let toggleField = new ToggleField(attribute.uniform, attribute.arguments[0]);
+			return toggleField.CreateHtml(shaderGuid);
+	}
+}
+
 //Drag stuf -------------------------------------
 document.addEventListener('mouseup', () => 
 {
@@ -175,6 +210,7 @@ class SliderField
 	SetValue(value)
 	{
 		this.value = value;
+		console.log("Set " + this.value + "  "  + currentShaderData);
 
 		if (currentShaderData != null)
 		{

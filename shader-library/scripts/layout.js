@@ -104,8 +104,16 @@ function ShowExample(example)
 	{
 		//Apply shader
 		let canvas = shaderOnly ? shaderOnlyCanvas : exampleCanvas;
-		currentshaderData = new ShaderData(canvas, example.json.request_id, example.code, null);
-		functionListRenderer.AddRenderer(currentshaderData);
+		currentShaderData = new ShaderData(canvas, example.json.request_id, example.code, 0);
+		functionListRenderer.AddRenderer(currentShaderData);
+
+		//Create properties
+		let propertiesHtml = "";
+		currentShaderData.attributes.forEach(element => 
+		{
+			propertiesHtml += CreateFieldHtmlFromAttribute(example.json.request_id, element);
+		});
+		exampleProperties.innerHTML = propertiesHtml;
 	}
 }
 
@@ -232,6 +240,8 @@ function OnExampleContentUpdated(example)
 //This updates the example only if it is still displayed to the user.
 function OnExamplePropertiesUpdated(example)
 {
+	return;
+
 	//Update data in any cases
 	examplesMap.set(example.json.request_id, example);
 	if (example == null || currentExample == null || (currentExample.json.request_id != example.json.request_id))

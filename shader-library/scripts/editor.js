@@ -183,40 +183,7 @@ function UpdateProperties(shaderData)
 	let html = "";
 	shaderData.attributes.forEach(element => 
 	{
-		switch (element.attribute)
-		{
-			case "Slider":
-			case "slider":
-			case "Range":
-			case "range":
-				let slider = new SliderField(element.uniform, element.arguments[0], element.arguments[1], element.arguments[2]);
-				html += slider.CreateHtml("shader-editor");
-			break;
-
-			case "Float":
-			case "float":
-			case "Field":
-			case "field":
-				let floatField = new FloatField(element.uniform, element.arguments[0]);
-				html += floatField.CreateHtml("shader-editor");
-			break;
-
-			case "Color":
-			case "color":
-				let colorField = new ColorField(element.uniform, element.arguments[0]);
-				html += colorField.CreateHtml("shader-editor");
-			break;
-
-			case "Toggle":
-			case "toggle":
-			case "Bool":
-			case "bool":
-			case "Checker":
-			case "checker":
-				let toggleField = new ToggleField(element.uniform, element.arguments[0]);
-				html += toggleField.CreateHtml("shader-editor");
-			break;
-		}
+		html += CreateFieldHtmlFromAttribute("shader-editor", element);
 	});
 
     shaderProperties.innerHTML = html;
