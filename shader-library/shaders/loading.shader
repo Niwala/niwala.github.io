@@ -1,4 +1,4 @@
-vec4 Execute(vec2 uv)
+vec4 Execute(vec4 uv)
 {
   float speed = 0.3;
   float dot_offset = 0.05;
@@ -18,7 +18,7 @@ vec4 Execute(vec2 uv)
 
     float s = PI * 2.0;
     vec2 o = float2(sin(t * s), cos(t * s)) * 0.3;
-    float dist = length(uv + o) - 0.02;
+    float dist = length(uv.xy + o) - 0.02;
     if (dist<d)
     {
       color.xyz = vec3(1.0, 1.0, 1.0);//lerp(vec3(0.0, 0.2, 0.35), vec3(1.0, 1.0, 1.0), 1.0 - (cos(t * s) * 0.5 + 0.5));

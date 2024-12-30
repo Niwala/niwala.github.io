@@ -376,7 +376,7 @@ function LoadLoadingShader()
 {
 	loading = document.getElementById("loading");
 
-	fetch('https://niwala.github.io/shader-library/shaders/loading.glsl')
+	fetch('https://niwala.github.io/shader-library/shaders/loading.shader')
 	.then(response => response.text())
 	.then(shader => 
 		{
