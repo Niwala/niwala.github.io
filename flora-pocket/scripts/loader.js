@@ -18,6 +18,19 @@ function Main()
 
 }
 
+function ReadPageName(fileID)
+{
+    const request = new XMLHttpRequest();
+    request.open("GET", "data/" + fileID + ".meta", false); // `false` makes the request synchronous
+    request.send(null);
+
+    if (request.status === 200) 
+    {
+        return JSON.parse(request.response).name;
+    }
+    return null;
+}
+
 function OnSelectNewPage(fileID)
 {
     ReadJsonFile("data/" + fileID + ".json").then(jsonFile =>
