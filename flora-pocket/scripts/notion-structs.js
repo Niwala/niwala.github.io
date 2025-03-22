@@ -252,8 +252,10 @@ class NotionBlock
          case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item); this.postfix = "</li></ol>"; break;
          case "divider": this.prefix = "<div class='divider'>"; this.postfix = "</div>"; break;
          case "quote": this.prefix = "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote); this.postfix = "</blockquote>"; break;
-         case "link_to_page": this.prefix = "<a href='" + ValueFromPageID(this.json.link_to_page); this.postfix = "'>link_to_page</a>"; break;
          case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
+         
+         case "link_to_page": let linkID = ValueFromPageID(this.json.link_to_page); this.prefix = "<button onclick='OnSelectNewPage(\"" + linkID + "\")'>link_to_page</button>"; break;
+         case "child_page": this.prefix = "<button onclick='OnSelectNewPage(\"" + this.json.id + "\")'>child_page</button>"; break;
          
          case "column_list": this.prefix = "<div class='notion-columns'>"; this.postfix = "</div>"; break;
          case "block": this.prefix = "<div class='notion-bloc'>"; this.postfix = "</div>"; break;

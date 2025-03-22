@@ -3,6 +3,7 @@
 Main();
 
 var content;
+var currentPage;
 
 function Main()
 {
@@ -11,17 +12,24 @@ function Main()
 
     ReadJsonFile("root.json").then(jsonFile =>
     {
-        let notionPage = new NotionPage(jsonFile, OnPageUpdate);
+        currentPage = new NotionPage(jsonFile, OnPageUpdate);
     });
 
 
+}
+
+function OnSelectNewPage(fileID)
+{
+    ReadJsonFile("data/" + fileID + ".json").then(jsonFile =>
+    {
+        currentPage = new NotionPage(jsonFile, OnPageUpdate);
+    });
 }
 
 function OnPageUpdate(page)
 {
     content.innerHTML = page.html;
 }
-
 
 function ReadJsonFile(filePath) 
 {
