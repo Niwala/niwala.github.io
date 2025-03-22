@@ -1,13 +1,52 @@
 body
 {
 	margin: 0;
-	background-color: #191919;
 	font-family: verdana;
 	color: white;
 	
 	display: flex;
 	flex-direction: column;
 	flex-shrink: 0;
+
+	align-items: center;
+
+	background-image: url("../media/background.png");
+  	background-repeat: no-repeat;
+  	background-attachment: fixed;
+	background-size: cover;
+}
+
+.content-container
+{
+	flex-direction: column;
+	width: 1024px;
+	margin-top: 150px;
+	margin-bottom: 150px;
+	flex-shrink: 0;
+}
+
+#banner
+{
+	padding: 8px;
+	flex-grow: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	
+	min-height: 120px;
+	background-color: #151515;
+	
+	border-bottom-color: #494949;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+
+	border-top-left-radius: 50px;
+	border-top-right-radius: 50px;
+}
+
+#content
+{
+	flex-direction: column;
 }
 
 article
@@ -18,7 +57,24 @@ article
 	justify-content: center;
 	align-items: center;
 	flex-direction: row;
+
+	background-color: #1f1f1f;
+	border-bottom-left-radius: 50px;
+	border-bottom-right-radius: 50px;
 }
+
+.main-logo
+{
+	width: 128px;
+	height: 128px;
+	flex-grow: 0;
+	margin-right: 172px;
+
+	background-image: url('../media/FloraIcon_Seed.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
 
 div 
 {
@@ -89,21 +145,6 @@ img
 	align-items: center
 }
 
-.main-logo
-{
-	width: 212px;
-	height: 60px;
-	flex-grow: 0;
-	
-	margin-top: 15px;
-	margin-bottom: 0;
-	
-	background-image: url('../media/heaj-red.png');
-	background-size: contain;
-	background-repeat: no-repeat;
-   transition: filter 0.1s ease;
-	filter: brightness(1000%) saturate(0%);
-}
 
 .main-logo:hover
 {
@@ -130,23 +171,6 @@ img
 .inline-link:hover
 {
 	background-color: #36445c;
-}
-
-
-#banner
-{
-	padding: 8px;
-	flex-grow: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	
-	min-height: 120px;
-	background-color: #151515;
-	
-	border-bottom-color: #494949;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
 }
 
 #loading
