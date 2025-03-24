@@ -1,0 +1,251 @@
+#code-editor-area
+{
+	color: rgba(255, 255, 255, 1.0);/* SyntaxColoring disabled */
+	caret-color: white;
+	background-color: transparent;
+   outline-style: none;
+   border-style: none;
+
+   pointer-events: all;
+   z-index: 20;
+   outline-style: none;
+
+   padding-left: 60px; /* Sync with line-numbers & SetFontSize function */
+   padding-top: 24px;
+
+   flex-shrink: 0;
+   flex-grow: 1;
+   display: flex;
+
+   position: absolute;
+
+   white-space: nowrap;
+   overflow: hidden;
+   resize: none; 
+}
+
+#overlay
+{
+   display: none;/* SyntaxColoring disabled */
+
+   z-index: 15;
+   pointer-events: none !important;
+   user-select: none !important;
+   margin: 0;
+   padding: 0;
+
+   position: absolute;
+}
+
+#font-size-control
+{
+   margin-top: 4px !important;
+   margin-left: 10px;
+   min-width: 300px;
+}
+
+#font-size-slider
+{
+   margin-top: 9px !important;
+   margin-right: 5px;
+}
+
+button
+{
+   background-color: #313131;
+   color: rgb(192, 192, 192);
+
+   border-style: none;
+   border-radius: 5px;
+
+   font-size: 14px;
+   font-style: bold;
+   padding: 10px 20px 10px 20px;
+   outline-style: none;
+   cursor: pointer;
+
+   margin-bottom: 10px;
+   margin-left: 5px;
+   margin-right: 5px;
+}
+
+button.controls-full
+{
+   margin-left: 0 !important;
+   margin-right: 0 !important;
+}
+
+button.controls-first
+{
+   margin-left: 0 !important;
+}
+
+button.controls-last
+{
+   margin-right: 0 !important;
+}
+
+.button-side-label
+{
+   margin: 8px 0px 0px 5px;
+}
+
+/* Popup panel --------------------------------------------- */
+
+#popup-panel
+{
+   width: 500px; 
+   background-color: #1f1f1f; 
+   border-radius: 5px;
+   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.677);
+
+   position: absolute;
+   margin-right: 50px;
+
+   z-index: 2000;
+   padding: 10px 10px 3px 10px;
+   display: none;
+   flex-direction: column;
+}
+
+.popup-panel-header
+{
+   background-color: #313131; 
+   border-radius: 5px 5px 0px 0px;
+
+   margin: -10px -10px 10px -10px;
+   padding-top: 5px;;
+   padding-bottom: 5px;;
+   text-anchor: middle;
+   justify-content: center;
+
+   user-select: none;
+}
+
+/* -------------------------------------------------------- */
+
+.img-button
+{
+   width: 40px;
+   height: 40px;
+   display: flex; 
+   align-items: center; 
+   justify-content: center;
+}
+
+.icon
+{
+   object-fit: contain;
+   width: 32px;
+   height: 32px;
+   pointer-events: none;
+}
+
+button:hover
+{
+   background-color: #404040;
+   color: rgb(255, 255, 255);
+}
+
+button:active
+{
+   background-color: #222222;
+}
+
+button.active 
+{
+    background-color: #234774;
+    color: white;
+}
+
+.separator
+{
+   display: flex;
+   flex-grow: 1;
+   margin: 10px 3px 10px 3px;
+   border-color: #ffffff2c;
+   border-bottom-width: 1px;
+   border-top-width: 0px;
+   border-style: solid;
+}
+
+#scroll-area
+{
+   position: relative; 
+   width: 100%; 
+   height: 400px; 
+   overflow: auto; 
+   border-radius: 5px;
+
+   pointer-events: all;
+   z-index: 20;
+}
+
+#scroll-content
+{
+   background-color: #121212;
+   margin-bottom: 20px;
+   border-radius: 5px;
+}
+
+.line-numbers
+{
+   padding-left : 60px !important; /* Sync with code-editor-area & SetFontSize function */
+}
+
+#code
+{
+   z-index: -5;
+   pointer-events: none !important;
+   user-select: none !important;
+}
+
+.code-toolbar
+{
+   /* position: absolute !important; */
+
+   /* min-width: none !important; */
+   /* max-width: none !important; */
+
+   overflow: hidden !important;
+   pointer-events: none;
+   user-select: none !important;
+   border-style: none !important;
+   margin: 0 !important;
+   padding: 0 !important;
+}
+
+#text-size
+{
+   display: block;
+   flex-grow: 0;
+   max-inline-size: fit-content;
+
+   position: absolute;
+   visibility: hidden;
+}
+
+#code-editor-overlay
+{
+
+}
+
+.format-code
+{
+	font-family: consolas !important;
+   font-size: 16px !important;
+   line-height: 24px !important;
+
+   word-spacing: normal !important;
+   word-break: normal !important;
+   word-wrap: normal !important;
+
+   text-rendering: optimizeLegibility !important;
+   font-smooth: always !important;
+
+}
+
+.token.keyword.keyword-float, .token.keyword.keyword-vec2, .token.keyword.keyword-vec3, .token.keyword.keyword-vec4
+{
+   color: #f92672;
+}

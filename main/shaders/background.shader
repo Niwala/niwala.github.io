@@ -45,7 +45,7 @@ vec4 Execute(vec4 uv)
   // color.w = smoothstep(0.003, 0.0, d) * saturate(time - 0.1);
 
   // color.xy = cells;
-   color.xyz = float3(0.2, 0.2, 0.2);
+   color.xyz = float3(116.0/255.0, 140.0/255.0, 165.0/255.0);
    color.w = dist;
 
   return color;
