@@ -1,8 +1,58 @@
 
-onmousemove = function(e){mouseX = e.clientX; mouseY = e.clientY}
+onmousemove = function(e)
+{
+	mouseX = e.clientX; 
+	mouseY = e.clientY;
+}
 
-var mouseX;
-var mouseY;
+function VectorLength(x, y)
+{
+	return Math.sqrt(x * x + y * y);
+}
+
+function Lerp(a, b, t) 
+{
+    return a + (b - a) * t;
+}
+
+function UpdateMouseTrail(x, y, deltaTime) 
+{
+	mouseTrail[0] = x;
+	mouseTrail[1] = y;
+
+	let mouseDelta = VectorLength(mouseX - lastMouseX, mouseY - lastMouseY);
+	trailMoveFactor = Lerp(trailMoveFactor, mouseDelta, deltaTime * 6.0);
+	let trailLengthFactor = Math.min(trailMoveFactor, trailMoveFactorMax) / trailMoveFactorMax;
+
+    for (let i = 1; i < trailSize; i ++) 
+	{
+		let vectorX = mouseTrail[i * 2] - mouseTrail[(i - 1) * 2];
+		let vectorY = mouseTrail[i * 2 + 1] - mouseTrail[(i - 1) * 2 + 1];
+		let vectorLength = VectorLength(vectorX, vectorY);
+
+		let headFactor = (trailSize - i) / trailSize;
+		let spacing = trailSegmentSize * (trailLengthFactor) ;
+
+		if (vectorLength > spacing)
+		{
+			let newPosX = mouseTrail[(i - 1) * 2] + (vectorX / vectorLength * spacing);
+			let newPosY = mouseTrail[(i - 1) * 2 + 1] + (vectorY / vectorLength * spacing);
+			mouseTrail[i * 2] = newPosX;
+			mouseTrail[i * 2 + 1] = newPosY;
+		}
+    }
+}
+
+var trailMoveFactorMax = 30.0;
+var trailMoveFactor = 0.0;
+
+const trailSize = 8;
+const trailSegmentSize = 40;
+var mouseX = 0.0;
+var mouseY= 0.0;
+var lastMouseX = 0.0;
+var lastMouseY = 0.0;
+var mouseTrail;
 
 function RendererFromExample(canvas, data, example)
 {
@@ -26,6 +76,11 @@ class ShaderData
 		this.locations = new Map();
 		this.floatValues = new Map();
 		this.colorValues = new Map();
+
+		if (mouseTrail == null)
+		{
+			mouseTrail = new Float32Array(trailSize * 2);
+		}
 		
 		//Build shaders > Vertex
 		this.vertexShader = 
@@ -67,6 +122,7 @@ class ShaderData
 			uniform float4 screenSize;
 			uniform float4 mousePos;
 			uniform float layout;
+			uniform float2 mouseTrail[8];
 
 			// Description : Array and textureless GLSL 2D simplex noise function. -----------------
 			//      Author : Ian McEwan, Ashima Arts.
@@ -233,7 +289,7 @@ class ShaderData
 		this.colorValues.set(name, color);
 	}
 
-	UpdateProperties(gl, time)
+	UpdateProperties(gl, time, deltaTime)
 	{
 		gl.useProgram(this.shaderProgram);
 		
@@ -296,11 +352,13 @@ class ShaderData
 		let ssZ = 1.0 / ssX;
 		let ssW = 1.0 / ssY;
 
+		UpdateMouseTrail(mx, my, deltaTime);
+
 		//Built-in Properties
 		gl.uniform1f(this.timeLocation, time);
 		gl.uniform4f(this.screenSizeLocation, ssX, ssY, ssZ, ssW);
 		gl.uniform4f(this.mousePosLocation, nmx, nmy, mx, my);
-		
+		gl.uniform2fv(this.mouseTrailLocation, mouseTrail);
 
 		//Example properties
 		this.floatValues.forEach((value, key) => 
@@ -338,6 +396,7 @@ class ShaderData
 		this.timeLocation = gl.getUniformLocation(this.shaderProgram, "time");
 		this.screenSizeLocation = gl.getUniformLocation(this.shaderProgram, "screenSize");
 		this.mousePosLocation = gl.getUniformLocation(this.shaderProgram, "mousePos");
+		this.mouseTrailLocation = gl.getUniformLocation(this.shaderProgram, "mouseTrail");
 		this.uvScaleOffsetLocation = gl.getUniformLocation(this.shaderProgram, "editor_uvScaleOffset");
 
 		// Collect all the info needed to use the shader program.
@@ -444,7 +503,7 @@ class ShaderRenderer
 		
 		this.width = canvas.getAttribute("width");
 		this.height = canvas.getAttribute("height");
-		
+
 		//Load gl context
 		this.gl = canvas.getContext('webgl');
 		
@@ -473,7 +532,6 @@ class ShaderRenderer
 		this.time = now * 0.001;
 		this.deltaTime = this.time - this.lastTime;
 		this.lastTime = this.time;
-
 		
 		//Keep canvas size sync
 		let bounds = this.canvas.getBoundingClientRect();
@@ -494,9 +552,12 @@ class ShaderRenderer
 		this.clearScene(this.gl);
 		for (var i = 0; i < this.shaderData.length; i++) 
 		{
-			this.shaderData[i].UpdateProperties(this.gl, this.time);
+			this.shaderData[i].UpdateProperties(this.gl, this.time, this.deltaTime);
 			this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
 		}
+
+		lastMouseX = mouseX;
+		lastMouseY = mouseY;
 					
 		requestAnimationFrame(this.Render)
 	}

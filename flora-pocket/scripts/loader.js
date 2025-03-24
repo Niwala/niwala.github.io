@@ -4,6 +4,7 @@ Main();
 
 var content;
 var currentPage;
+var functionListRenderer;
 
 function Main()
 {
@@ -15,20 +16,37 @@ function Main()
         currentPage = new NotionPage(jsonFile, OnPageUpdate);
     });
 
+    functionListCanvas = document.getElementById("overlay-canvas");
+    functionListRenderer = new ShaderRenderer(functionListCanvas);
+    LoadLoadingShader();
+}
 
+function LoadLoadingShader()
+{
+	loading = document.getElementById("overlay-canvas");
+
+    let shader = ReadFile("shaders/background.shader");
+    let shaderData = new ShaderData(loading, "loading", shader,  null);
+    functionListRenderer.AddRenderer(shaderData);
 }
 
 function ReadPageName(fileID)
 {
+    let file = ReadFile("data/" + fileID + ".meta");
+    return JSON.parse(file).name;
+}
+
+function ReadFile(path)
+{
     const request = new XMLHttpRequest();
-    request.open("GET", "data/" + fileID + ".meta", false); // `false` makes the request synchronous
+    request.open("GET", path, false); // `false` makes the request synchronous
     request.send(null);
 
     if (request.status === 200) 
     {
-        return JSON.parse(request.response).name;
+        return request.response;
     }
-    return null;
+    return "";
 }
 
 function OnSelectNewPage(fileID)

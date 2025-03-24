@@ -254,8 +254,8 @@ class NotionBlock
          case "quote": this.prefix = "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote); this.postfix = "</blockquote>"; break;
          case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
          
-         case "link_to_page": let linkID = ValueFromPageID(this.json.link_to_page); this.prefix = "<button onclick='OnSelectNewPage(\"" + linkID + "\")'>" + ReadPageName(this.json.id) + "</button>"; break;
-         case "child_page": this.prefix = "<button onclick='OnSelectNewPage(\"" + this.json.id + "\")'>" + ReadPageName(this.json.id) + "</button>"; break;
+         case "link_to_page": let linkID = ValueFromPageID(this.json.link_to_page); this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + linkID + "\")'>TODO : Find page name</button>"; break;
+         case "child_page": this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + this.json.id + "\")'>" + ReadPageName(this.json.id) + "</button>"; break;
          
          case "column_list": this.prefix = "<div class='notion-columns'>"; this.postfix = "</div>"; break;
          case "block": this.prefix = "<div class='notion-bloc'>"; this.postfix = "</div>"; break;
