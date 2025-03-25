@@ -8,13 +8,7 @@ var functionListRenderer;
 
 function Main()
 {
-
     content = document.getElementById("content");
-
-    ReadJsonFile("root.json").then(jsonFile =>
-    {
-        currentPage = new NotionPage(jsonFile, OnPageUpdate);
-    });
 
     functionListCanvas = document.getElementById("overlay-canvas");
     functionListRenderer = new ShaderRenderer(functionListCanvas);

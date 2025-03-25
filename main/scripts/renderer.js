@@ -1,6 +1,19 @@
 
+document.addEventListener('touchstart', OnTouchMove, false);
+document.addEventListener('touchmove', OnTouchMove, false);
+
 onmousemove = function(e)
 {
+	mouseX = e.clientX; 
+	mouseY = e.clientY;
+}
+
+function OnTouchMove(e)
+{
+	console.log("touch");
+	// e.preventDefault();
+	e = e.changedTouches[ 0 ];
+
 	mouseX = e.clientX; 
 	mouseY = e.clientY;
 }
