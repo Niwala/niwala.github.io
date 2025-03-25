@@ -78,30 +78,51 @@ article
 	background-repeat: no-repeat;
 }
 
-.page-button
+.about-me-icon
+{
+	width: 80px;
+	height: 80px;
+	margin-bottom: 10px;
+
+	background-image: url('../media/samuel-jemine.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.flora-icon
+{
+	width: 80px;
+	height: 80px;
+	margin-bottom: 10px;
+
+	background-image: url('../media/FloraIcon_Seed.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.project-button
 {
 	display: flex;
-	flex-grow : 0;
 	background-color: #414141;
 	color: white;
-	border-radius: 3px;
+	border-radius: 7px;
 	border-width: 0;
 	padding-top: 2px;
 	padding-bottom: 2px;
 	margin-top: 2px;
-	margin-bottom: 2px;
+	margin-bottom: 20px;
 
 	cursor: pointer;
 }
 
-.page-button:hover
+.project-button:hover
 {
 	background-color: #5a5a5a;
 }
 
-.page-button:active
+.project-button:active
 {
-	background-color: #202020;
+	background-color: #353535;
 }
 
 div 
