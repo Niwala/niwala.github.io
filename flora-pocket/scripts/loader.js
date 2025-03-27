@@ -12,7 +12,7 @@ function Main()
     content = document.getElementById("content");
 
     LoadRoot();
-    
+
     functionListCanvas = document.getElementById("overlay-canvas");
     functionListRenderer = new ShaderRenderer(functionListCanvas);
     LoadLoadingShader();
@@ -80,4 +80,9 @@ function ReadJsonFile(filePath)
             console.error("Erreur lors de la lecture du fichier JSON :", error);
             return null;
         });
+}
+
+function FetchNotionBlock(blockID) 
+{
+    return ReadJsonFile("data/" + blockID + ".json");
 }
