@@ -138,7 +138,9 @@ class NotionBlock
       this.postfix = "";
       this.html = "";
       this.hide = false;
+      this.calloutButton = false;
       this.refreshCount = -1;
+
 
       // console.log(this.json.type + "  ---------");
       // console.log(this.json);
@@ -229,6 +231,22 @@ class NotionBlock
       for (let i = 0; i < childList.results.length; i++) 
       {
          const element = childList.results[i];
+
+         if (this.calloutButton)
+         {
+            if (element.type == "child_page")
+            {
+               let newPrefix = this.prefix.slice(0, -1); 
+               let metaFile = ReadMetaFile(element.id);
+               newPrefix += " onclick=\"OnSelectNewPage('" + element.id + "')\"" + 
+               "style='background-image: url(\"" + metaFile.pageCover + "\")';>" +
+               "<image class='callout-button-icon' src='" + metaFile.pageIcon + "'>";
+               this.prefix = newPrefix;
+               this.UpdateHtml();
+            }
+            continue;
+         }
+
          let childNotionBlock = new NotionBlock(this, element, null, (type) => {specialContainerType = type});
          this.children.push(childNotionBlock);
          if (childNotionBlock.html != "")
@@ -290,13 +308,40 @@ class NotionBlock
          case "heading_3": this.prefix = "<div class='heading_3'>" + this.HtmlFromRichText(this.json.heading_3); this.postfix = "</div>"; break;
          case "paragraph": this.prefix = "<p class='text'>" + this.HtmlFromRichText(this.json.paragraph); this.postfix = "</p>"; break;
          case "code": this.prefix = "<div class='notion-code-container'><pre class='line-numbers'><code class='language-hlsl'>" + this.HtmlFromRichText(this.json.code); this.postfix = "</code></pre></div>"; break;
-         case "callout": this.prefix = "<div class='callout " + this.json.callout.color + "'><div class='callout-icon'>" + this.GetIcon(this.json.callout.icon) + "</div><div class='callout-content'>" + this.HtmlFromRichText(this.json.callout); this.postfix = "</div></div>"; break;
          case "bulleted_list_item": this.prefix = "<ul><li>" + this.HtmlFromRichText(this.json.bulleted_list_item); this.postfix = "</li></ul>"; break;
          case "numbered_list_item": this.prefix = "<ol><li>" + this.HtmlFromRichText(this.json.numbered_list_item); this.postfix = "</li></ol>"; break;
          case "divider": this.prefix = "<div class='divider'>"; this.postfix = "</div>"; break;
          case "quote": this.prefix = "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote); this.postfix = "</blockquote>"; break;
          case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
          
+         case "callout":
+         {
+            let bypassCallout = false;
+            if (this.json.callout.rich_text.length > 0)
+            {
+               if (this.json.callout.rich_text[0] != null && this.json.callout.rich_text[0].type == "text")
+               {
+                  let command = this.json.callout.rich_text[0].plain_text;
+                  if (command == "#CalloutButton")
+                  {
+                     bypassCallout = true;
+                     this.calloutButton = true;
+
+                     this.prefix = "<button class='callout-button'>";
+                     this.postfix = "</button>"; 
+                  }
+               }
+            }
+
+            if (!bypassCallout)
+            {
+               this.prefix = "<div class='callout " + this.json.callout.color + "'><div class='callout-icon'>" + this.GetIcon(this.json.callout.icon) + "</div><div class='callout-content'>" + this.HtmlFromRichText(this.json.callout);
+               this.postfix = "</div></div>"; 
+            }
+            break;
+         }
+
+
          case "link_to_page":
          {
             let metaFile = ReadMetaFile(this.json.link_to_page.page_id);
@@ -329,10 +374,10 @@ class NotionBlock
          //Unsupported
          case "unsupported": break;
 
-         case "video":
-            this.prefix = this.GenerateYouTubeIframe(this.json.video.external.url); this.postfix = "</iframe>"
-            console.log(this.json);
-            break;
+         // case "video":
+         //    this.prefix = this.GenerateYouTubeIframe(this.json.video.external.url); this.postfix = "</iframe>"
+         //    console.log(this.json);
+         //    break;
 
          default: this.prefix = "<p>Unknown type : " + this.json.type; this.postfix = "</p>"
       }

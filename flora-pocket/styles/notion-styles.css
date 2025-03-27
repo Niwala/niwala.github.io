@@ -146,6 +146,36 @@
 	color: rgb(223, 84, 82, 1);
 }
 
+.callout-button-icon
+{
+	height: 120px;
+	position: relative;
+}
+
+.callout-button
+{
+	background-color: rgb(63, 63, 63, 0.1);
+	border-radius: 16px;
+	border-width: 0px;
+	height: 120px;
+
+	cursor: pointer;
+	position: relative;
+
+	background-size: cover;
+	background-blend-mode: multiply;
+}
+
+.callout-button:hover
+{
+	background-color: rgb(75, 75, 75);
+}
+
+.callout-button:active
+{
+	background-color: rgb(49, 49, 49);
+}
+
 .inline-code
 {
 	color: #eb5757;
