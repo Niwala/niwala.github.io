@@ -1,3 +1,8 @@
+html, body, div 
+{
+	display: flex;
+}
+
 body
 {
 	margin: 0;
@@ -7,6 +12,7 @@ body
 	display: flex;
 	flex-direction: column;
 	flex-shrink: 0;
+	flex-grow: 1;
 
 	align-items: center;
 

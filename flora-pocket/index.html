@@ -44,28 +44,31 @@
 
   <body>
 
+	<!-- Banner -->
+	<div id="banner">
+		<div class="centred" style="flex-direction: row; justify-content: space-between;">
+			<!-- Sam's Backpack logo -->
+			<div>
+				<button class="transparent-button" onclick="LoadRoot()"><div class="main-logo"></div></button>
+			</div>
+			
+			<!-- Home button -->
+			<button class="transparent-button" onclick="GoHome(event)" onauxclick="GoHome(event)">
+				<h1 class="main-header">Flora Pocket</h1>
+			</button>
+			
+			<!-- Search bar -->
+			<form id="search-form">
+				<input type="text" class="search-bar" id="search-bar" onkeyup="SearchFunction()" placeholder="(F) Search...">
+				<div class="search-bar-list" id="search-bar-list" style="display: none;"></div>
+			</form>		
+		</div>	
+	</div>
+
+
+
 	<div class="content-container">
 	
-		<!-- Banner -->
-		<div id="banner">
-				<!-- Sam's Backpack logo -->
-				<div>
-					<div class="main-logo"></div>
-				</div>
-				
-				<!-- Home button -->
-				<button class="transparent-button" onclick="GoHome(event)" onauxclick="GoHome(event)">
-					<h1 class="main-header">Flora Pocket</h1>
-				</button>
-				
-				<!-- Search bar -->
-				<form id="search-form">
-					<input type="text" class="search-bar" id="search-bar" onkeyup="SearchFunction()" placeholder="(F) Search...">
-					<div class="search-bar-list" id="search-bar-list" style="display: none;"></div>
-				</form>			
-		</div>
-		
-
 		<article id="homepage">
 		
 			<!-- Main content -->
@@ -77,7 +80,7 @@
 	</div>
 
 	<!-- Shader only canvas -->
-	<canvas id="shader-only-canvas" width="512" height="512" class="shader-preview"></canvas>
+	<!-- <canvas id="shader-only-canvas" width="512" height="512" class="shader-preview"></canvas> -->
 
 	<canvas width="1024" height="1024" id="overlay-canvas" class="overlay-canvas"></canvas>
 

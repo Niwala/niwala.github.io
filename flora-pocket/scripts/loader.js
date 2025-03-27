@@ -11,14 +11,19 @@ function Main()
 
     content = document.getElementById("content");
 
+    LoadRoot();
+    
+    functionListCanvas = document.getElementById("overlay-canvas");
+    functionListRenderer = new ShaderRenderer(functionListCanvas);
+    LoadLoadingShader();
+}
+
+function LoadRoot()
+{
     ReadJsonFile("root.json").then(jsonFile =>
     {
         currentPage = new NotionPage(jsonFile, OnPageUpdate);
     });
-
-    functionListCanvas = document.getElementById("overlay-canvas");
-    functionListRenderer = new ShaderRenderer(functionListCanvas);
-    LoadLoadingShader();
 }
 
 function LoadLoadingShader()
