@@ -240,7 +240,8 @@ class NotionBlock
                let metaFile = ReadMetaFile(element.id);
                newPrefix += " onclick=\"OnSelectNewPage('" + element.id + "')\"" + 
                "style='background-image: url(\"" + metaFile.pageCover + "\")';>" +
-               "<image class='callout-button-icon' src='" + metaFile.pageIcon + "'>";
+               "<image class='callout-button-icon' src='" + metaFile.pageIcon + "'>" + 
+               "<div class='callout-button-bottom'><div class='callout-button-label'>" + metaFile.pageName + "</div></div>";
                this.prefix = newPrefix;
                this.UpdateHtml();
             }

@@ -148,19 +148,26 @@
 
 .callout-button-icon
 {
-	height: 120px;
-	position: relative;
+	height: 32px;
+	width: 32px;
+
+	left: 5px;
+	top: 5px;
+
+	position: absolute;
+	margin-bottom: 20px;
 }
 
 .callout-button
 {
-	background-color: rgb(63, 63, 63, 0.1);
+	background-color: rgb(179, 179, 179);
 	border-radius: 16px;
 	border-width: 0px;
 	height: 120px;
 
 	cursor: pointer;
 	position: relative;
+	overflow: hidden;
 
 	background-size: cover;
 	background-blend-mode: multiply;
@@ -168,12 +175,33 @@
 
 .callout-button:hover
 {
-	background-color: rgb(75, 75, 75);
+	background-color: rgb(255, 255, 255);
 }
 
 .callout-button:active
 {
-	background-color: rgb(49, 49, 49);
+	background-color: rgb(102, 102, 102);
+}
+
+.callout-button-bottom
+{
+	position: absolute;
+	left : 4px;
+	right: 4px;
+	bottom: 4px;
+	justify-content: center;
+
+	height: 24px;
+	border-radius: 16px;
+
+	background-color: #202020;
+	border-top-width: 1px;
+	border-top-color: #000000;
+}
+
+.callout-button-label
+{
+	color: white;
 }
 
 .inline-code
