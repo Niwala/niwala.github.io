@@ -32,6 +32,19 @@ function ValueFromPageID(property)
    return property.page_id;
 }
 
+class MetaFile
+{
+   constructor(json)
+   {
+      this.type = json.type;
+      this.id = json.id;
+      this.last_edited_time = json.last_edited_time;
+
+      this.pageName = json.pageName;
+      this.pageIcon = json.pageIcon;
+      this.pageCover = json.pageCover;
+   }
+}
 
 class FunctionPreview
 {
@@ -238,6 +251,37 @@ class NotionBlock
       }
    }
 
+   GetIconFromUrl(url)
+   {
+      console.log(url);
+      if (url == null)
+         return "";
+
+      return "<img class='notion-icon' src='" + url + "'>";
+   }
+
+   GetIcon(icon)
+   {
+      if (icon == null)
+         return "";
+      switch(icon.type)
+      {
+         case "external":
+            return this.GetIconFromUrl(icon.external.url);
+
+         case "file":
+            return this.GetIconFromUrl(icon.file.url);
+
+         case "custom_emoji":
+            return this.GetIconFromUrl(icon.custom_emoji.url);
+
+         case "emoji":
+            return "<div class='notion-icon'>" + icon.emoji + "</div>"
+      }
+
+      return "";
+   }
+
    GeneratePrePost()
    {
       switch(this.json.type)
@@ -255,7 +299,13 @@ class NotionBlock
          case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
          
          case "link_to_page": let linkID = ValueFromPageID(this.json.link_to_page); this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + linkID + "\")'>TODO : Find page name</button>"; break;
-         case "child_page": this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + this.json.id + "\")'>" + ReadPageName(this.json.id) + "</button>"; break;
+         
+         case "child_page": 
+         {
+            let metaFile = ReadMetaFile(this.json.id);
+            this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + this.json.id + "\")'><div class='callout-icon'>" + this.GetIconFromUrl(metaFile.pageIcon) + "</div>" + metaFile.pageName + "</button>"; 
+            break;
+         }
          
          case "column_list": this.prefix = "<div class='notion-columns'>"; this.postfix = "</div>"; break;
          case "block": this.prefix = "<div class='notion-bloc'>"; this.postfix = "</div>"; break;
@@ -277,28 +327,6 @@ class NotionBlock
 
          default: this.prefix = "<p>Unknown type : " + this.json.type; this.postfix = "</p>"
       }
-   }
-
-   GetIcon(icon)
-   {
-      if (icon == null)
-         return "";
-      switch(icon.type)
-      {
-         case "external":
-            return "<img class='notion-icon' src='" + icon.external.url + "'>"
-
-         case "file":
-            return "<img class='notion-icon' src='" + icon.file.url + "'>"
-
-         case "custom_emoji":
-            return "<img class='notion-icon' src='" + icon.custom_emoji.url + "'>"
-
-         case "emoji":
-            return "<div class='notion-icon'>" + icon.emoji + "</div>"
-      }
-
-      return "";
    }
 
    HtmlFromRichText(property)

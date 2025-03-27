@@ -35,10 +35,10 @@ function LoadLoadingShader()
     functionListRenderer.AddRenderer(shaderData);
 }
 
-function ReadPageName(fileID)
+function ReadMetaFile(fileID)
 {
     let file = ReadFile("data/" + fileID + ".meta");
-    return JSON.parse(file).name;
+    return new MetaFile(JSON.parse(file));
 }
 
 function ReadFile(path)
