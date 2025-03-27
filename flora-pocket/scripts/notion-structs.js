@@ -253,8 +253,7 @@ class NotionBlock
 
    GetIconFromUrl(url)
    {
-      console.log(url);
-      if (url == null)
+      if (url == null || url == "")
          return "";
 
       return "<img class='notion-icon' src='" + url + "'>";
@@ -298,12 +297,17 @@ class NotionBlock
          case "quote": this.prefix = "<blockquote class='notion-quote'>" + this.HtmlFromRichText(this.json.quote); this.postfix = "</blockquote>"; break;
          case "image": this.prefix = "<img class='notion-image' src='" + UrlOfImage(this.json.image); this.postfix = "'>"; break;
          
-         case "link_to_page": let linkID = ValueFromPageID(this.json.link_to_page); this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + linkID + "\")'>TODO : Find page name</button>"; break;
+         case "link_to_page":
+         {
+            let metaFile = ReadMetaFile(this.json.link_to_page.page_id);
+            this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + metaFile.id + "\")'><div class='page-icon'>" + this.GetIconFromUrl(metaFile.pageIcon) + "</div>" + metaFile.pageName + "</button>"; 
+            break;
+         }
          
          case "child_page": 
          {
             let metaFile = ReadMetaFile(this.json.id);
-            this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + this.json.id + "\")'><div class='callout-icon'>" + this.GetIconFromUrl(metaFile.pageIcon) + "</div>" + metaFile.pageName + "</button>"; 
+            this.prefix = "<button class='page-button' onclick='OnSelectNewPage(\"" + metaFile.id + "\")'><div class='page-icon'>" + this.GetIconFromUrl(metaFile.pageIcon) + "</div>" + metaFile.pageName + "</button>"; 
             break;
          }
          
@@ -325,8 +329,32 @@ class NotionBlock
          //Unsupported
          case "unsupported": break;
 
+         case "video":
+            this.prefix = this.GenerateYouTubeIframe(this.json.video.external.url); this.postfix = "</iframe>"
+            console.log(this.json);
+            break;
+
          default: this.prefix = "<p>Unknown type : " + this.json.type; this.postfix = "</p>"
       }
+   }
+
+   GenerateYouTubeIframe (url)
+   {
+      const videoId = this.ExtractYouTubeVideoId(url);
+      if (!videoId) return "";
+
+      return `<iframe 
+                  width="560" 
+                  height="315" 
+                  src="https://www.youtube.com/embed/${videoId}" 
+                  frameborder="0" 
+                  allowfullscreen>`;
+   }
+
+   ExtractYouTubeVideoId (url)
+   {
+      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/))([^?&]+)/);
+      return match ? match[1] : null;
    }
 
    HtmlFromRichText(property)

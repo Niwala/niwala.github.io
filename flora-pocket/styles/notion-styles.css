@@ -311,3 +311,49 @@ ul
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
+.page-icon
+{
+	flex-direction: column;
+	margin-left: 5px;
+	margin-right: 8px;
+	margin-top: 0px;
+	margin-bottom: 4px;
+}
+
+.page-button
+{
+	display: flex;
+	flex-grow : 0;
+	background-color: #414141;
+	color: white;
+	border-radius: 16px;
+	border-width: 0;
+
+	height: 32px;
+
+	padding-top: 0px;
+	padding-bottom: 5px;
+	padding-right: 16px;
+	padding-left: 2px;
+
+	margin-top: 2px;
+	margin-bottom: 2px;
+
+	align-items: center;
+
+	font-size: 16px;
+	padding-top: 8px;
+
+	cursor: pointer;
+}
+
+.page-button:hover
+{
+	background-color: #5a5a5a;
+}
+
+.page-button:active
+{
+	background-color: #202020;
+}
