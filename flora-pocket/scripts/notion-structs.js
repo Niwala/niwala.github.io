@@ -375,10 +375,10 @@ class NotionBlock
          //Unsupported
          case "unsupported": break;
 
-         // case "video":
-         //    this.prefix = this.GenerateYouTubeIframe(this.json.video.external.url); this.postfix = "</iframe>"
-         //    console.log(this.json);
-         //    break;
+         case "video":
+            this.prefix = this.GenerateYouTubeIframe(this.json.video.external.url); this.postfix = "</iframe>"
+            console.log(this.json);
+            break;
 
          default: this.prefix = "<p>Unknown type : " + this.json.type; this.postfix = "</p>"
       }
