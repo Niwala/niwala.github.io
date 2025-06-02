@@ -27,6 +27,7 @@
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 
+		<script src="./main/scripts/circle.js" defer></script>
 		<script src="./main/scripts/gl-matrix-min.js" defer></script>
 		<script src="./main/scripts/renderer.js" defer></script>
 		<script src="./main/scripts/loader.js" defer></script>
@@ -35,18 +36,17 @@
 
   <body>
 
-	<div class="horizontal">
-		<div class="content-container">
+	<div class="horizontal" id="main-column">
+		<div id="main-column-content">
 		
+			<!-- Circle + Sam's Backpack logo -->
+			<div id="circle">
+				<div class="main-logo"></div>
+			</div>
+
 			<!-- Banner -->
 			<div id="banner">
 				
-				<!-- Sam's Backpack logo -->
-				<div>
-					<div class="main-logo"></div>
-				</div>
-
-
 				<!-- Home button -->
 					<h1 class="main-header">Sam's Backpack</h1>
 
@@ -87,6 +87,8 @@
 			
 		</div>
 	</div>
+
+	<canvas width="1024" height="1024" id="overlay-canvas" class="overlay-canvas"></canvas>
 
   </body>
 </html>

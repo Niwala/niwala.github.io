@@ -8,6 +8,8 @@ body
 	margin: 0;
 	font-family: verdana;
 	color: white;
+
+	height: 3000px;
 	
 	display: flex;
 	flex-direction: column;
@@ -22,12 +24,37 @@ body
 	background-size: cover;
 }
 
-.content-container
+#main-column
 {
+	position: relative;
+	justify-self: center;
+	align-self: center;
+	align-items: center;
+	flex-direction: row;
+
+	margin-left: 10px;
+	margin-right: 10px;
+	
+
+	width: 800px;
+	max-width: 900px;
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+#main-column-content
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+
 	flex-direction: column;
 	margin-top: 150px;
 	margin-bottom: 150px;
+
 	flex-shrink: 0;
+	flex-grow: 0;
 }
 
 #banner
@@ -48,6 +75,32 @@ body
 
 	border-top-left-radius: 50px;
 	border-top-right-radius: 50px;
+}
+
+#circle 
+{
+	position: fixed;
+	top: 50px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	background: rgb(34, 43, 63);
+	z-index: 1000;
+	transition: width 0.05s, height 0.05s;
+}
+
+#circle img 
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 170%;
+	height: 170%;
+	object-fit: cover;
+	pointer-events: none;
 }
 
 #content
@@ -72,14 +125,13 @@ article
 
 .main-logo
 {
-	width: 256px;
-	height: 256px;
-	flex-grow: 0;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
 
-	margin-left : -128px;
-	margin-top : -170px;
-
-	background-image: url('../media/SamsBackpack_Logo_Color_NoBg.png');
+	background-image: url('../media/SamsBackpack_Logo_White.png');
 	background-size: contain;
 	background-repeat: no-repeat;
 }
