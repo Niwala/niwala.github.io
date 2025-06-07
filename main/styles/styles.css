@@ -1,3 +1,9 @@
+@font-face 
+{
+  font-family: mat-saleh;
+  src: url(../media/mat-saleh.otf);
+}
+
 html, body, div 
 {
 	display: flex;
@@ -18,10 +24,7 @@ body
 
 	align-items: center;
 
-	background-image: url("../media/background.png");
-  	background-repeat: no-repeat;
-  	background-attachment: fixed;
-	background-size: cover;
+	background-color: #202020;
 }
 
 #main-column
@@ -55,6 +58,73 @@ body
 
 	flex-shrink: 0;
 	flex-grow: 0;
+
+	border-width: 15px;
+	border-radius: 50px;
+	border-style: solid;
+	border-color: white;
+
+	overflow: hidden;
+}
+
+.section
+{
+	height: 350px;
+
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin-top: -1000px;
+	padding-top: 1000px;
+}
+
+.section-content
+{
+	display: flex;
+	flex-direction: column;
+
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0px;
+}
+
+.section-back
+{
+	position: absolute;
+	left: -1000px;
+	right: -1000px;
+	top: -1000px;
+	bottom: 0;
+	padding-left: 1000px;
+	padding-right: 1000px;
+	padding-top: 1000px;
+
+	border-bottom-width: 15px;
+	border-style: solid;
+	border-color: white;
+
+	overflow: hidden;
+}
+
+.section-background
+{
+	position: absolute;
+	left: 900px;
+	right: 1080px;
+	top: 970px;
+	bottom: -70px;
+
+	background-size: cover;
+	background-position: top right;
+}
+
+.main-title
+{
+	font-family: mat-saleh;
+	font-size: 100px;
+ 	line-height: 0.95;
+	font-weight: 100;
 }
 
 #banner
@@ -66,7 +136,7 @@ body
 	justify-content: space-between;
 	align-items: center;
 	
-	min-height: 120px;
+	min-height: 220px;
 	background-color: #151515;
 	
 	border-bottom-color: #494949;
@@ -77,18 +147,40 @@ body
 	border-top-right-radius: 50px;
 }
 
+#circle-container
+{
+	position: absolute;
+	top: 157px;
+	left: 0;
+	right: 0;
+	height: 0;
+	justify-content: center;
+	align-items: center;
+}
+
 #circle 
 {
-	position: fixed;
-	top: 50px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 200px;
-	height: 200px;
+	position: relative;
 	border-radius: 50%;
-	background: rgb(34, 43, 63);
+	background: #202020;
 	z-index: 1000;
-	transition: width 0.05s, height 0.05s;
+
+	border-width: 15px;
+	border-style: solid;
+	border-color: white;
+}
+
+.main-logo
+{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
+
+	background-image: url('../media/SamsBackpack_Logo_Color_NoBg.png');
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 
 #circle img 
@@ -121,19 +213,6 @@ article
 	background-color: #1f1f1f;
 	border-bottom-left-radius: 50px;
 	border-bottom-right-radius: 50px;
-}
-
-.main-logo
-{
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	right: 10px;
-	bottom: 10px;
-
-	background-image: url('../media/SamsBackpack_Logo_White.png');
-	background-size: contain;
-	background-repeat: no-repeat;
 }
 
 .about-me-icon
