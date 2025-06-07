@@ -134,6 +134,11 @@ function Loop()
     circle.style.height = (circleOriginSize * circleSize) + "px";
     circle.style.borderWidth = Math.min(15, circleOriginSize * circleSize) + "px";
 
+    if (circleSize < 0.01)
+        circle.style.display = "none";
+    else
+        circle.style.display = "flex";
+
     //Main title
     let mtPosX = Lerp(titleSmallX, titleLargeX, circleSize);
     let mtPosY = Lerp(titleSmallY, titleLargeY, circleSize);

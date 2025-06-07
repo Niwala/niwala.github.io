@@ -38,8 +38,7 @@ body
 	margin-left: 10px;
 	margin-right: 10px;
 	
-
-	width: 800px;
+	width: 900px;
 	max-width: 900px;
 	flex-grow: 1;
 	flex-shrink: 1;
@@ -113,7 +112,7 @@ body
 	left: 880px;
 	right: 1080px;
 	top: 970px;
-	bottom: -90px;
+	bottom: -110px;
 
 	background-size: cover;
 	background-position: top right;
@@ -150,7 +149,8 @@ body
 #circle-container
 {
 	position: absolute;
-	top: 157px;
+	/* top: 157px; */
+	top: 180px;
 	left: 0;
 	right: 0;
 	height: 0;
