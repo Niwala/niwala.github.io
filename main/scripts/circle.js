@@ -1,14 +1,14 @@
 
-const sectionOffset = 250;
+const sectionOffset = 200;
 const sectionRange = 130;
 const globalOffsetAjustement = 100;
 
-const titleLargeX = 0;
-const titleLargeY = 180;
-const titleSmallX = -60;
-const titleSmallY = -50;
-const titleLargeSize = 1.3;
-const titleSmallSize = 1;
+const titleLargeX = -60;
+const titleLargeY = 100;
+const titleSmallX = -150;
+const titleSmallY = -80;
+const titleLargeSize = 1.1;
+const titleSmallSize = 0.6;
 const speed = 6.0;
 
 let circle = null;

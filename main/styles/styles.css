@@ -110,10 +110,10 @@ body
 .section-background
 {
 	position: absolute;
-	left: 900px;
+	left: 880px;
 	right: 1080px;
 	top: 970px;
-	bottom: -70px;
+	bottom: -90px;
 
 	background-size: cover;
 	background-position: top right;
