@@ -69,6 +69,7 @@ body
 .section
 {
 	height: 350px;
+	will-change: top;
 
 	position: absolute;
 	left: 0;
@@ -81,6 +82,7 @@ body
 {
 	display: flex;
 	flex-direction: column;
+	will-change: height;
 
 	position: absolute;
 	left: 0;

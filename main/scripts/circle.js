@@ -29,6 +29,7 @@ InitializeSections();
 OnScroll();
 Loop();
 
+
 function InitializeCircle()
 {
     //Load circle border

@@ -2,15 +2,25 @@
 
 Main();
 
-var content;
 var currentPage;
 var functionListRenderer;
 
+function IsMobile()
+{
+    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 function Main()
 {
-    content = document.getElementById("content");
-
     functionListCanvas = document.getElementById("overlay-canvas");
+
+    //Disable canvas on mobile
+    if (IsMobile())
+    {
+        functionListCanvas.style.display = "none";
+        return;
+    }
+
     functionListRenderer = new ShaderRenderer(functionListCanvas);
     LoadLoadingShader();
 }
@@ -49,11 +59,6 @@ function OnSelectNewPage(fileID)
     {
         currentPage = new NotionPage(jsonFile, OnPageUpdate);
     });
-}
-
-function OnPageUpdate(page)
-{
-    content.innerHTML = page.html;
 }
 
 function ReadJsonFile(filePath) 
