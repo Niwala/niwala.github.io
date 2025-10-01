@@ -24,6 +24,6 @@ class PackedData
         }
         const decompressed = pako.inflate(byteArray, { to: 'string' });
         Object.assign(this, JSON.parse(decompressed));
-        console.log(decompressed);
+        console.log("Uncompressed shader : \n" + decompressed.shader);
     }
 }
