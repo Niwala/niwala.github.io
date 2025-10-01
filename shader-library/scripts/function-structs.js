@@ -34,6 +34,10 @@ function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 		case "bool":
 		case "Checker":
 		case "checker":
+		case "Check":
+		case "check":
+		case "Checkbox":
+		case "checkbox":
 			let toggleField = new ToggleField(attribute.uniform, attribute.arguments[0]);
 			return toggleField.CreateHtml(shaderGuid);
 	}
@@ -182,6 +186,7 @@ function FloatFieldDrag(guid, delta)
 	field.value = value;
 	floatData.SetValue(field.value);	
 }
+
 
 
 //Slider field --------------------------------------

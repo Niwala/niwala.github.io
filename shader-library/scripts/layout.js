@@ -10,6 +10,8 @@ function ApplyUrlParams()
 	shaderOnlyCanvas.style.display = shaderOnly ? "flex" : "none";
 	bannerElement.style.display = hideBanner ? "none" : "flex";
 	searchBar.style.display = homePageLoaded ? "flex" : "none";
+	exampleContentContainerElement.style.display = hideContent ? "none" : "flex";
+	propertiesTitle.style.display = hideContent ? "none" : "flex";
 
 	if (hideContent)
 	{

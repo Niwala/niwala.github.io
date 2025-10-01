@@ -42,10 +42,12 @@ var errorMessageElement;
 //Examples
 var exampleElement;
 var exampleContentElement;
+var exampleContentContainerElement;
 var exampleProperties;
 var exampleCanvas;
 var shaderOnlyCanvas;
 var exampleBox;
+var propertiesTitle;
 
 //Loading throbber
 var loading;
@@ -179,6 +181,8 @@ function LoadHtmlElements()
 	exampleCanvas = document.getElementById("example-canvas");
 	shaderOnlyCanvas = document.getElementById("shader-only-canvas");
 	exampleBox = document.getElementById("example-box");
+	exampleContentContainerElement = document.getElementById("example-content-container");
+	propertiesTitle = document.getElementById("properties-title");
 
 	//Search
 	searchBar = document.getElementById("search-bar");
