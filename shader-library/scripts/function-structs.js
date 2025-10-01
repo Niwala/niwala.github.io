@@ -23,6 +23,13 @@ function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 			let floatField = new FloatField(attribute.uniform, attribute.arguments[0]);
 			return floatField.CreateHtml(shaderGuid);
 
+		case "Enum":
+		case "enum":
+		case "Dropdown":
+		case "dropdown":
+			let dropdown = new DropdownField(attribute.uniform, attribute.arguments[0], attribute.arguments[1]);
+			return dropdown.CreateHtml(shaderGuid);
+
 		case "Color":
 		case "color":
 			let colorField = new ColorField(attribute.uniform, attribute.arguments[0]);
@@ -41,6 +48,14 @@ function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 			let toggleField = new ToggleField(attribute.uniform, attribute.arguments[0]);
 			return toggleField.CreateHtml(shaderGuid);
 	}
+}
+
+//Utils
+function VariableNameToLabel(str)
+{
+	let withSpaces = str.replace(/([A-Z])/g, " $1");
+	withSpaces = withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
+	return withSpaces;
 }
 
 //Drag stuf -------------------------------------
@@ -96,7 +111,7 @@ class ToggleField
 		currentExampleFields.set(this.guid, this);
 
 		return "<div class='shader-property' id='" + this.guid + "'>" + 
-			"<p style='user-select: none; cursor: pointer;' onmousedown='SwitchSetToggle(this)'>" + this.name + "</p>" + 
+			"<p style='user-select: none; cursor: pointer;' onmousedown='SwitchSetToggle(this)'>" + VariableNameToLabel(this.name) + "</p>" + 
 			"<label class=\"toggle-container\">" +
 			"<input type=\"checkbox\" onchange=\"SetToggleValue(this)\"" + (this.value ? "checked" : "") + " id='field-" + this.guid + "'>" +
 			"<span class=\"checkmark\"></span>" +
@@ -152,7 +167,7 @@ class FloatField
 		currentExampleFields.set(this.guid, this);
 
 		return "<div class='shader-property' id='" + this.guid + "'>" + 
-			"<p name='" + this.guid + "' style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'FloatField')\">" + this.name + "</p>" + 
+			"<p name='" + this.guid + "' style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'FloatField')\">" + VariableNameToLabel(this.name) + "</p>" + 
 			"<input type='number' class='float-field' oninput='SetFloatValue(this)' value='" + this.value + "' id='field-" + this.guid + "'/>" +
 			"</div>";
 	}
@@ -207,7 +222,7 @@ class SliderField
 		currentExampleFields.set(this.guid, this);
 
 		return "<div class='shader-property' id='" + this.guid +"'>" + 
-			"<p style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'SliderField')\">" + this.name + "</p>" + 
+			"<p style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'SliderField')\">" + VariableNameToLabel(this.name) + "</p>" + 
 			"<input type=\"range\" oninput=\"SetSliderValue(this)\" min=\"" + this.min + "\" max=\"" + this.max + "\" value=\"" + this.value + "\" step=\"" + 0.01 + "\" class='slider' id='slider-" + this.guid +"'>" +
 			"<p class=\"slider-value\"><span id='field-" + exampleID + "-" + this.name + "'>" + this.value + "</span></p></div>";
 	}
@@ -215,7 +230,7 @@ class SliderField
 	SetValue(value)
 	{
 		this.value = value;
-		console.log("Set " + this.value + "  "  + currentShaderData);
+		// console.log("Set " + this.value + "  "  + currentShaderData);
 
 		if (currentShaderData != null)
 		{
@@ -254,6 +269,55 @@ function SliderFieldDrag(guid, delta)
 }
 
 
+//Dropdown field --------------------------------------
+class DropdownField
+{
+	constructor(name, defaultValue, options)
+	{
+		this.name = name;
+		this.options = options.split('|');
+		this.value = defaultValue;
+		this.SetValue(this.value);
+	}
+
+	CreateHtml(exampleID)
+	{
+		this.guid = exampleID + "-" + this.name;
+		currentExampleFields.set(this.guid, this);
+
+		//Build options html
+		let optionsHtml = "";
+		for (let i = 0; i < this.options.length; i++)
+		{
+			optionsHtml += "<option value='" + i + "'" + (i == this.value ? " selected" : "") + ">" + this.options[i] + "</option>";
+		}
+
+		return "<div class='shader-property' id='" + this.guid +"'>" + 
+			"<p style='user-select: none;'>" + VariableNameToLabel(this.name) + "</p>" +
+			"<select class='dropdown-field' onchange='SetDropdownValue(this)' id='field-" + this.guid + "'>" +
+			optionsHtml +
+			"</select></div>";
+	}
+
+	SetValue(value)
+	{
+		this.value = value;
+		if (currentShaderData != null)
+		{
+			currentShaderData.SetFloatValue(this.name, value);
+		}
+	}
+}
+
+function SetDropdownValue(element)
+{
+	let guid = element.parentElement.id;
+	let dropdownData = currentExampleFields.get(guid);
+
+	let field = document.getElementById("field-" + guid);
+	dropdownData.SetValue(field.value);
+}
+
 
 //Color field --------------------------------------
 class ColorField
@@ -276,7 +340,7 @@ class ColorField
 		currentExampleFields.set(this.guid, this);
 
 		return "<div class='shader-property'>" + 
-			"<p style='user-select: none; cursor: default;'>" + this.name + "</p>" +
+			"<p style='user-select: none; cursor: default;'>" + VariableNameToLabel(this.name) + "</p>" +
 				"<div class=color-field>" +
 					"<input type='text' style='background-color:" + this.hexColor + ";' value='" + this.hexColor + "' class='coloris test' data-coloris onmousedown='ConfigureColorPicker(this)' oninput=\"SetColorValue(this)\" id=\"" + this.guid + "\">" +
 				"</div>" +

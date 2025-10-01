@@ -23,7 +23,7 @@ class PackedData
             byteArray[i] = decoded.charCodeAt(i);
         }
         const decompressed = pako.inflate(byteArray, { to: 'string' });
-        Object.assign(this, JSON.parse(decompressed))
+        Object.assign(this, JSON.parse(decompressed));
+        console.log(decompressed);
     }
-
 }
