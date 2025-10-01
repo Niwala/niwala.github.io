@@ -101,7 +101,7 @@ class ToggleField
 	constructor(name, defaultValue)
 	{
 		this.name = name;
-		this.value = defaultValue;
+		this.value = (defaultValue == "True" || defaultValue == "true" || (defaultValue > 0.5));
 		this.SetValue(this.value);
 	}
 
