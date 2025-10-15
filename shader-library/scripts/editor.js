@@ -554,12 +554,6 @@ function FormatTextArea()
 	});
 }
 
-function ConvertIntegersToFloats(shaderCode)
-{
-	const regex = /(?<=\bfloat\s+\w+\s*=\s*)(-?\d+)(?=;)/g;
-	return shaderCode.replace(regex, (match) => `${match}.0`);
-}
-
 //Return [new line, applied offset]
 function OutdentLineAt(text, cursorPos)
 {

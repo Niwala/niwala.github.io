@@ -1,3 +1,9 @@
+function ConvertIntegersToFloats(shaderCode)
+{
+	const regex = /(?<=\bfloat\s+\w+\s*=\s*)(-?\d+)(?=;)/g;
+	return shaderCode.replace(regex, (match) => `${match}.0`);
+}
+
 class PackedData
 {
 
