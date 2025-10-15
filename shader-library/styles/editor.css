@@ -225,11 +225,6 @@ button.active
    visibility: hidden;
 }
 
-#code-editor-overlay
-{
-
-}
-
 .format-code
 {
 	font-family: consolas !important;

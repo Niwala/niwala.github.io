@@ -94,8 +94,21 @@ function Main()
 		}
 	}
 
-	OpenExample("default");
-	CompileShader();
+	let params = new URLSearchParams(window.location.search);	
+	let embedShader = params.get("shader");
+	if (embedShader != null)
+	{
+		let packedData = new PackedData();
+		packedData.DecompressURL(embedShader);
+		codeEditorArea.value = packedData.shader;
+		CompileShader();
+	}
+	else
+	{
+		OpenExample("default");
+	}
+
+	// CompileShader();
 }
 
 function GoToLibrary(event)

@@ -68,6 +68,37 @@ img
 	border-radius: 5px;
 }
 
+/*Context menu*/
+.context-menu 
+{
+    position: absolute;
+    background: #333;
+    color: white;
+	padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    display: none;
+    flex-direction: column;
+    min-width: 150px;
+    z-index: 10;
+  }
+
+  .context-menu button 
+  {
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+	margin: 0;
+    cursor: pointer;
+	padding: 5px;
+  }
+
+  .context-menu button:hover 
+  {
+    background: #555;
+  }
+
 .selected-btn
 {
 	background-color: #2f4d6e;

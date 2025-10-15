@@ -3,22 +3,52 @@ onmousemove = function(e){mouseX = e.clientX; mouseY = e.clientY}
 
 var mouseX;
 var mouseY;
+var lastFragShaderContent;
 
 function RendererFromExample(canvas, data, example)
 {
 	return new ShaderData(canvas, data.name + "-" + example.name, example.shader, 1);
 }
 
+function ContextMenuAction(action)
+{
+	//Execute action
+	switch (action)
+	{
+		case "Copy":
+			navigator.clipboard.writeText(lastFragShaderContent);
+		break;
+
+		default :
+
+			let packedData = new PackedData();
+			packedData.shader = ConvertIntegersToFloats(lastFragShaderContent);
+
+			let url = window.location.href;
+			let rootLastIndex = url.lastIndexOf('/');
+			url = url.substring(0, rootLastIndex);
+			url += "/editor.html?shader=" + packedData.CompressToURL();
+
+			window.open(url, "_blank");
+			break;
+	}
+
+	//Hide menu
+	menu.style.display='none';
+}
+
 class ShaderData
 {
 	constructor(element, shaderGuid, shaderInclude, layout)
 	{
+		this.shaderInclude = shaderInclude;
 		this.element = element;
 		this.width = element.getAttribute("width");
 		this.height = element.getAttribute("height");
 		this.shaderGuid = shaderGuid;
 		this.layout = layout;
 
+		lastFragShaderContent = shaderInclude;
 		let parse = this.ParseAttributes(shaderInclude);
 		this.shaderFragContent = parse.cleanedShader;
 		this.attributes = parse.parsedUniforms;
@@ -27,6 +57,20 @@ class ShaderData
 		this.floatValues = new Map();
 		this.colorValues = new Map();
 		
+		//Add context menu
+		this.element.addEventListener('click',()=>{menu.style.display='none';});
+		this.element.addEventListener('contextmenu',(e)=>{
+			e.preventDefault(); //Block default menu
+			menu.style.left = e.pageX + 'px';
+			menu.style.top = e.pageY + 'px';
+			menu.style.display = 'flex';
+		});
+		document.addEventListener('mousedown',(e)=>{
+			if(!menu.contains(e.target)){
+				menu.style.display='none';
+			}
+		});
+
 		//Build shaders > Vertex
 		this.vertexShader = 
 			`
