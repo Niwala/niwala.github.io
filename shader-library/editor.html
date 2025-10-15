@@ -17,6 +17,9 @@
 		
 		<title>Shader Editor</title>
 		<link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+		<link rel="stylesheet" href="./external/coloris/coloris.css" type="text/css"/>
+		<script src="./external/coloris/coloris.js"></script>
 		
 		<link rel="stylesheet" href="./styles/editor.css" type="text/css"/>
 		<link rel="stylesheet" href="./styles/field-styles.css" type="text/css"/>
@@ -112,6 +115,7 @@
 		<div id="examples-section" class="vertical" style="display: none;">
 			<div class="popup-panel-header" id="examples-btn-list">Examples</div>
 			<button onclick="OpenExample('default')">Default</button>
+			<button onclick="OpenExample('properties')">Properties</button>
 			<button onclick="OpenExample('mask')">Mask</button>
 			<button onclick="OpenExample('raymarching')">Raymarching</button>
 			<button onclick="OpenExample('mouse')">Mouse</button>
