@@ -336,20 +336,26 @@ function TogglePanelForElement(element, section)
 	{
 		popupPanel.style.display = 'none';
 		element.classList.remove('active');
-	} else 
+	} 
+	else 
 	{
 		popupPanel.style.display = 'block';
 		element.classList.add('active');
 
 		let rect = element.getBoundingClientRect();
-		popupPanel.style.top = (rect.top + rect.height) + "px";
+		const scrollX = window.scrollX || window.pageXOffset;
+		const scrollY = window.scrollY || window.pageYOffset;
 
-		if (leftSide)
-			popupPanel.style.left = rect.left + "px";
-		else
-			popupPanel.style.left = (rect.left - 520 + rect.width) + "px";
+		//Compute absolute position including scroll
+		const top = rect.top + rect.height + scrollY;
+		const left = leftSide 
+			? rect.left + scrollX 
+			: rect.left - 520 + rect.width + scrollX;
 
+		popupPanel.style.top = top + "px";
+		popupPanel.style.left = left + "px";
 	}
+
 	return isVisible;
 }
 
