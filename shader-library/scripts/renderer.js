@@ -59,9 +59,9 @@ class ShaderData
 		//Add context menu
 		this.element.addEventListener('click',()=>{menu.style.display='none';});
 		this.element.addEventListener('contextmenu',(e)=>{
-			e.preventDefault(); //Block default menu
-			menu.style.left = e.pageX + 'px';
-			menu.style.top = e.pageY + 'px';
+			e.preventDefault();
+			menu.style.left = e.clientX + 'px';
+			menu.style.top = e.clientY + 'px';
 			menu.style.display = 'flex';
 			focusedShaderData = this;
 		});

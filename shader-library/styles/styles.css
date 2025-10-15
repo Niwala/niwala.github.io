@@ -71,7 +71,7 @@ img
 /*Context menu*/
 .context-menu 
 {
-    position: absolute;
+	position: fixed;
     background: #333;
     color: white;
 	padding: 5px;
