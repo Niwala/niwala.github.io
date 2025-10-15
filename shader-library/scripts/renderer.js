@@ -3,7 +3,7 @@ onmousemove = function(e){mouseX = e.clientX; mouseY = e.clientY}
 
 var mouseX;
 var mouseY;
-var lastFragShaderContent;
+var focusedShaderData;
 
 function RendererFromExample(canvas, data, example)
 {
@@ -16,13 +16,13 @@ function ContextMenuAction(action)
 	switch (action)
 	{
 		case "Copy":
-			navigator.clipboard.writeText(lastFragShaderContent);
+			navigator.clipboard.writeText(focusedShaderData.shaderInclude);
 		break;
 
 		default :
 
 			let packedData = new PackedData();
-			packedData.shader = ConvertIntegersToFloats(lastFragShaderContent);
+			packedData.shader = ConvertIntegersToFloats(focusedShaderData.shaderInclude);
 
 			let url = window.location.href;
 			let rootLastIndex = url.lastIndexOf('/');
@@ -48,7 +48,6 @@ class ShaderData
 		this.shaderGuid = shaderGuid;
 		this.layout = layout;
 
-		lastFragShaderContent = shaderInclude;
 		let parse = this.ParseAttributes(shaderInclude);
 		this.shaderFragContent = parse.cleanedShader;
 		this.attributes = parse.parsedUniforms;
@@ -64,6 +63,7 @@ class ShaderData
 			menu.style.left = e.pageX + 'px';
 			menu.style.top = e.pageY + 'px';
 			menu.style.display = 'flex';
+			focusedShaderData = this;
 		});
 		document.addEventListener('mousedown',(e)=>{
 			if(!menu.contains(e.target)){
