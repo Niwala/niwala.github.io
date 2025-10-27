@@ -1,4 +1,3 @@
-
 var codeElement;
 var codeEditorArea;
 var codeEditorOverlay;
@@ -107,8 +106,6 @@ function Main()
 	{
 		OpenExample("default");
 	}
-
-	// CompileShader();
 }
 
 function GoToLibrary(event)
@@ -128,8 +125,6 @@ function GoToLibrary(event)
 	{
 		window.location="index.html"
 	}
-
-
 }
 
 function ConvertToUrl()
@@ -152,6 +147,7 @@ function ConvertToUrl()
 	url += "?embed=" + packedData.CompressToURL() + params;
 	SetClipboard(url);
 }
+
 
 function SetClipboard(value)
 {
@@ -378,7 +374,7 @@ async function OpenExample(fileName)
 {
     try 
 	{
-        const response = await fetch("./examples/" + fileName + ".shader");
+        const response = await fetch("./src/shader-library/examples/" + fileName + ".shader");
 
         if (!response.ok) 
 		{

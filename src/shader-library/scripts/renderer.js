@@ -27,7 +27,7 @@ function ContextMenuAction(action)
 			let url = window.location.href;
 			let rootLastIndex = url.lastIndexOf('/');
 			url = url.substring(0, rootLastIndex);
-			url += "/editor.html?shader=" + packedData.CompressToURL();
+			url += "/shader-editor.html?shader=" + packedData.CompressToURL();
 
 			window.open(url, "_blank");
 			break;
@@ -488,9 +488,13 @@ class ShaderRenderer
 		
 		this.width = canvas.getAttribute("width");
 		this.height = canvas.getAttribute("height");
+
+		this.overrideSize = false;
+		this.overrideWidth = 512;
+		this.overrideHeight = 512;
 		
 		//Load gl context
-		this.gl = canvas.getContext('webgl');
+		this.gl = canvas.getContext('webgl2', {preserveDrawingBuffer: true});
 		
 		if (!this.gl) 
 		{
@@ -524,6 +528,12 @@ class ShaderRenderer
 		let currentWidth = bounds.width;
 		let currentHeight = bounds.height;
 		
+		if (this.overrideSize)
+		{
+			currentWidth = this.overrideWidth;
+			currentHeight = this.overrideHeight;
+		}
+
 		if (this.width != currentWidth || this.height != currentHeight)
 		{
 			this.width = currentWidth;
@@ -543,6 +553,38 @@ class ShaderRenderer
 		}
 					
 		requestAnimationFrame(this.Render)
+	}
+		
+	RenderNow(time) 
+	{
+		//Keep canvas size sync
+		let bounds = this.canvas.getBoundingClientRect();
+		let currentWidth = bounds.width;
+		let currentHeight = bounds.height;
+		
+		if (this.overrideSize)
+		{
+			currentWidth = this.overrideWidth;
+			currentHeight = this.overrideHeight;
+		}
+
+		if (this.width != currentWidth || this.height != currentHeight)
+		{
+			this.width = currentWidth;
+			this.height = currentHeight;
+			this.canvas.setAttribute("width", this.width);
+			this.canvas.setAttribute("height", this.height);
+			
+			this.gl.viewport.width = this.width;
+			this.gl.viewport.height = this.height;
+		}
+
+		this.clearScene(this.gl);
+		for (var i = 0; i < this.shaderData.length; i++) 
+		{
+			this.shaderData[i].UpdateProperties(this.gl, time);
+			this.drawObject(this.gl, this.shaderData[i].programInfo, this.buffers, this.shaderData[i]);
+		}
 	}
 	
 
