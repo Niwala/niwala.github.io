@@ -79,7 +79,6 @@ export function ExportPNG()
 	});
 }
 
-
 window.ExportGIF = ExportGIF;
 export async function ExportGIF()
 {
@@ -93,17 +92,16 @@ export async function ExportGIF()
     {
         for (let i = 0; i < totalFrames; i++) 
         {
-            renderer.RenderNow(i / exportFPS + exportStartTime);
-            renderer.gl.finish()
-            renderer.gl.bindFramebuffer(renderer.gl.FRAMEBUFFER, null)
-
-            const ctx = offscreen.getContext("2d")
+            renderer.RenderNow(i / exportFPS);
+            renderer.gl.finish();
+            renderer.gl.bindFramebuffer(renderer.gl.FRAMEBUFFER, null);
 
             //Copy the final rendered image
-            ctx.drawImage(overlayCanvas, 0, 0)
+            const ctx = offscreen.getContext("2d");
+            ctx.drawImage(overlayCanvas, 0, 0);
 
             //Extract pixels
-            const { data:pixels } = ctx.getImageData(0, 0, exportWidth, exportHeight)
+            const { data:pixels } = ctx.getImageData(0, 0, exportWidth, exportHeight);
 
             //Quantize & encode
             const palette = quantize(pixels, 256);
