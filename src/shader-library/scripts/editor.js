@@ -127,7 +127,7 @@ function GoToLibrary(event)
 	}
 }
 
-function ConvertToUrl()
+function ExportIFrame()
 {
 	let packedData = new PackedData();
 	packedData.shader = ConvertIntegersToFloats(codeEditorArea.value);
@@ -144,7 +144,7 @@ function ConvertToUrl()
 	let rootLastIndex = url.lastIndexOf('/');
 	url = url.substring(0, rootLastIndex);
 
-	url += "?embed=" + packedData.CompressToURL() + params;
+	url += "/shader-library?embed=" + packedData.CompressToURL() + params;
 	SetClipboard(url);
 }
 
