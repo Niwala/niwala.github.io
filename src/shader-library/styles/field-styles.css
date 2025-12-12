@@ -199,6 +199,17 @@ input[type="number"]
 	user-select: none;
 }
 
+.clr-field
+{
+	width: 100%;
+	display: flex;
+}
+
+.clr-field button
+{
+	display: none;
+}
+
 .float-field
 {
 	border-width: 0 !important;
