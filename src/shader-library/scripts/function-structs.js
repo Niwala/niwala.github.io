@@ -35,6 +35,14 @@ function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 			let colorField = new ColorField(attribute.uniform, attribute.arguments[0]);
 			return colorField.CreateHtml(shaderGuid);
 
+		case "vector2":
+		case "Vector2":
+		case "float2":
+		case "Float2":
+			let float2Field = new FloatField(attribute.uniform, attribute.arguments[0]);
+			return float2Field.CreateHtml(shaderGuid);
+
+
 		case "Toggle":
 		case "toggle":
 		case "Bool":
@@ -202,6 +210,58 @@ function FloatFieldDrag(guid, delta)
 	floatData.SetValue(field.value);	
 }
 
+
+//Float2 field --------------------------------------
+class Float2Field
+{
+	constructor(name, defaultValue)
+	{
+		this.name = name;
+		this.value = defaultValue;
+
+		this.SetValue(this.value);
+	}
+
+	CreateHtml(exampleID)
+	{
+		this.guid = exampleID + "-" + this.name;
+		currentExampleFields.set(this.guid, this);
+
+		return "<div class='shader-property' id='" + this.guid + "'>" + 
+			"<p name='" + this.guid + "' style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'Float2Field')\">" + VariableNameToLabel(this.name) + "</p>" + 
+			"<input type='number' class='float-field' oninput='SetFloat2Value(this)' value='" + this.value + "' id='field-" + this.guid + "'/>" +
+			"</div>";
+	}
+
+	SetValue(value)
+	{
+		this.value = value;
+		if (currentShaderData != null)
+		{
+			currentShaderData.SetFloatValue(this.name, value);
+		}
+	}
+}
+
+function SetFloat2Value(element)
+{
+	let guid = element.parentElement.id;
+	let floatData = currentExampleFields.get(guid);
+
+	let field = document.getElementById("field-" + guid);
+	floatData.SetValue(field.value);
+}
+
+function FloatFieldDrag(guid, delta)
+{
+	let floatData = currentExampleFields.get(guid);
+	let field = document.getElementById("field-" + guid);
+	let value = parseFloat(field.value);
+	value -= parseFloat(delta) * 0.1;
+	value = Math.round(value * 100) / 100;
+	field.value = value;
+	floatData.SetValue(field.value);	
+}
 
 
 //Slider field --------------------------------------
