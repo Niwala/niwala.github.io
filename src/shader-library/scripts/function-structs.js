@@ -52,8 +52,6 @@ function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 		case "toggle":
 		case "Bool":
 		case "bool":
-		case "Checker":
-		case "checker":
 		case "Check":
 		case "check":
 		case "Checkbox":

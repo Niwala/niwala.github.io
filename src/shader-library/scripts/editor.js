@@ -28,23 +28,31 @@ var currentLayoutValue = 10;
 var shaderOnly = false;
 var largeLayout = false;
 
-window.Prism = window.Prism || {};
-Prism.manual = true;
-
-Prism.hooks.add('wrap', function (env)
-{
-	if (env.type !== 'keyword')
-	{
-		return;
-	}
-	env.classes.push('keyword-' + env.content);
-});
 
 Main();
 FormatTextArea();
 
 function Main()
 {
+
+	//Setup ace
+	ace.config.set("basePath", "/shader-library/external/ace");
+
+	var editor = ace.edit("ace-editor");
+
+	editor.session.setMode("ace/mode/glsl");
+	editor.setTheme("ace/theme/monokai");
+
+	editor.setOptions({
+		wrap: false,
+		fontFamily: "Consolas, monospace",
+		fontSize: 16,
+		showPrintMargin: false,
+		highlightActiveLine: true
+	});
+
+	
+	//Get document elements
 	textSizeElement = document.getElementById("text-size");
 	codeElement = document.getElementById("code");
 	overlayElement = document.getElementById("overlay");
