@@ -58,6 +58,15 @@
    right: 0px;
 }
 
+.logo-area
+{
+   position: absolute;
+   flex-direction: row;
+   margin-top: -150px;
+   left: 0px;
+   align-items: flex-end;
+}
+
 button
 {
    background-color: #363636;

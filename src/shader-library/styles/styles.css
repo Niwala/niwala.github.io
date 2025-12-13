@@ -122,18 +122,16 @@ img
 
 .main-logo
 {
-	width: 212px;
-	height: 60px;
+	width: 120px;
+	height: 120px;
 	flex-grow: 0;
+	flex-shrink: 0;
 	
-	margin-top: 15px;
-	margin-bottom: 0;
+	margin-bottom: -2px;
 	
-	background-image: url('../media/heaj-red.png');
+	background-image: url('../media/sams-backpack-white.png');
 	background-size: contain;
 	background-repeat: no-repeat;
-   transition: filter 0.1s ease;
-	filter: brightness(1000%) saturate(0%);
 }
 
 .main-logo:hover
