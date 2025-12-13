@@ -465,8 +465,8 @@ class ColorField
         //Hex default value
         if (typeof defaultValue[0] === "string" && defaultValue[0].length > 0 && defaultValue[0].startsWith("#") )
 		{
-			this.hexColor = defaultValue;
-			let c = HexToRGB(defaultValue);
+			this.hexColor = defaultValue[0];
+			let c = HexToRGB(defaultValue[0]);
 			this.value = `R: ${c[0]} G: ${c[1]} B: ${c[2]} A: 1.00`;
         }
 

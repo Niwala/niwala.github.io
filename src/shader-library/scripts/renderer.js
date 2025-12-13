@@ -571,7 +571,7 @@ class ShaderData
 			{
 				this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
 				gl.attachShader(this.shaderProgram, this.fragmentShader);
-				console.error('Error on shader B ' + e);
+				// console.error('Error on shader B ' + e);
 			}
 			gl.linkProgram(this.shaderProgram);
 
@@ -584,22 +584,13 @@ class ShaderData
 			}
 			else
 			{
-				let info = gl.getShaderInfoLog(this.fragmentShader);
-				console.log(info);
-   				//  if (info) 
-				// 	console.error('Error on shader A ' + info);
+				// let info = gl.getShaderInfoLog(this.fragmentShader);
+				// console.log(info);
 			}
 		}
 		catch (e)
 		{
-			// if (this.onShaderCompiled != null)
-			// {
-			// 	this.onShaderCompiled('Error on shader ' + this.shaderGuid + "\n" + gl.getProgramInfoLog(this.shaderProgram) + "\n\n" + this.shaderFragContent);
-			// }
-
-			console.error('Error on shader C ' + fsErrorSource);
-
-			// console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
+			// console.error('Error on shader C ' + fsErrorSource);
 
 			this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
 			gl.attachShader(this.shaderProgram, this.fragmentShader);
