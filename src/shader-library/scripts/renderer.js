@@ -54,7 +54,9 @@ class ShaderData
 
 		this.locations = new Map();
 		this.floatValues = new Map();
-		this.colorValues = new Map();
+		this.float2Values = new Map();
+		this.float3Values = new Map();
+		this.float4Values = new Map();
 		
 		//Add context menu
 		this.element.addEventListener('click',()=>{menu.style.display='none';});
@@ -272,9 +274,19 @@ class ShaderData
 		this.floatValues.set(name, value);
 	}
 	
-	SetColorValue(name, color)
+	SetFloat2Value(name, color)
 	{
-		this.colorValues.set(name, color);
+		this.float2Values.set(name, color);
+	}
+
+	SetFloat3Value(name, color)
+	{
+		this.float3Values.set(name, color);
+	}
+
+	SetFloat4Value(name, color)
+	{
+		this.float4Values.set(name, color);
 	}
 
 	UpdateProperties(gl, time)
@@ -356,7 +368,25 @@ class ShaderData
 			gl.uniform1f(loc, value);
 		});
 		
-		this.colorValues.forEach((value, key) => 
+		this.float2Values.forEach((value, key) => 
+		{
+			if (!this.locations.has(key))
+				this.locations.set(key, gl.getUniformLocation(this.shaderProgram, key));
+
+			let loc = this.locations.get(key);
+			gl.uniform2f(loc, value[0], value[1]);
+		});
+
+		this.float3Values.forEach((value, key) => 
+		{
+			if (!this.locations.has(key))
+				this.locations.set(key, gl.getUniformLocation(this.shaderProgram, key));
+
+			let loc = this.locations.get(key);
+			gl.uniform3f(loc, value[0], value[1], value[2]);
+		});
+
+		this.float4Values.forEach((value, key) => 
 		{
 			if (!this.locations.has(key))
 				this.locations.set(key, gl.getUniformLocation(this.shaderProgram, key));

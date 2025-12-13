@@ -7,6 +7,7 @@ var currentShaderData;
 
 function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 {
+	//Attribute
 	switch (attribute.attribute)
 	{
 		case "Slider":
@@ -27,21 +28,25 @@ function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 		case "enum":
 		case "Dropdown":
 		case "dropdown":
-			let dropdown = new DropdownField(attribute.uniform, attribute.arguments[0], attribute.arguments[1]);
+			let dropdown = new DropdownField(attribute.uniform, attribute.arguments);
 			return dropdown.CreateHtml(shaderGuid);
 
 		case "Color":
 		case "color":
-			let colorField = new ColorField(attribute.uniform, attribute.arguments[0]);
+			let colorField = new ColorField(attribute.uniform, attribute.arguments);
 			return colorField.CreateHtml(shaderGuid);
 
-		case "vector2":
-		case "Vector2":
-		case "float2":
-		case "Float2":
-			let float2Field = new FloatField(attribute.uniform, attribute.arguments[0]);
-			return float2Field.CreateHtml(shaderGuid);
-
+		case "vector":
+		case "Vector":
+			
+			let vectorField;
+			switch (attribute.type)
+			{
+				case "float2": vectorField = new VectorField(attribute.uniform, attribute.arguments, 2); break;
+				case "float3": vectorField = new VectorField(attribute.uniform, attribute.arguments, 3); break;
+				case "float4": vectorField = new VectorField(attribute.uniform, attribute.arguments, 4); break;
+			}
+			return vectorField.CreateHtml(shaderGuid);
 
 		case "Toggle":
 		case "toggle":
@@ -56,6 +61,17 @@ function CreateFieldHtmlFromAttribute(shaderGuid, attribute)
 			let toggleField = new ToggleField(attribute.uniform, attribute.arguments[0]);
 			return toggleField.CreateHtml(shaderGuid);
 	}
+
+	//Fallback
+	let field;
+	switch (attribute.type)
+	{
+		case "float": field = new FloatField(attribute.uniform, 0.0); break;
+		case "float2": field = new VectorField(attribute.uniform, attribute.arguments, 2); break;
+		case "float3": field = new VectorField(attribute.uniform, attribute.arguments, 3); break;
+		case "float4": field = new VectorField(attribute.uniform, attribute.arguments, 4); break;
+	}		
+	return field.CreateHtml(shaderGuid);
 }
 
 //Utils
@@ -96,6 +112,7 @@ function onDrag()
 	switch(isDragging)
 	{
 		case "FloatField": FloatFieldDrag(dragGuid, delta); break;
+		case "VectorField": VectorFieldDrag(dragGuid, delta); break;
 		case "SliderField": SliderFieldDrag(dragGuid, delta); break;
 
 	}
@@ -158,6 +175,101 @@ function SwitchSetToggle(element)
 
 
 
+//Vector field --------------------------------------
+class VectorField
+{
+	constructor(name, defaultValue, count)
+	{
+		this.name = name;
+		this.value = VectorField.Make4(defaultValue);
+		this.count = count;
+
+		for (let i = 0; i < count; i++)
+		{
+			this.SetValue(this.value[i], i);
+		}
+	}
+
+	static Make4(v)
+    {
+        const out = [0, 0, 0, 0];
+
+        if (Array.isArray(v))
+        {
+            for (let i = 0; i < 4 && i < v.length; ++i)
+                out[i] = Number(v[i]) || 0;
+        }
+        else if (typeof v === "number")
+        {
+            out[0] = v;
+        }
+
+        return out;
+    }
+
+	CreateHtml(exampleID)
+	{
+		this.guid = exampleID + "-" + this.name;		
+
+		let pre = "<div class='shader-property' id='" + this.guid + "'>" + 
+			"<div class=\"vector-field\">" + "<p name='" + this.guid + "'>" + VariableNameToLabel(this.name) + "</p>";
+
+		let post = "</div>" + 
+			"</div>";
+
+		let components = "";
+		let componenNames = "XYZW";
+
+		for (let i = 0; i < this.count; i++)
+		{
+			let localGuid = this.guid + "_" + componenNames[i];
+			currentExampleFields.set(localGuid, this);
+			components += "<p class='vector-channel' style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + localGuid + "', 'VectorField')\">" + componenNames[i] + "</p>" + 
+			"<input type='number' class='float-field vector-comp' oninput='SetVectorValue(this," + i + ")' value='" + this.value[i] + "' id='field-" + localGuid + "'/>";
+		}
+
+		return pre + components + post;
+	}
+
+	SetValue(value, componentID)
+	{
+		this.value[componentID] = value;
+		if (currentShaderData != null)
+		{
+			switch (this.count)
+			{
+				case 2: currentShaderData.SetFloat2Value(this.name, this.value); break;
+				case 3: currentShaderData.SetFloat3Value(this.name, this.value); break;
+				case 4: currentShaderData.SetFloat4Value(this.name, this.value); break;
+			}
+		}
+	}
+}
+
+function SetVectorValue(element, componentID)
+{
+	console.log(componentID);
+	let guid = element.parentElement.id;
+	let floatData = currentExampleFields.get(guid);
+
+	let field = document.getElementById("field-" + guid);
+	floatData.SetValue(field.value, componentID);
+}
+
+function VectorFieldDrag(guid, delta)
+{
+	const lastChar = guid[guid.length - 1];
+	let componentID = "XYZW".indexOf(lastChar);
+	let floatData = currentExampleFields.get(guid);
+	let field = document.getElementById("field-" + guid);
+	let value = parseFloat(field.value);
+	value -= parseFloat(delta) * 0.1;
+	value = Math.round(value * 100) / 100;
+	field.value = value;
+	floatData.SetValue(field.value, componentID);	
+}
+
+
 //Float field --------------------------------------
 class FloatField
 {
@@ -176,7 +288,7 @@ class FloatField
 
 		return "<div class='shader-property' id='" + this.guid + "'>" + 
 			"<p name='" + this.guid + "' style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'FloatField')\">" + VariableNameToLabel(this.name) + "</p>" + 
-			"<input type='number' class='float-field' oninput='SetFloatValue(this)' value='" + this.value + "' id='field-" + this.guid + "'/>" +
+			"<input type='number' class='float-field' oninput='SetValue(this)' value='" + this.value + "' id='field-" + this.guid + "'/>" +
 			"</div>";
 	}
 
@@ -190,60 +302,7 @@ class FloatField
 	}
 }
 
-function SetFloatValue(element)
-{
-	let guid = element.parentElement.id;
-	let floatData = currentExampleFields.get(guid);
-
-	let field = document.getElementById("field-" + guid);
-	floatData.SetValue(field.value);
-}
-
-function FloatFieldDrag(guid, delta)
-{
-	let floatData = currentExampleFields.get(guid);
-	let field = document.getElementById("field-" + guid);
-	let value = parseFloat(field.value);
-	value -= parseFloat(delta) * 0.1;
-	value = Math.round(value * 100) / 100;
-	field.value = value;
-	floatData.SetValue(field.value);	
-}
-
-
-//Float2 field --------------------------------------
-class Float2Field
-{
-	constructor(name, defaultValue)
-	{
-		this.name = name;
-		this.value = defaultValue;
-
-		this.SetValue(this.value);
-	}
-
-	CreateHtml(exampleID)
-	{
-		this.guid = exampleID + "-" + this.name;
-		currentExampleFields.set(this.guid, this);
-
-		return "<div class='shader-property' id='" + this.guid + "'>" + 
-			"<p name='" + this.guid + "' style='user-select: none; cursor: ew-resize;' onmousedown=\"StartDrag('" + this.guid + "', 'Float2Field')\">" + VariableNameToLabel(this.name) + "</p>" + 
-			"<input type='number' class='float-field' oninput='SetFloat2Value(this)' value='" + this.value + "' id='field-" + this.guid + "'/>" +
-			"</div>";
-	}
-
-	SetValue(value)
-	{
-		this.value = value;
-		if (currentShaderData != null)
-		{
-			currentShaderData.SetFloatValue(this.name, value);
-		}
-	}
-}
-
-function SetFloat2Value(element)
+function SetVectorValue(element)
 {
 	let guid = element.parentElement.id;
 	let floatData = currentExampleFields.get(guid);
@@ -332,13 +391,25 @@ function SliderFieldDrag(guid, delta)
 //Dropdown field --------------------------------------
 class DropdownField
 {
-	constructor(name, defaultValue, options)
-	{
-		this.name = name;
-		this.options = options.split('|');
-		this.value = defaultValue;
-		this.SetValue(this.value);
-	}
+    constructor(name, args)
+    {
+        this.name = name;
+        this.value = args[0];
+
+        let rest = args.slice(1);
+
+        if (rest.length === 1 && typeof rest[0] === "string" && rest[0].includes("|"))
+        {
+            this.options = rest[0].split("|").map(o => o.toString());
+        }
+        else
+        {
+            this.options = rest.map(o => o.toString());
+        }
+
+        this.SetValue(this.value);
+    }
+
 
 	CreateHtml(exampleID)
 	{
@@ -386,9 +457,32 @@ class ColorField
 	{
 		this.name = name;
 
-		this.hexColor = defaultValue;
-		let c = HexToRGB(defaultValue);
-		this.value = `R: ${c[0]} G: ${c[1]} B: ${c[2]} A: 1.00`;
+
+		//No default value
+		if (!Array.isArray(defaultValue) || defaultValue.length === 0)
+		{
+			this.value = `R: ${0.5} G: ${0.5} B: ${0.5} A: 1.00`;
+		}
+
+        //Hex default value
+        if (typeof defaultValue[0] === "string" && defaultValue[0].length > 0 && defaultValue[0].startsWith("#") )
+		{
+			this.hexColor = defaultValue;
+			let c = HexToRGB(defaultValue);
+			this.value = `R: ${c[0]} G: ${c[1]} B: ${c[2]} A: 1.00`;
+        }
+
+		//Float array
+		else
+		{
+			let out = [0.5, 0.5, 0.5, 1.0];
+			for (let i = 0; i < 4 && i < defaultValue.length; i++)
+			{
+				out[i] = parseFloat(defaultValue[i]);
+			}
+			this.hexColor = RGBAtoHexA(out);
+			this.value = `R: ${out[0]} G: ${out[1]} B: ${out[2]} A: ${out[3]}`;
+		}
 
 		let color = ParseNormalizedColor(this.value);
 		this.SetValue([color[1], color[2], color[3], color[4]]);
@@ -412,7 +506,7 @@ class ColorField
 		this.value = value;
 		if (currentShaderData != null)
 		{
-			currentShaderData.SetColorValue(this.name, value);
+			currentShaderData.SetFloat4Value(this.name, value);
 		}
 	}
 }
@@ -492,4 +586,18 @@ function HexToRGB(h)
   }
   
   return [r, g, b];
+}
+
+function RGBAtoHexA(color)
+{
+    const r = Math.round(Math.min(Math.max(color[0], 0), 1) * 255);
+    const g = Math.round(Math.min(Math.max(color[1], 0), 1) * 255);
+    const b = Math.round(Math.min(Math.max(color[2], 0), 1) * 255);
+    const a = Math.round(Math.min(Math.max(color[3], 0), 1) * 255);
+
+    return "#" +
+        r.toString(16).padStart(2, "0") +
+        g.toString(16).padStart(2, "0") +
+        b.toString(16).padStart(2, "0") +
+        a.toString(16).padStart(2, "0");
 }
