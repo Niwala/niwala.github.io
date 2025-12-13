@@ -138,7 +138,7 @@ class ShaderData
 				return mod289(((x*34.0)+10.0)*x);
 			}
 
-			float noise(vec2 v)
+			float noise12(vec2 v)
 			{
 				const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
 											0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)

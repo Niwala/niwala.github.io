@@ -427,7 +427,7 @@ var glslHighlightRules = function ()
         "normalize|reflect|refract|" +
         "dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|mul|" +
         "texture2DProjLod|textureCube|textureCubeLod" + 
-        "hash|noise|smin|rotate|hash11|hash12|hash13|hash21|hash22|hash23|hash31|hash32|hash33|hash41|hash42|hash43|hash44"
+        "hash|noise12|smin|rotate|hash11|hash12|hash13|hash21|hash22|hash23|hash31|hash32|hash33|hash41|hash42|hash43|hash44"
     );
 
     // Attributes
