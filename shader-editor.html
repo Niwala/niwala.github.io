@@ -45,6 +45,7 @@
 		<script src="./src/shader-library/scripts/renderer.js" defer></script>
 		<script src="./src/shader-library/scripts/function-structs.js" defer></script>
 		<script src="./src/shader-library/scripts/editor.js" defer></script>
+		<script src="./src/shader-library/scripts/external.js" defer></script>
 	
 	</head>
 
@@ -223,8 +224,6 @@
 			<button onclick="ExportWebM()" class="controls-full">Export WebM</button>
 		</div>
 
-
-
 	</div>
 
 	<article id="back">
@@ -238,6 +237,7 @@
 
 					<div class="spacer" style="flex-grow: 1;"></div>
 
+					<button id="openExternal">IDE</button>
 					<button onclick="ToggleInfoPanel(this)">Info</button>
 					<button onclick="ToggleExamplesPanel(this)">Examples</button>
 					<button onclick="ToggleExportPanel(this)" class="controls-last">Export</button>
