@@ -50,6 +50,12 @@
    margin-right: 5px;
 }
 
+.controls-area
+{
+   margin-top: -70px;
+   margin-bottom: 25px;
+}
+
 button
 {
    background-color: #363636;

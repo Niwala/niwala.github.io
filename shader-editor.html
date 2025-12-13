@@ -101,7 +101,7 @@
 			<div class="separator"></div>
 			<span><b>Uniforms :</b> time, screenSize, mousePosition</span>
 			<span><b>Constants :</b> PI, TAU</span>
-			<span><b>Functions :</b> hash, noise, smin, hash, rot2D</span>
+			<span><b>Functions :</b> hash, noise, smin, rot2D</span>
 			<div class="separator"></div>
 			<lu>
 				<li>uv.xy : Layout Uvs</li>
@@ -234,11 +234,9 @@
 			
 				<!-- Controls -->
 				<div class="controls-area">
-					<button onclick="ToggleLayoutPanel(this)" class="img-button controls-first"><img class="icon" src="./src/shader-library/media/layout-code-vertical.png"></button>
-					<div id="font-size-control"> <input type="range" oninput="SetFontSize(this)" min="16" max="30" value="16" step="0.01" class="slider" id="font-size-slider"><img class="icon" src="./src/shader-library/media/font-size-icon.png"></div>
-
 					<div class="spacer" style="flex-grow: 1;"></div>
 
+					<button onclick="ToggleLayoutPanel(this)" class="img-button controls-first"><img class="icon" src="./src/shader-library/media/layout-code-vertical.png"></button>
 					<button onclick="ToggleInfoPanel(this)">Info</button>
 					<button onclick="ToggleExamplesPanel(this)">Examples</button>
 					<button onclick="ToggleExportPanel(this)" class="controls-last">Export</button>

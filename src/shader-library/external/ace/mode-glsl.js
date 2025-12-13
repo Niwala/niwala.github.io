@@ -426,7 +426,8 @@ var glslHighlightRules = function ()
         "min|max|clamp|mix|step|smoothstep|length|distance|dot|cross|lerp|saturate|" +
         "normalize|reflect|refract|" +
         "dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|mul|" +
-        "texture2DProjLod|textureCube|textureCubeLod"
+        "texture2DProjLod|textureCube|textureCubeLod" + 
+        "hash|noise|smin|rot2D"
     );
 
     // Attributes
@@ -445,7 +446,7 @@ var glslHighlightRules = function ()
 
     // Constants
     var constant = (
-        "PI|TAU"
+        "PI|TAU|time|screenSize|mousePosition"
     );
 
     var keywordMapper = this.createKeywordMapper({
