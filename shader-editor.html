@@ -21,6 +21,7 @@
 		<link rel="stylesheet" href="./src/shader-library/external/coloris/coloris.css" type="text/css"/>
 		<script src="./src/shader-library/external/coloris/coloris.js"></script>
 		
+		<link rel="stylesheet" href="./src/shader-library/styles/layout.css" type="text/css"/>
 		<link rel="stylesheet" href="./src/shader-library/styles/ace-styles.css" type="text/css"/>
 		<link rel="stylesheet" href="./src/shader-library/styles/editor.css" type="text/css"/>
 		<link rel="stylesheet" href="./src/shader-library/styles/field-styles.css" type="text/css"/>
@@ -51,7 +52,10 @@
 
   <body>
 
+
+	<!-- Overlay Canvas --> 
 	<canvas width="1024" height="1024" id="overlay-canvas" class="overlay-canvas"></canvas>
+
 
 	<!-- Context menu -->
 	<div id="menu" class="context-menu">
@@ -59,6 +63,7 @@
 	<button onclick="ContextMenuAction('Open')">Open in editor</button>
 	</div>
   
+
 	<!-- Banner -->
 	<div id="banner">
 		<div class="centred" style="justify-content: space-between; align-items: center; flex-direction: row;">
@@ -81,7 +86,9 @@
 	</div>
 
 	
+
 	<div id="text-size" class="format-code"></div>
+
 
 	<!-- Popup panel-->
 	<div id="popup-panel">
@@ -89,9 +96,9 @@
 		<!-- Layout -->
 		<div id="layout-section" class="vertical" style="display: none;">
 			<div class="popup-panel-header">Editor layout</div>
-			<div class="horizontal"><button class="img-button"><img class="icon" src="./src/shader-library/media/layout-code-vertical.png"></button><span class="button-side-label">Vertical</span></div>
-			<div class="horizontal"><button class="img-button"><img class="icon" src="./src/shader-library/media/layout-code-horizontal.png"></button><span class="button-side-label">Horizontal</span></div>
-			<div class="horizontal"><button class="img-button"><img class="icon" src="./src/shader-library/media/layout-code-stack.png"></button><span class="button-side-label">Stack</span></div>
+			<div class="horizontal"><button class="img-button" onclick="SetWindowsLayout('layout-a')"><img class="icon" src="./src/shader-library/media/layout-code-vertical.png"></button><span class="button-side-label">Vertical</span></div>
+			<div class="horizontal"><button class="img-button" onclick="SetWindowsLayout('layout-b')"><img class="icon" src="./src/shader-library/media/layout-code-horizontal.png"></button><span class="button-side-label">Horizontal</span></div>
+			<div class="horizontal"><button class="img-button" onclick="SetWindowsLayout('layout-c')"><img class="icon" src="./src/shader-library/media/layout-code-stack.png"></button><span class="button-side-label">Stack</span></div>
 		</div>
 
 		<!-- Info -->
@@ -227,43 +234,31 @@
 	</div>
 
 
+	<!-- Layout -->
+	<div id="layout-root">
+		<div id="layout" class="layout-normal">
 
-	<article id="back">
-		<div class="centred">
-			<div class="vertical">
-			
-				<!-- Controls -->
-				<div class="controls-area">
-					<div class="spacer" style="flex-grow: 1;"></div>
+			<!-- Code -->
+			<div id="winA" class="panel panel-a"><div id="code-container" class="ace-host"><div id="ace-editor"></div></div></div>
 
-					<button onclick="ToggleLayoutPanel(this)" class="img-button controls-first"><img class="icon" src="./src/shader-library/media/layout-code-vertical.png"></button>
-					<button onclick="ToggleInfoPanel(this)">Info</button>
-					<button onclick="ToggleExamplesPanel(this)">Examples</button>
-					<button onclick="ToggleExportPanel(this)" class="controls-last">Export</button>
-				</div>
-				
+			<!-- Shader Properties -->
+			<div id="winB" class="panel panel-b"><div id="shader-properties" class="shader-properties"></div></div>
 
-				<!-- <div id="error-message"></div> -->
+			<!-- Canvas -->
+			<div id="winC" class="panel panel-c"><canvas id="shader-canvas" width="700" height="400" class="shader-editor-preview" style="align-self: start;"></canvas></div>
 
-				<!-- Code -->
-				<div class="ace-host">
-					<div id="ace-editor"></div>
-				</div>
+			<!-- Controls -->
+			<div class="controls-area">
+				<div class="spacer" style="flex-grow: 1;"></div>
 
-				<div class="horizontal">
-
-					<div class="vertical example-box" style="border-radius: 5px; margin-right: 20px;">
-
-						<!-- Shader Properties -->
-						<div class="shader-properties" id="shader-properties"></div>
-
-					</div>
-
-					<!-- Preview -->
-					<canvas id="shader-canvas" width="700" height="400" class="shader-editor-preview" style="align-self: start;"></canvas>
-				</div>
+				<button onclick="ToggleLayoutPanel(this)" class="img-button controls-first"><img class="icon" src="./src/shader-library/media/layout-code-vertical.png"></button>
+				<button onclick="ToggleInfoPanel(this)">Info</button>
+				<button onclick="ToggleExamplesPanel(this)">Examples</button>
+				<button onclick="ToggleExportPanel(this)" class="controls-last">Export</button>
 			</div>
 		</div>
-	</article>
+	</div>
+
+
   </body>
 </html>

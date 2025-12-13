@@ -7,6 +7,8 @@ var renderer;
 var shaderProperties;
 var errorMessageElement;
 
+var layoutElement;
+
 //Popup panel
 var popupPanel;
 var popupPanelOwner;
@@ -32,6 +34,12 @@ Main();
 
 function Main()
 {
+	//Setup layout
+	layoutElement = document.getElementById("layout");
+	SetWindowsLayout("layout-a");
+
+
+
 
 	//Setup ace
 	ace.config.set("basePath", "/shader-library/external/ace");
@@ -54,7 +62,6 @@ function Main()
 
 	
 	//Get document elements
-	textSizeElement = document.getElementById("text-size");
 	overlayElement = document.getElementById("overlay");
 	overlayCanvas = document.getElementById("overlay-canvas");
 	shaderCanvas = document.getElementById("shader-canvas");
@@ -71,7 +78,7 @@ function Main()
 	popupPanel = document.getElementById("popup-panel");
 	popupPanel.addEventListener('click', (event) => event.stopPropagation());
 	document.getElementById("banner").addEventListener('click', ClosePopup);
-	document.getElementById("back").addEventListener('click', ClosePopup);
+	document.getElementById("layout-root").addEventListener('click', ClosePopup);
 
 	//Default layout
 	currentLayoutBtn = document.getElementById("layout-btn-" + currentLayoutValue);
@@ -113,6 +120,11 @@ function Main()
 	{
 		OpenExample("default");
 	}
+}
+
+function SetWindowsLayout(layoutName)
+{
+	layoutElement.className = layoutName;
 }
 
 function GoToLibrary(event)
@@ -177,7 +189,6 @@ function SetClipboard(value)
 function CompileShader()
 {
 	let hlsl = editor.getValue().replace(/\t/g, "    ");
-	textSizeElement.innerText = hlsl + "\n";
 
 	let shader = ConvertIntegersToFloats(hlsl);
 	currentShaderData = new ShaderData(shaderCanvas, "shader-editor", shader, currentLayoutValue, OnShaderCompiled);

@@ -52,8 +52,10 @@
 
 .controls-area
 {
-   margin-top: -70px;
-   margin-bottom: 25px;
+   position: absolute;
+   flex-direction: row;
+   margin-top: -80px;
+   right: 0px;
 }
 
 button

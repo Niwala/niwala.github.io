@@ -228,9 +228,23 @@ img
 
 .shader-properties
 {
+	position: relative;
 	flex-direction: column;
-	margin-right: 8px;
-	margin-top: 15px;
+	padding: 10px;
+	flex-grow: 1;
+	background-color: #212121;
+	border-radius: 5px;
+}
+
+#shader-canvas
+{
+	position: relative;
+	aspect-ratio: 1;
+	flex-shrink: 1;
+	flex-grow: 1;
+	width: 100px;
+	min-width: 500px;
+	z-index: 0;
 }
 
 .example-box
