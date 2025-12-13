@@ -46,7 +46,6 @@
 		<script src="./src/shader-library/scripts/renderer.js" defer></script>
 		<script src="./src/shader-library/scripts/function-structs.js" defer></script>
 		<script src="./src/shader-library/scripts/editor.js" defer></script>
-		<script src="./src/shader-library/scripts/external.js" defer></script>
 	
 	</head>
 
@@ -240,7 +239,6 @@
 
 					<div class="spacer" style="flex-grow: 1;"></div>
 
-					<button id="openExternal">IDE</button>
 					<button onclick="ToggleInfoPanel(this)">Info</button>
 					<button onclick="ToggleExamplesPanel(this)">Examples</button>
 					<button onclick="ToggleExportPanel(this)" class="controls-last">Export</button>
@@ -250,17 +248,6 @@
 				<!-- Code -->
 				<div class="ace-host">
 					<div id="ace-editor"></div>
-				</div>
-
-				<div id="scroll-content">
-					<div id="scroll-area">
-						<textarea id="code-editor-area" class="format-code" type="text" spellcheck="false" onkeyup="CompileShader()"></textArea>						
-
-						<div id="overlay">
-							<pre class="line-numbers" id="code-editor-overlay"><code class="language-hlsl format-code" id="code">example-code</code></pre>
-						</div>
-
-					</div>
 				</div>
 
 				<div class="horizontal">

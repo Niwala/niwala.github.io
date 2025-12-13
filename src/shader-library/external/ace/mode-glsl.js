@@ -421,19 +421,12 @@ var glslHighlightRules = function ()
 
     // Functions
     var functions = (
-        "radians|degrees|sin|cos|tan|asin|acos|atan|pow|" +
+        "sin|cos|tan|asin|acos|atan|pow|" +
         "exp|log|exp2|log2|sqrt|inversesqrt|abs|sign|floor|ceil|fract|frac|mod|" +
         "min|max|clamp|mix|step|smoothstep|length|distance|dot|cross|lerp|saturate|" +
-        "normalize|faceforward|reflect|refract|matrixCompMult|lessThan|" +
-        "lessThanEqual|greaterThan|greaterThanEqual|equal|notEqual|any|all|" +
-        "not|dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|mul|" +
-        "texture2DProjLod|textureCube|textureCubeLod|" +
-        "gl_MaxVertexAttribs|gl_MaxVertexUniformVectors|gl_MaxVaryingVectors|" +
-        "gl_MaxVertexTextureImageUnits|gl_MaxCombinedTextureImageUnits|" +
-        "gl_MaxTextureImageUnits|gl_MaxFragmentUniformVectors|gl_MaxDrawBuffers|" +
-        "gl_DepthRangeParameters|gl_DepthRange|" +
-        "gl_Position|gl_PointSize|" +
-        "gl_FragCoord|gl_FrontFacing|gl_PointCoord|gl_FragColor|gl_FragData"
+        "normalize|reflect|refract|" +
+        "dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|mul|" +
+        "texture2DProjLod|textureCube|textureCubeLod"
     );
 
     // Attributes
