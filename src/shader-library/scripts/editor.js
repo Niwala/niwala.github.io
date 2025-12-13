@@ -5,6 +5,7 @@ var shaderCanvas;
 var scrollArea;
 var renderer;
 var shaderProperties;
+var errorMessageElement;
 
 //Popup panel
 var popupPanel;
@@ -59,6 +60,7 @@ function Main()
 	shaderCanvas = document.getElementById("shader-canvas");
 	scrollArea = document.getElementById("scroll-area");
 	shaderProperties = document.getElementById("shader-properties");
+	// errorMessageElement = document.getElementById("error-message");
 
 	layoutSection = document.getElementById("layout-section");
 	exportSection = document.getElementById("export-section");
@@ -178,7 +180,7 @@ function CompileShader()
 	textSizeElement.innerText = hlsl + "\n";
 
 	let shader = ConvertIntegersToFloats(hlsl);
-	currentShaderData = new ShaderData(shaderCanvas, "shader-editor", shader, currentLayoutValue);
+	currentShaderData = new ShaderData(shaderCanvas, "shader-editor", shader, currentLayoutValue, OnShaderCompiled);
 
 	renderer.ClearRenderers();
 	renderer.AddRenderer(currentShaderData);
@@ -366,4 +368,38 @@ function SetShaderOnly(toggleElement)
 function SetLargeLayout(toggleElement)
 {
 	largeLayout = toggleElement.checked;
+}
+
+//Shader compilation-------------------------
+function OnShaderCompiled(error, lineOffset = 0)
+{
+	ParseShaderErrors(error, lineOffset);
+}
+
+function ParseShaderErrors(errorString, lineOffset) 
+{
+    const annotations = [];
+    const lines = errorString.split('\n');
+
+    lines.forEach(line => {
+        //Example : ERROR: 0:125: 'fds' : undeclared identifier
+        const match = line.match(/(ERROR|WARNING):\s*\d+:(\d+):\s*(.*)/);
+        if (match) {
+            const typeStr = match[1];   // ERROR or WARNING
+            const lineNum = parseInt(match[2]) - lineOffset;
+            const message = match[3].trim();
+
+            if (lineNum >= 0) 
+			{
+                annotations.push({
+                    row: lineNum,
+                    column: 0,
+                    text: message,
+                    type: typeStr.toLowerCase() // "error", "warning", "info"
+                });
+            }
+        }
+    });
+
+    editor.getSession().setAnnotations(annotations);
 }

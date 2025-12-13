@@ -16,6 +16,7 @@
     font-family: Consolas, "Courier New", monospace;
     font-size: 16px;
     line-height: 24px;
+    border-radius: 5px;
 
     white-space: pre;
 }
@@ -32,6 +33,29 @@
 .ace_text-layer,
 .ace_cursor-layer {
     position: absolute;
+}
+
+.ace_gutter-cell.error-gutter {
+    background-color: red; 
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    margin: 0 auto; /* centrer */
+}
+
+.ace_selected-word
+{
+    box-shadow: 0px 0px 0px 1px rgb(142, 191, 255) !important;
+}
+
+.ace_selection
+{
+    background-color: #61afef62 !important;
+}
+
+.ace_bracket
+{
+    border-color: rgb(142, 191, 255) !important;
 }
 
 /*Popup background*/

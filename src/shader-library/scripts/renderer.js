@@ -5,9 +5,9 @@ var mouseX;
 var mouseY;
 var focusedShaderData;
 
-function RendererFromExample(canvas, data, example)
+function RendererFromExample(canvas, data, example,  onShaderCompiled = null)
 {
-	return new ShaderData(canvas, data.name + "-" + example.name, example.shader, 1);
+	return new ShaderData(canvas, data.name + "-" + example.name, example.shader, 1, onShaderCompiled);
 }
 
 function ContextMenuAction(action)
@@ -39,8 +39,9 @@ function ContextMenuAction(action)
 
 class ShaderData
 {
-	constructor(element, shaderGuid, shaderInclude, layout)
+	constructor(element, shaderGuid, shaderInclude, layout, onShaderCompiled = null)
 	{
+		this.onShaderCompiled = onShaderCompiled;
 		this.shaderInclude = shaderInclude;
 		this.element = element;
 		this.width = element.getAttribute("width");
@@ -93,9 +94,7 @@ class ShaderData
 			}
 			`;
 
-		//Build shaders > Fragment
-		this.fragmentShader = 
-			`
+		let fragmentPre = `
 			precision highp float;
 			varying vec4 vTextureCoord;
 			
@@ -214,7 +213,13 @@ class ShaderData
 			}
 
 			//Custom shader 
-			` + this.shaderFragContent + ` 
+			`;
+
+		this.fragmentPreLineCount = fragmentPre.split("\n").length;
+
+		//Build shaders > Fragment
+		this.fragmentShader = fragmentPre + this.shaderFragContent + 
+			` 
 
 			void main(void) 
 			{
@@ -263,7 +268,10 @@ class ShaderData
 				arguments: argumentsList
 			});
 			
-			cleanedShader = cleanedShader.replace(match[0], `uniform ${type} ${name};`);
+			let lineSpacing = ("//\n").repeat(match[0].split("\n").length - 1); //We keep the same line count to avoid breaking the error line index
+			let replacement = lineSpacing + `uniform ${type} ${name};` 
+
+			cleanedShader = cleanedShader.replace(match[0], replacement);
 		}
 		
 		return { cleanedShader, parsedUniforms: result };
@@ -437,13 +445,25 @@ class ShaderData
 	//
 	initShaderProgram(gl, vsSource, fsSource, fsErrorSource) 
 	{
+		this.hasError = false;
+		this.errorMessage = "";
+
 		this.vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
 		this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+		//Check errors
+		if (this.onShaderCompiled != null)
+		{
+			if (this.hasError)
+				this.onShaderCompiled(this.errorMessage, this.fragmentPreLineCount);	
+			else
+				this.onShaderCompiled("", 0);
+		}
 
 		// Create the shader program
 		this.shaderProgram = gl.createProgram();
 
-		//try
+		try
 		{
 			gl.attachShader(this.shaderProgram, this.vertexShader);
 
@@ -451,59 +471,71 @@ class ShaderData
 			{
 				gl.attachShader(this.shaderProgram, this.fragmentShader);
 			}
-			catch
+			catch (e)
 			{
 				this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
 				gl.attachShader(this.shaderProgram, this.fragmentShader);
+				console.error('Error on shader B ' + e);
 			}
 			gl.linkProgram(this.shaderProgram);
 
-			// If creating the shader program failed, alert
 			if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) 
 			{
-				console.error('Error on shader ' + this.shaderGuid + "\n" + gl.getProgramInfoLog(this.shaderProgram) + "\n\n" + this.shaderFragContent);
-
 				this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
 				gl.attachShader(this.shaderProgram, this.fragmentShader);
 				gl.linkProgram(this.shaderProgram);
 				return this.shaderProgram;
 			}
+			else
+			{
+				let info = gl.getShaderInfoLog(this.fragmentShader);
+				console.log(info);
+   				//  if (info) 
+				// 	console.error('Error on shader A ' + info);
+			}
 		}
-		// catch (e)
-		// {
-		// 	console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
+		catch (e)
+		{
+			// if (this.onShaderCompiled != null)
+			// {
+			// 	this.onShaderCompiled('Error on shader ' + this.shaderGuid + "\n" + gl.getProgramInfoLog(this.shaderProgram) + "\n\n" + this.shaderFragContent);
+			// }
 
-		// 	this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
-		// 	gl.attachShader(this.shaderProgram, this.fragmentShader);
-		// 	gl.linkProgram(this.shaderProgram);
-		// 	return this.shaderProgram;
-		// }
+			console.error('Error on shader C ' + fsErrorSource);
+
+			// console.error('Error on shader ' + this.shaderGuid + "\n" + e + "\n\n" + this.shaderFragContent);
+
+			this.fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsErrorSource);
+			gl.attachShader(this.shaderProgram, this.fragmentShader);
+			gl.linkProgram(this.shaderProgram);
+			return this.shaderProgram;
+		}
 
 		this.compiled = true;
 		return this.shaderProgram;
 	}
 
-	//
-	// creates a shader of the given type, uploads the source and
-	// compiles it.
-	//
+	//Creates a shader of the given type, uploads the source and compiles it.
 	loadShader(gl, type, source) 
 	{
-	  let shader = gl.createShader(type);
+		let shader = gl.createShader(type);
 
-	  // Send the source to the shader object
-	  gl.shaderSource(shader, source);
+		//Send the source to the shader object
+		gl.shaderSource(shader, source);
 
-	  // Compile the shader program
-	  gl.compileShader(shader);
+		//Compile the shader program
+		gl.compileShader(shader);
 
-	  // See if it compiled successfully
-	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
-	  {
-		//alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
-		gl.deleteShader(shader);
-		return null;
-	  }
+
+		//Check if it compiled successfully
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
+		{
+			this.hasError = true;
+			this.errorMessage = gl.getShaderInfoLog(shader);
+
+			gl.deleteShader(shader);
+			return null;
+		}
 
 	  return shader;
 	}
