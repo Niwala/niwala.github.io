@@ -127,7 +127,7 @@ img
 	flex-grow: 0;
 	flex-shrink: 0;
 	
-	margin-bottom: -2px;
+	margin-bottom: -10px;
 	
 	background-image: url('../media/sams-backpack-white.png');
 	background-size: contain;
@@ -164,7 +164,7 @@ img
 
 #banner
 {
-	padding: 8px;
+	padding-top: 3px;
 	flex-grow: 1;
 	display: flex;
 	justify-content: center;
