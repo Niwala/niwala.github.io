@@ -50,23 +50,6 @@
    margin-right: 5px;
 }
 
-.controls-area
-{
-   position: absolute;
-   flex-direction: row;
-   margin-top: -80px;
-   right: 0px;
-}
-
-.logo-area
-{
-   position: absolute;
-   flex-direction: row;
-   margin-top: -144px;
-   left: 0px;
-   align-items: flex-end;
-}
-
 button
 {
    background-color: #363636;

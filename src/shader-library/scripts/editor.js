@@ -8,6 +8,7 @@ var shaderProperties;
 var errorMessageElement;
 
 var layoutElement;
+var bannerElement;
 
 //Popup panel
 var popupPanel;
@@ -67,6 +68,7 @@ function Main()
 	shaderCanvas = document.getElementById("shader-canvas");
 	scrollArea = document.getElementById("scroll-area");
 	shaderProperties = document.getElementById("shader-properties");
+	bannerElement = document.getElementById("banner");
 	// errorMessageElement = document.getElementById("error-message");
 
 	layoutSection = document.getElementById("layout-section");
@@ -124,7 +126,21 @@ function Main()
 
 function SetWindowsLayout(layoutName)
 {
+	//Large layout
+	let largeLayout = false;
+	if (layoutName == "layout-a")
+		largeLayout = true;
+
+	// console.log(bannerElement);
+	// if (largeLayout)
+	// 	bannerElement.className = "large";
+	// else
+	// 	bannerElement.className = "";
+
+	//Layout
 	layoutElement.className = layoutName;
+
+
 }
 
 function GoToLibrary(event)

@@ -120,26 +120,6 @@ img
 	align-items: center
 }
 
-.main-logo
-{
-	width: 120px;
-	height: 120px;
-	flex-grow: 0;
-	flex-shrink: 0;
-	
-	margin-bottom: -10px;
-	
-	background-image: url('../media/sams-backpack-white.png');
-	background-size: contain;
-	background-repeat: no-repeat;
-}
-
-.main-logo:hover
-{
-	cursor: pointer;
-	filter: brightness(100%) saturate(100%);
-}
-
 .main-header
 {
 	margin-bottom: 0;
@@ -164,18 +144,75 @@ img
 
 #banner
 {
-	padding-top: 3px;
+	margin-top: -20px;
+	margin-left: -10000px;
+	margin-right: -10000px;
+
+	padding-top: 23px;
+	padding-left: 10000px;
+	padding-right: 10000px;
+
 	flex-grow: 1;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	justify-content: space-between;
 	
-	min-height: 120px;
 	background-color: #151515;
 	
 	border-bottom-color: #494949;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
+}
+
+.banner-titles
+{
+	position: relative;
+	flex-direction: column;
+	justify-content: flex-end;
+   	left : 0;
+   	bottom: 0;
+}
+
+.logo-area
+{
+   	position: relative;
+   	left : 0;
+   	bottom: 10px;
+   	flex-direction: row;
+   	height: 100%;
+}
+
+.controls-area
+{
+   	position: absolute;
+   	right : 0;
+	bottom: 10px;
+   	flex-direction: row;
+}
+
+.main-logo
+{
+	aspect-ratio: 1;
+	width: auto;
+	height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+	
+	margin-bottom: -10px;
+	
+	background-image: url('../media/sams-backpack-white.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.main-logo:hover
+{
+	cursor: pointer;
+	filter: brightness(100%) saturate(100%);
+}
+
+.large #banner
+{
+    min-height: 64px;
 }
 
 #loading

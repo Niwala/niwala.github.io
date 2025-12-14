@@ -38,8 +38,9 @@
 {
     width: min(100% - 40px, 1200px);
     grid-template-columns: 1fr 2fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 128px 1fr 1fr;
     grid-template-areas:
+        "D D"
         "A A"
         "B C";
 }
@@ -49,8 +50,9 @@
 {
     width: calc(100% - 40px);
     grid-template-columns: minmax(200px, 1fr) auto;
-    grid-template-rows: 1fr 100fr;
+    grid-template-rows: 64px 1fr 100fr;
     grid-template-areas:
+        "D D"
         "A B"
         "A C";
 }
@@ -60,8 +62,9 @@
 {
     width: calc(100% - 40px);
     grid-template-columns: 1fr 5fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 64px 1fr;
     grid-template-areas:
+        "D D"
         "B C";
 }
 
@@ -93,5 +96,12 @@
 { 
     grid-area: C;
     z-index: -1;
+    position: relative;
+}
+
+/* Banner */
+#winD
+{ 
+    grid-area: D;
     position: relative;
 }
