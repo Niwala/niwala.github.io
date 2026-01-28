@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"> -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+
+  <!-- Adds the default breadcrumb styling -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-breadcrumb@latest/dist/breadcrumb.min.css">
+
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: 'FloraPocket',
+      repo: '',
+      homepage: 'home.md',
+      loadSidebar: true,
+
+      breadcrumb: {
+        showHome: true,
+        homeText: 'Home',
+        separator: ' &rsaquo; ',
+        casing: 'capitalize',
+        linkColor: 'var(--theme-color, #42b983)',
+        size: 'small'
+      },
+
+      search: {
+        depth: 10,
+        noData: "No results",
+        placeholder: "Search..."
+      }
+
+    }
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-breadcrumb@latest/dist/index.min.js"></script> <!-- Breadcrumb -->
+  <script src="https://unpkg.com/docsify-plugin-flexible-alerts"></script> <!-- Calouts / alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script> <!-- Search -->
+  <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js" ></script> <!-- Inline code -->
+</body>
+</html>
+
+
+<!-- Breadcrumbs : https://github.com/FranCarstens/docsify-breadcrumb -->
+ <!-- Tabs : https://jhildenbiddle.github.io/docsify-tabs/#/ -->
+ <!-- Changelogs : https://github.com/Plugin-contrib/docsify-plugin/tree/master/packages/docsify-changelog-plugin
+ Top banner :  https://github.com/Plugin-contrib/docsify-plugin/tree/master/packages/docsify-top-banner-plugin
+ GLTF explorer : https://github.com/X-Ryl669/docsify-gltfexplorer
+ Corner customisation : https://github.com/Koooooo-7/docsify-corner
+ IFrame : https://github.com/HerbertHe/docsify-codeblock-iframe
+ Gif : https://gbodigital.github.io/docsify-gifcontrol/#/
+Alerts : https://github.com/fzankl/docsify-plugin-flexible-alerts
+Lucide icons : https://github.com/bhaireshm/docsify-lucide-icons -->
