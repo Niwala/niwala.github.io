@@ -1,9 +1,16 @@
-- [**Documentation**](home.md)
-
-    - [Flora Surface](api/components/flora-surface.md)
-    - [Flora Mask](api/generation/flora-mask.md)
-
-- API
-
-    - [Flora Surface](api/components/flora-surface.md)
-    - [Flora Mask](api/generation/flora-mask.md)
+- [home](home.md)
+	- documentation
+		- [flora-surface.md](documentation\flora-surface.md)
+	- api
+		- components
+			- [flora-seed.md](api\components\flora-seed.md)
+			- [flora-surface.md](api\components\flora-surface.md)
+		- flora-objects
+			- [flora-scriptable-object.md](api\flora-objects\flora-scriptable-object.md)
+		- flora-surface
+			- [navigable-surface.md](api\flora-surface\navigable-surface.md)
+			- [surface-point.md](api\flora-surface\surface-point.md)
+		- generation
+			- [custom-creeper-behaviour.md](api\generation\custom-creeper-behaviour.md)
+			- [flora-generation-process.md](api\generation\flora-generation-process.md)
+			- [flora-mask.md](api\generation\flora-mask.md)
