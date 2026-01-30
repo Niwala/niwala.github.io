@@ -3,6 +3,8 @@ Les surface navigable sont au cœur du fonctionnement de FloraPocket. Ces derni�
 - Garantir une surface avec une géométrie propre, continue, régulière, standard.
 - Permettre une évaluation très rapide de cette surface pour les différents processus de génération.
 
+## Classe
+<!--#Class: NavigableSurface-->
 
 ## Generation
 
@@ -10,7 +12,7 @@ Les surface navigable sont au cœur du fonctionnement de FloraPocket. Ces derni�
 ## Evaluation & Navigation
 
 #### Surface point
-La plupart des opérations se feront à l'aide de [[surface-point|Surface Points]]
+La plupart des opérations se feront à l'aide de [Surface Points](surface-point)
 
 
 ### Raycast

@@ -1,1 +1,1 @@
-# Flora Pocket Documentation
+# FloraPocket Documentation

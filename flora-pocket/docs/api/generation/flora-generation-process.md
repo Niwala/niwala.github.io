@@ -1,9 +1,8 @@
 # Flora Generation Process
 
-Un flora generation process existe dés lors qu'un [[flora-scriptable-object|FloraScriptableObject]] est placé sur un [[flora-seed|Flora Seed]].
+Un flora generation process existe dés lors qu'un [FloraScriptableObject](flora-scriptable-object) est placé sur un [FloraSeed](flora-seed).
 
-
-OnSurfaceChanged()
+<!--#Function: OnSurfaceChanged()-->
 
 OnObjectSettingsChanged()
 
