@@ -6,13 +6,18 @@ Les surface navigable sont au cœur du fonctionnement de FloraPocket. Ces derni�
 ## Classe
 <!--#Class: NavigableSurface-->
 
-## Generation
+## Création
+La manière la plus simple de créer une NavigableSurface est de la générer via le component FloraSurface. Vous pouvez néanmoins créer une surface depuis l'API dédié : 
+
+IMeshProvider
+
+SurfaceSettingsSnapshot
 
 
 ## Evaluation & Navigation
 
 #### Surface point
-La plupart des opérations se feront à l'aide de [Surface Points](surface-point)
+La plupart des opérations se feront à l'aide de [Surface Points](api/api-flora-surface/api-surface-point.md)
 
 
 ### Raycast

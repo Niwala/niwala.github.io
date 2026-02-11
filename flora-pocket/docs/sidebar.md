@@ -1,16 +1,28 @@
-- [home](home.md)
-	- documentation
-		- [flora-surface](documentation\flora-surface.md)
-	- api
-		- components
-			- [flora-seed](api\components\flora-seed.md)
-			- [flora-surface](api\components\flora-surface.md)
-		- flora-objects
-			- [flora-scriptable-object](api\flora-objects\flora-scriptable-object.md)
-		- flora-surface
-			- [navigable-surface](api\flora-surface\navigable-surface.md)
-			- [surface-point](api\flora-surface\surface-point.md)
-		- generation
-			- [custom-creeper-behaviour](api\generation\custom-creeper-behaviour.md)
-			- [flora-generation-process](api\generation\flora-generation-process.md)
-			- [flora-mask](api\generation\flora-mask.md)
+- [Scripting Reference](api.md)
+	- Components
+		- [Flora Seed](api\components\flora-seed.md)
+		- [Flora Surface](api\components\flora-surface.md)
+	- Flora objects
+		- [Flora pack](api\flora-objects\flora-pack.md)
+		- [Flora plant](api\flora-objects\flora-plant.md)
+		- [Flora Scriptable Object](api\flora-objects\flora-scriptable-object.md)
+	- Flora Surface
+		- [Flora Mask Editor](api\flora-surface\flora-masks-editor.md)
+		- [Flora Masks](api\flora-surface\flora-masks.md)
+			- [Ambient Occlusion Mask](api\flora-surface\flora-masks\flora-masks-ao.md)
+			- [Curvature Mask](api\flora-surface\flora-masks\flora-masks-curvature.md)
+			- [Light Mask](api\flora-surface\flora-masks\flora-masks-light.md)
+			- [Normal Mask](api\flora-surface\flora-masks\flora-masks-normal.md)
+			- [Orientation Mask](api\flora-surface\flora-masks\flora-masks-orientation.md)
+			- [Paintable Mask](api\flora-surface\flora-masks\flora-masks-paintable.md)
+			- [Texture Mask](api\flora-surface\flora-masks\flora-masks-texture.md)
+			- [Vertex Color Mask](api\flora-surface\flora-masks\flora-masks-vertex-color.md)
+		- [Navigable Surface](api\flora-surface\navigable-surface.md)
+		- [Surface point](api\flora-surface\surface-point.md)
+	- Generation
+		- [Custom creeper behaviour](api\generation\custom-creeper-behaviour.md)
+		- [Flora Generation Process](api\generation\flora-generation-process.md)
+		- [Flora mask](api\generation\flora-mask.md)
+- [Documentation](documentation.md)
+	- Components
+		- [Flora Surface](documentation\components\flora-surface.md)
