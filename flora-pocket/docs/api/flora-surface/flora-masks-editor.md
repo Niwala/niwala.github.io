@@ -1,6 +1,6 @@
 # Flora Mask Editor
 
-Un [flora-mask] à 2 zones où afficher ses propriétés
+Un [Flora mask](api\generation\flora-mask.md) à 2 zones où afficher ses propriétés
 ### La popup de la liste de la Flora Surface
 Pour modifier cette popup vous devez hériter de la classe ContextPopupEditor avec un attribut ContextPopupEditorAttribute.
 

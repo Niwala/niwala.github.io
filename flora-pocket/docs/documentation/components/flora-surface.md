@@ -1,2 +1,2 @@
 # Flora Surface
-Le component FloraSurface permet de créer une [NavigableSurface](api/api-flora-surface/api-navigable-surface.md).
+Le component FloraSurface permet de créer une [Navigable Surface](api\flora-surface\navigable-surface.md).

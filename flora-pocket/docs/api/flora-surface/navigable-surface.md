@@ -17,7 +17,7 @@ SurfaceSettingsSnapshot
 ## Evaluation & Navigation
 
 #### Surface point
-La plupart des opérations se feront à l'aide de [Surface Points](api/api-flora-surface/api-surface-point.md)
+La plupart des opérations se feront à l'aide de [Surface point](api\flora-surface\surface-point.md)
 
 
 ### Raycast

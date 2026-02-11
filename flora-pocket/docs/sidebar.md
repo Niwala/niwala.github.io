@@ -3,9 +3,9 @@
 		- [Flora Seed](api\components\flora-seed.md)
 		- [Flora Surface](api\components\flora-surface.md)
 	- Flora objects
+		- [Flora Object](api\flora-objects\flora-object.md)
 		- [Flora pack](api\flora-objects\flora-pack.md)
 		- [Flora plant](api\flora-objects\flora-plant.md)
-		- [Flora Scriptable Object](api\flora-objects\flora-scriptable-object.md)
 	- Flora Surface
 		- [Flora Mask Editor](api\flora-surface\flora-masks-editor.md)
 		- [Flora Masks](api\flora-surface\flora-masks.md)
