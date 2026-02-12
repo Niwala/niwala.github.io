@@ -1,12 +1,12 @@
 - [Scripting Reference](api.md)
-	- Components
+	- [Components](api\components.md)
 		- [Flora Seed](api\components\flora-seed.md)
 		- [Flora Surface](api\components\flora-surface.md)
-	- Flora objects
+	- [Flora objects](api\flora-objects.md)
 		- [Flora Object](api\flora-objects\flora-object.md)
 		- [Flora pack](api\flora-objects\flora-pack.md)
 		- [Flora plant](api\flora-objects\flora-plant.md)
-	- Flora Surface
+	- [Flora Surface](api\components\flora-surface.md)
 		- [Flora Mask Editor](api\flora-surface\flora-masks-editor.md)
 		- [Flora Masks](api\flora-surface\flora-masks.md)
 			- [Ambient Occlusion Mask](api\flora-surface\flora-masks\flora-masks-ao.md)
@@ -19,10 +19,10 @@
 			- [Vertex Color Mask](api\flora-surface\flora-masks\flora-masks-vertex-color.md)
 		- [Navigable Surface](api\flora-surface\navigable-surface.md)
 		- [Surface point](api\flora-surface\surface-point.md)
-	- Generation
+	- [Generation](api\generation.md)
 		- [Custom creeper behaviour](api\generation\custom-creeper-behaviour.md)
 		- [Flora Generation Process](api\generation\flora-generation-process.md)
 		- [Flora mask](api\generation\flora-mask.md)
 - [Documentation](documentation.md)
-	- Components
+	- [Components](documentation\components.md)
 		- [Flora Surface](documentation\components\flora-surface.md)
