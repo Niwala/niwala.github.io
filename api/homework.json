@@ -1,0 +1,66 @@
+{
+  "timeStamp": "10-10-26 15:33:40",
+  "packageVersion": "1.0.10",
+  "entries": [
+    {
+      "name": "Homework",
+      "comment": "",
+      "status": 2,
+      "limitedTime": ""
+    },
+    {
+      "name": "Introduction",
+      "comment": "",
+      "status": 2,
+      "limitedTime": ""
+    },
+    {
+      "name": "Uv",
+      "comment": "",
+      "status": 2,
+      "limitedTime": ""
+    },
+    {
+      "name": "Uv Drill",
+      "comment": "",
+      "status": 0,
+      "limitedTime": ""
+    },
+    {
+      "name": "Old Uv Drill",
+      "comment": "",
+      "status": 0,
+      "limitedTime": ""
+    },
+    {
+      "name": "Step",
+      "comment": "",
+      "status": 2,
+      "limitedTime": ""
+    },
+    {
+      "name": "Vertex",
+      "comment": "",
+      "status": 0,
+      "limitedTime": ""
+    },
+    {
+      "name": "Animated",
+      "comment": "",
+      "status": 0,
+      "limitedTime": ""
+    },
+    {
+      "name": "Warmup",
+      "comment": "",
+      "status": 0,
+      "limitedTime": ""
+    },
+    {
+      "name": "Distances Remake",
+      "comment": "",
+      "status": 0,
+      "limitedTime": ""
+    }
+  ]
+}
